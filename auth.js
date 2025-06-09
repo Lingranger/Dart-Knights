@@ -5,8 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (signupForm) {
     signupForm.addEventListener('submit', e => {
       e.preventDefault();
-      alert('Signup successful!');
-      // Simulate saving user data and redirect to login
+      // Simple fake signup logic (no real backend)
+      alert('Account created successfully!');
       window.location.href = 'login.html';
     });
   }
@@ -14,9 +14,15 @@ document.addEventListener('DOMContentLoaded', () => {
   if (loginForm) {
     loginForm.addEventListener('submit', e => {
       e.preventDefault();
-      alert('Login successful!');
-      // Simulate login success and redirect to Players.html
-      window.location.href = 'Players.html';
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+
+      // Fake login logic (for demo only)
+      if (email && password) {
+        window.location.href = 'Players.html'; // redirect after fake login
+      } else {
+        alert('Please enter valid login credentials.');
+      }
     });
   }
 });
