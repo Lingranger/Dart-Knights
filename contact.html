@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Caraga Dart Knights - Contact</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #333;
+      line-height: 1.6;
+      background: #000; /* fallback if video fails */
+    }
+
+    /* Background video styles */
+    #bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -1;
+      filter: brightness(0.5); /* darker background for better contrast */
+    }
+
+    /* Wrapper to keep content above video and readable */
+    .content-wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 1000px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.95); /* higher opacity for clearer text */
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    header {
+      background: #005f73;
+      color: #fff;
+      padding: 20px 0;
+      text-align: center;
+      border-radius: 8px;
+    }
+
+    nav {
+      background: #0a9396;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      padding: 15px 0;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+    nav a {
+      color: #e9d8a6;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 8px 15px;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+
+    nav a:hover {
+      background: #94d2bd;
+      color: #001219;
+    }
+
+    main {
+      margin-top: 30px;
+      padding: 0 20px;
+      text-align: center;
+      color: #000;
+    }
+
+    h2 {
+      margin-bottom: 25px;
+    }
+
+    form {
+      max-width: 500px;
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    form p {
+      margin-bottom: 15px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-family: inherit;
+      resize: vertical;
+    }
+
+    button {
+      background-color: #005f73;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #0a9396;
+    }
+
+    footer {
+      background: #005f73;
+      color: #fff;
+      text-align: center;
+      padding: 15px 0;
+      margin-top: 40px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Video -->
+  <video autoplay muted loop playsinline id="bg-video">
+    <source src="videos/71943-540487063_small.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="content-wrapper">
+    <header>
+      <h1>Caraga Dart Knights</h1>
+      <p>Contact Us</p>
+    </header>
+
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="introduction.html">Top Players</a>
+      <a href="tips.html">Rankings</a>
+      <a href="history.html">Photo Bombers</a>
+      <a href="equipment.html">Team Gallery</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+
+    <main>
+      <h2>Get in Touch</h2>
+      <p>If you have any questions or want to connect, please fill out the form below:</p>
+      <form>
+        <p><input type="text" placeholder="Your Name" required /></p>
+        <p><input type="email" placeholder="Your Email" required /></p>
+        <p><textarea rows="5" placeholder="Your Message" required></textarea></p>
+        <p><button type="submit">Send Message</button></p>
+      </form>
+    </main>
+
+    <footer>
+      &copy; 2025 Caraga Dart Knights. All rights reserved.
+    </footer>
+  </div>
+
+</body>
+</html>

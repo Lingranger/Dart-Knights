@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Team Photo Gallery | Caraga Dart Knights</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #333;
+      line-height: 1.6;
+      background: transparent; /* video will show behind */
+    }
+    /* Background video styles */
+    #bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -1;
+      filter: brightness(0.7);
+    }
+
+    /* Wrapper to keep content above video and readable */
+    .content-wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 1000px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.85);
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    header {
+      background: #005f73;
+      color: #fff;
+      padding: 20px 0;
+      text-align: center;
+      border-radius: 8px;
+    }
+    nav {
+      background: #0a9396;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      padding: 15px 0;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    nav a {
+      color: #e9d8a6;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 8px 15px;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+    nav a:hover {
+      background: #94d2bd;
+      color: #001219;
+    }
+    main {
+      margin-top: 30px;
+      padding: 0 20px;
+    }
+    h2 {
+      text-align: center;
+      color: #005f73;
+      margin-bottom: 30px;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .gallery img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      object-fit: cover;
+    }
+    .caption {
+      text-align: center;
+      font-style: italic;
+      margin-top: 5px;
+      color: #666;
+    }
+    footer {
+      background: #005f73;
+      color: #fff;
+      text-align: center;
+      padding: 15px 0;
+      margin-top: 40px;
+      border-radius: 8px;
+    }
+    @media (max-width: 600px) {
+      .gallery {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Video -->
+  <video autoplay muted loop playsinline id="bg-video">
+    <source src="videos/71943-540487063_small.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="content-wrapper">
+    <header>
+      <h1>Team Photo Gallery</h1>
+      <p>Moments with the Dart Knights</p>
+    </header>
+
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="introduction.html">Top Players</a>
+      <a href="tips.html">Rankings</a>
+      <a href="history.html">Photo Bombers</a>
+      <a href="equipment.html">Team Gallery</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+
+    <main>
+      <h2>📸 Dart Knights in Action</h2>
+      <div class="gallery">
+        <div>
+          <img src="images/team1.jpg" alt="Team photo 1" />
+          <p class="caption">Caraga Dart Knights - Regional Tournament</p>
+        </div>
+        <div>
+          <img src="images/team2.jpg" alt="Team photo 2" />
+          <p class="caption">Celebrating a Win Together</p>
+        </div>
+        <div>
+          <img src="images/team3.jpg" alt="Team photo 3" />
+          <p class="caption">Focused at the Oche</p>
+        </div>
+        <div>
+          <img src="images/team4.jpg" alt="Team photo 4" />
+          <p class="caption">After the Finals - Smiles All Around</p>
+        </div>
+        <!-- Add more photos here as needed -->
+      </div>
+    </main>
+
+    <footer>
+      &copy; 2025 Caraga Dart Knights. All rights reserved.
+    </footer>
+  </div>
+
+</body>
+</html>
