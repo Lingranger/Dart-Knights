@@ -5,8 +5,12 @@ document.addEventListener('DOMContentLoaded', () => {
   if (signupForm) {
     signupForm.addEventListener('submit', e => {
       e.preventDefault();
-      // Simple fake signup logic (no real backend)
-      alert('Account created successfully!');
+      const email = document.getElementById('signup-email').value;
+      const password = document.getElementById('signup-password').value;
+
+      // Store user data locally (insecure, for demo only)
+      localStorage.setItem('user', JSON.stringify({ email, password }));
+      alert('Account created! Please login.');
       window.location.href = 'login.html';
     });
   }
@@ -17,11 +21,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const email = document.getElementById('login-email').value;
       const password = document.getElementById('login-password').value;
 
-      // Fake login logic (for demo only)
-      if (email && password) {
-        window.location.href = 'Players.html'; // redirect after fake login
+      const storedUser = JSON.parse(localStorage.getItem('user'));
+
+      if (storedUser && email === storedUser.email && password === storedUser.password) {
+        window.location.href = 'Players.html'; // Redirect after login
       } else {
-        alert('Please enter valid login credentials.');
+        alert('Invalid email or password.');
       }
     });
   }
