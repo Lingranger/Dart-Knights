@@ -147,6 +147,7 @@
       <a href="Rankings.html">Rankings</a>
       <a href="Photo-Bombers.html">Photo Bombers</a>
       <a href="Photo-Gallery.html"> Photo Gallery</a>
+      <a href="#" id="logout-button" style="color: #ffb703;">Logout</a>
       <a href="Contact.html" style="background-color: #94d2bd; color: #001219;">Contact</a>
     </nav>
 
@@ -167,4 +168,13 @@
   </div>
 
 </body>
+  <script>
+  document.getElementById('logout-button').addEventListener('click', function (e) {
+    e.preventDefault();
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('userPassword');
+    window.location.href = 'login.html';
+  });
+</script>
+
 </html>
