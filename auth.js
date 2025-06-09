@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Basic fake validation (you can improve this with localStorage or Firebase later)
       if (email === 'test@example.com' && password === 'password123') {
-        window.location.href = 'players.html'; // Redirect after login
+        window.location.href = 'Players.html'; // Redirect after login
       } else {
         alert('Invalid credentials. Try test@example.com / password123');
       }
