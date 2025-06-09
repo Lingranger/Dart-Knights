@@ -11,10 +11,9 @@
       padding: 0;
       color: #333;
       line-height: 1.6;
-      background: #000; /* fallback if video fails */
+      background: #000;
     }
 
-    /* Background video styles */
     #bg-video {
       position: fixed;
       top: 0;
@@ -23,17 +22,16 @@
       height: 100vh;
       object-fit: cover;
       z-index: -1;
-      filter: brightness(0.5); /* darker background for better contrast */
+      filter: brightness(0.5);
     }
 
-    /* Wrapper to keep content above video and readable */
     .content-wrapper {
       position: relative;
       z-index: 1;
       max-width: 1000px;
       margin: 20px auto;
       padding: 20px;
-      background-color: rgba(255, 255, 255, 0.95); /* higher opacity for clearer text */
+      background-color: rgba(255, 255, 255, 0.95);
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
@@ -43,17 +41,17 @@
       color: #fff;
       padding: 20px 0;
       text-align: center;
-      border-radius: 8px;
+      border-radius: 8px 8px 0 0;
     }
 
     nav {
       background: #0a9396;
       display: flex;
       justify-content: center;
+      flex-wrap: wrap;
       gap: 20px;
       padding: 15px 0;
-      border-radius: 8px;
-      margin-top: 10px;
+      border-radius: 0 0 8px 8px;
     }
 
     nav a {
@@ -142,14 +140,14 @@
       <p>Contact Us</p>
     </header>
 
-<nav>
-  <a href="Players.html">Home</a>
-  <a href="Players in Caraga.html">Top Players</a>
-  <a href="Rankings.html">Rankings</a>
-  <a href="Photo-Bombers.html">Photo Bombers</a>
-  <a href="Photo-Gallery.html">Team Gallery</a>
-</nav>
-
+    <!-- Fixed Nav Bar: Matches the style and content of working pages -->
+    <nav>
+      <a href="Photo-Gallery.html">Home</a>
+      <a href="Players in Caraga.html">Top Players</a>
+      <a href="Rankings.html">Rankings</a>
+      <a href="Photo-Bombers.html">Photo Bombers</a>
+      <a href="Contact.html" style="background-color: #94d2bd; color: #001219;">Contact</a>
+    </nav>
 
     <main>
       <h2>Get in Touch</h2>
