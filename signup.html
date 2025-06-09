@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sign Up - Dark Knight</title>
+  <title>Sign Up - Caraga Dart Knights</title>
   <link rel="stylesheet" href="auth.css" />
   <style>
     body {
@@ -11,10 +11,22 @@
       background: #0f172a;
       color: #f8fafc;
       margin: 0;
+      height: 100vh;
       display: flex;
       align-items: center;
-      justify-content: center;
-      height: 100vh;
+      justify-content: flex-start;
+      padding-left: 5%;
+      position: relative;
+    }
+
+    .site-logo {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 100px;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     }
 
     .auth-container {
@@ -87,6 +99,10 @@
   </style>
 </head>
 <body>
+
+  <!-- 🔥 LOGO INSERTED HERE -->
+  <img src="images/Itim at Pula E-Sports Naglalarawan Gaming Gaming Logo (1).png" alt="Caraga Dart Knights Logo" class="site-logo" />
+
   <div class="auth-container">
     <h2>Create Your Account</h2>
     <form id="signup-form">
@@ -129,7 +145,6 @@
         return;
       }
 
-      // You can store or send the data here (for demo, storing in localStorage)
       localStorage.setItem("userEmail", email);
       localStorage.setItem("userPassword", password);
       alert("Account created successfully!");
