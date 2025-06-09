@@ -1,32 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const signupForm = document.getElementById('signup-form');
   const loginForm = document.getElementById('login-form');
-
-  if (signupForm) {
-    signupForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const email = document.getElementById('signup-email').value;
-      const password = document.getElementById('signup-password').value;
-
-      // Store user data locally (insecure, for demo only)
-      localStorage.setItem('user', JSON.stringify({ email, password }));
-      alert('Account created! Please login.');
-      window.location.href = 'login.html';
-    });
-  }
 
   if (loginForm) {
     loginForm.addEventListener('submit', e => {
       e.preventDefault();
-      const email = document.getElementById('login-email').value;
-      const password = document.getElementById('login-password').value;
 
-      const storedUser = JSON.parse(localStorage.getItem('user'));
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
 
-      if (storedUser && email === storedUser.email && password === storedUser.password) {
-        window.location.href = 'Players.html'; // Redirect after login
+      // Basic fake validation (you can improve this with localStorage or Firebase later)
+      if (email === 'test@example.com' && password === 'password123') {
+        window.location.href = 'players.html'; // Redirect after login
       } else {
-        alert('Invalid email or password.');
+        alert('Invalid credentials. Try test@example.com / password123');
       }
     });
   }
