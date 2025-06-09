@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Welcome to Caraga Dart Knights</title>
   <style>
     * {
@@ -11,113 +11,89 @@
       box-sizing: border-box;
     }
 
-    body, html {
-      height: 100%;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    body {
+      font-family: Arial, sans-serif;
       overflow: hidden;
+      color: #fff;
     }
 
-    /* Background video style */
-   #bg-video {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  min-width: 100%;
-  min-height: 100%;
-  width: auto;
-  height: auto;
-  transform: translate(-50%, -50%);
-  z-index: -1;
-}
-
-
-    /* Overlay for readability */
-    .overlay {
+    video#bg-video {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(15, 23, 42, 0.75);
-      z-index: 0;
+      min-width: 100%;
+      min-height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      filter: brightness(0.5);
     }
 
-    .hero {
+    .ad-wrapper {
       position: relative;
-      z-index: 1;
-      height: 100%;
+      height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       text-align: center;
-      color: white;
       padding: 20px;
+      background: rgba(0, 0, 0, 0.4);
     }
 
-    .hero h1 {
+    .logo {
+      max-width: 120px;
+      height: auto;
+      margin-bottom: 20px;
+      border-radius: 12px;
+    }
+
+    h1 {
       font-size: 3rem;
-      color: #38bdf8;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
     }
 
-    .hero p {
-      font-size: 1.3rem;
-      margin-bottom: 30px;
+    p {
+      font-size: 1.2rem;
       max-width: 600px;
     }
 
-    .hero .btn {
-      display: inline-block;
-      margin: 10px;
-      padding: 12px 24px;
-      font-size: 1rem;
-      font-weight: bold;
-      color: #0f172a;
-      background-color: #38bdf8;
+    .cta-buttons {
+      margin-top: 30px;
+    }
+
+    .cta-buttons a {
+      padding: 12px 25px;
+      margin: 0 10px;
       border: none;
-      border-radius: 6px;
+      background-color: #00b4d8;
+      color: white;
+      font-size: 1rem;
       text-decoration: none;
-      transition: background-color 0.3s;
+      border-radius: 6px;
+      transition: background 0.3s;
     }
 
-    .hero .btn:hover {
-      background-color: #0ea5e9;
-    }
-
-    @media (max-width: 600px) {
-      .hero h1 {
-        font-size: 2rem;
-      }
-
-      .hero p {
-        font-size: 1rem;
-      }
-
-      .hero .btn {
-        font-size: 0.9rem;
-        padding: 10px 20px;
-      }
+    .cta-buttons a:hover {
+      background-color: #0096c7;
     }
   </style>
 </head>
 <body>
 
-  <!-- Background Video -->
   <video autoplay muted loop playsinline id="bg-video">
     <source src="videos/Untitled design.mp4" type="video/mp4" />
     Your browser does not support the video tag.
   </video>
 
-  <!-- Overlay -->
-  <div class="overlay"></div>
-
-  <!-- Hero Section -->
-  <div class="hero">
+  <div class="ad-wrapper">
+    <img src="images/logo.jpg" alt="Dark Knight Logo" class="logo" />
     <h1>Welcome to Caraga Dart Knights</h1>
-    <p>The ultimate darts companion. Track players. Stay updated. Compete smarter.</p>
-    <a href="signup.html" class="btn">Sign Up</a>
-    <a href="login.html" class="btn">Log In</a>
+    <p>The ultimate destination for dart enthusiasts. Join the league of champions now!</p>
+    
+    <div class="cta-buttons">
+      <a href="signup.html">Sign Up</a>
+      <a href="login.html">Login</a>
+    </div>
   </div>
 
 </body>
