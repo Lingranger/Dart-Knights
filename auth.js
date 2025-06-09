@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const storedPassword = localStorage.getItem('userPassword');
 
       if (email === storedEmail && password === storedPassword) {
-        window.location.href = 'players.html'; // or index.html
+        window.location.href = 'Players.html'; // or index.html
       } else {
         alert('Invalid email or password.');
       }
