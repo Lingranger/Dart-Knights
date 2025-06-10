@@ -133,6 +133,28 @@
       margin-top: 40px;
       border-radius: 8px;
     }
+    .center-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  z-index: 1;
+  padding: 20px;
+  background-color: rgba(0, 95, 115, 0.7);
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+.center-title h1 {
+  margin: 0;
+  font-size: 3rem;
+}
+.center-title p {
+  margin-top: 10px;
+  font-size: 1.2rem;
+}
+
 
     @media (max-width: 600px) {
       .player-card {
@@ -152,11 +174,12 @@
   <!-- 🔥 Logo (top-left corner) -->
   <img src="images/Itim at Pula E-Sports Naglalarawan Gaming Gaming Logo (1).png" alt="Logo" class="site-logo" />
 
-  <div class="content-wrapper">
-    <header>
-      <h1>Caraga Dart Knights</h1>
-      <p>Meet the top dart players from the Caraga region</p>
-    </header>
+<!-- 🔥 Centered Page Title -->
+<div class="center-title">
+  <h1>Caraga Dart Knights</h1>
+  <p>Meet the top dart players from the Caraga region</p>
+</div>
+
 
     <nav aria-label="Primary navigation">
       <a href="Players in Caraga.html">Top Players</a>
