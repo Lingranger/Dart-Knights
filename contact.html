@@ -40,31 +40,30 @@
       background: #005f73;
       color: #fff;
       padding: 20px;
-      display: flex;
-      align-items: center;
-      gap: 20px;
       border-radius: 8px 8px 0 0;
+      position: relative;
+      height: 100px;
     }
 
     header img {
+      position: absolute;
+      top: 50%;
+      left: 20px;
+      transform: translateY(-50%);
       width: 60px;
       height: auto;
       border-radius: 8px;
     }
 
-    header .header-text {
-      display: flex;
-      flex-direction: column;
-    }
-
-    header .header-text h1 {
+    header h1 {
       margin: 0;
+      text-align: center;
+      line-height: 100px;
       font-size: 1.8rem;
     }
 
-    header .header-text p {
-      margin: 5px 0 0;
-      font-size: 1rem;
+    header p {
+      display: none; /* Remove the subtitle for cleaner layout */
     }
 
     nav {
@@ -159,11 +158,8 @@
 
   <div class="content-wrapper">
     <header>
-      <img src="images/logo.png" alt="Caraga Dart Knights Logo" />
-      <div class="header-text">
-        <h1>Caraga Dart Knights</h1>
-        <p>Contact Us</p>
-      </div>
+      <img src="images/Itim at Pula E-Sports Naglalarawan Gaming Gaming Logo (1).png" alt="Caraga Dart Knights Logo" />
+      <h1>Caraga Dart Knights</h1>
     </header>
 
     <!-- Navigation Bar -->
