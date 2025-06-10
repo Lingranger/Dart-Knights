@@ -38,6 +38,31 @@
       box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
     }
 
+    /* 🔥 Centered title */
+    .center-title {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: white;
+      z-index: 1;
+      padding: 20px;
+      background-color: rgba(0, 95, 115, 0.7);
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+
+    .center-title h1 {
+      margin: 0;
+      font-size: 3rem;
+    }
+
+    .center-title p {
+      margin-top: 10px;
+      font-size: 1.2rem;
+    }
+
     .content-wrapper {
       position: relative;
       z-index: 1;
@@ -47,14 +72,7 @@
       background-color: rgba(255, 255, 255, 0.85);
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    header {
-      background: #005f73;
-      color: #fff;
-      padding: 20px 0;
-      text-align: center;
-      border-radius: 8px;
+      margin-top: 80vh; /* Push content below center title */
     }
 
     nav {
@@ -64,7 +82,6 @@
       gap: 20px;
       padding: 15px 0;
       border-radius: 8px;
-      margin-top: 10px;
       flex-wrap: wrap;
     }
 
@@ -133,32 +150,18 @@
       margin-top: 40px;
       border-radius: 8px;
     }
-    .center-title {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  color: white;
-  z-index: 1;
-  padding: 20px;
-  background-color: rgba(0, 95, 115, 0.7);
-  border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
-}
-.center-title h1 {
-  margin: 0;
-  font-size: 3rem;
-}
-.center-title p {
-  margin-top: 10px;
-  font-size: 1.2rem;
-}
-
 
     @media (max-width: 600px) {
       .player-card {
         flex: 1 1 100%;
+      }
+
+      .center-title h1 {
+        font-size: 2rem;
+      }
+
+      .center-title p {
+        font-size: 1rem;
       }
     }
   </style>
@@ -174,13 +177,14 @@
   <!-- 🔥 Logo (top-left corner) -->
   <img src="images/Itim at Pula E-Sports Naglalarawan Gaming Gaming Logo (1).png" alt="Logo" class="site-logo" />
 
-<!-- 🔥 Centered Page Title -->
-<div class="center-title">
-  <h1>Caraga Dart Knights</h1>
-  <p>Meet the top dart players from the Caraga region</p>
-</div>
+  <!-- 🔥 Centered Title -->
+  <div class="center-title">
+    <h1>Caraga Dart Knights</h1>
+    <p>Meet the top dart players from the Caraga region</p>
+  </div>
 
-
+  <!-- 🔥 Main Content Below -->
+  <div class="content-wrapper">
     <nav aria-label="Primary navigation">
       <a href="Players in Caraga.html">Top Players</a>
       <a href="Rankings.html">Rankings</a>
@@ -193,7 +197,6 @@
     <main>
       <h2>Featured Dart Players of Caraga</h2>
       <div class="players">
-        <!-- Example cards below -->
         <div class="player-card">
           <img src="images/348606664_3393093387621073_7068113774532448902_n.jpg" alt="Player 1" />
           <h3>Godofredo Abuzo IV</h3>
