@@ -33,7 +33,7 @@
     }
 
     .content-wrapper {
-      max-width: 800px;
+      max-width: 1000px;
       margin: 20px auto;
       padding: 20px;
       background-color: rgba(247, 249, 252, 0.9);
@@ -46,11 +46,12 @@
     header {
       display: flex;
       align-items: center;
-      gap: 15px;
+      justify-content: space-between;
       background: #005f73;
       color: #fff;
-      padding: 20px;
+      padding: 15px 20px;
       border-radius: 10px 10px 0 0;
+      position: relative;
     }
 
     header img {
@@ -59,7 +60,14 @@
       border-radius: 5px;
     }
 
-    header h1 {
+    .header-title {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+
+    .header-title h1 {
       color: white;
       margin: 0;
       font-size: 1.8em;
@@ -125,14 +133,15 @@
     }
 
     @media (max-width: 600px) {
-      nav {
-        flex-wrap: wrap;
-      }
-
       header {
         flex-direction: column;
-        align-items: flex-start;
-        text-align: left;
+        align-items: center;
+      }
+
+      .header-title {
+        position: static;
+        transform: none;
+        margin-top: 10px;
       }
     }
   </style>
@@ -147,10 +156,9 @@
 
   <div class="content-wrapper">
     <header>
-      <img src="images/Itim at Pula E-Sports Naglalarawan Gaming Gaming Logo (1).png" alt="Caraga Dart Knights Logo" />
-      <div>
+      <img src="images/logo.png" alt="Caraga Dart Knights Logo" />
+      <div class="header-title">
         <h1>Caraga Darts Rankings</h1>
-        <p>From Champion to Top Contenders</p>
       </div>
     </header>
 
