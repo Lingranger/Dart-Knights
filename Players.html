@@ -150,6 +150,39 @@
       margin-top: 40px;
       border-radius: 8px;
     }
+    /* 🔥 Header styling to match Rankings Page */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #005f73;
+  color: #fff;
+  padding: 15px 20px;
+  border-radius: 10px 10px 0 0;
+  position: relative;
+  z-index: 2;
+}
+
+header img {
+  height: 80px;
+  width: auto;
+  border-radius: 5px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.header-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.header-title h1 {
+  color: white;
+  margin: 0;
+  font-size: 1.8em;
+}
+
 
     @media (max-width: 600px) {
       .player-card {
@@ -175,13 +208,14 @@
   </video>
 
   <!-- 🔥 Logo (top-left corner) -->
-  <img src="images/Itim at Pula E-Sports Naglalarawan Gaming Gaming Logo (1).png" alt="Logo" class="site-logo" />
-
-  <!-- 🔥 Centered Title -->
-  <div class="center-title">
+<!-- 🔥 Header with Logo and Title Centered -->
+<header>
+  <img src="images/Itim at Pula E-Sports Naglalarawan Gaming Gaming Logo (1).png" alt="Logo" />
+  <div class="header-title">
     <h1>Caraga Dart Knights</h1>
-    <p>Meet the top dart players from the Caraga region</p>
   </div>
+</header>
+
 
   <!-- 🔥 Main Content Below -->
   <div class="content-wrapper">
@@ -195,6 +229,7 @@
     </nav>
 
     <main>
+      <p style="text-align:center; font-size:1.2rem; margin-top:20px;">Meet the top dart players from the Caraga region</p>
       <h2>Featured Dart Players of Caraga</h2>
       <div class="players">
         <div class="player-card">
