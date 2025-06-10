@@ -11,9 +11,10 @@
       padding: 0;
       color: #333;
       line-height: 1.6;
-      background: transparent; /* video will show behind */
+      background: transparent;
     }
-    /* Background video styles */
+
+    /* 🔥 Background video */
     #bg-video {
       position: fixed;
       top: 0;
@@ -22,10 +23,21 @@
       height: 100vh;
       object-fit: cover;
       z-index: -1;
-      filter: brightness(0.7); /* Optional: darken video a bit for text contrast */
+      filter: brightness(0.7);
     }
 
-    /* Wrapper to keep content above video and readable */
+    /* 🔥 Logo top-left */
+    .site-logo {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      width: 100px;
+      height: auto;
+      z-index: 2;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+    }
+
     .content-wrapper {
       position: relative;
       z-index: 1;
@@ -44,6 +56,7 @@
       text-align: center;
       border-radius: 8px;
     }
+
     nav {
       background: #0a9396;
       display: flex;
@@ -52,7 +65,9 @@
       padding: 15px 0;
       border-radius: 8px;
       margin-top: 10px;
+      flex-wrap: wrap;
     }
+
     nav a {
       color: #e9d8a6;
       text-decoration: none;
@@ -61,24 +76,29 @@
       border-radius: 5px;
       transition: background 0.3s;
     }
+
     nav a:hover {
       background: #94d2bd;
       color: #001219;
     }
+
     main {
       margin-top: 30px;
       padding: 0 20px;
     }
+
     h2 {
       text-align: center;
       margin-bottom: 25px;
     }
+
     .players {
       display: flex;
       flex-wrap: wrap;
       gap: 20px;
       justify-content: center;
     }
+
     .player-card {
       background: #ffffff;
       padding: 15px;
@@ -87,20 +107,24 @@
       max-width: 280px;
       text-align: center;
     }
+
     .player-card img {
       width: 100%;
       height: auto;
       border-radius: 8px;
       margin-bottom: 10px;
     }
+
     .player-card h3 {
       margin: 10px 0 5px;
       color: #005f73;
     }
+
     .player-card p {
       margin: 0;
       font-size: 0.95rem;
     }
+
     footer {
       background: #005f73;
       color: #fff;
@@ -109,6 +133,7 @@
       margin-top: 40px;
       border-radius: 8px;
     }
+
     @media (max-width: 600px) {
       .player-card {
         flex: 1 1 100%;
@@ -118,11 +143,14 @@
 </head>
 <body>
 
-  <!-- Background Video -->
+  <!-- 🔥 Background Video -->
   <video autoplay muted loop playsinline id="bg-video">
     <source src="videos/71943-540487063_small.mp4" type="video/mp4" />
     Your browser does not support the video tag.
   </video>
+
+  <!-- 🔥 Logo (top-left corner) -->
+  <img src="images/Itim at Pula E-Sports Naglalarawan Gaming Gaming Logo (1).png" alt="Logo" class="site-logo" />
 
   <div class="content-wrapper">
     <header>
@@ -130,18 +158,19 @@
       <p>Meet the top dart players from the Caraga region</p>
     </header>
 
-   <nav aria-label="Primary navigation">
+    <nav aria-label="Primary navigation">
       <a href="Players in Caraga.html">Top Players</a>
       <a href="Rankings.html">Rankings</a>
       <a href="Photo-Bombers.html">Photo Bombers</a>
       <a href="Photo-Gallery.html">Team Gallery</a>
       <a href="contact.html">Contact</a>
-     <a href="#" id="logout-button" style="color: #ffb703;">Logout</a>
+      <a href="#" id="logout-button" style="color: #ffb703;">Logout</a>
     </nav>
 
     <main>
       <h2>Featured Dart Players of Caraga</h2>
       <div class="players">
+        <!-- Example cards below -->
         <div class="player-card">
           <img src="images/348606664_3393093387621073_7068113774532448902_n.jpg" alt="Player 1" />
           <h3>Godofredo Abuzo IV</h3>
@@ -178,14 +207,14 @@
     </footer>
   </div>
 
-</body>
   <script>
-  document.getElementById('logout-button').addEventListener('click', function (e) {
-    e.preventDefault();
-    localStorage.removeItem('userEmail');
-    localStorage.removeItem('userPassword');
-     window.location.href = 'advertisement.html';
-  });
-</script>
+    document.getElementById('logout-button').addEventListener('click', function (e) {
+      e.preventDefault();
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userPassword');
+      window.location.href = 'advertisement.html';
+    });
+  </script>
 
+</body>
 </html>
