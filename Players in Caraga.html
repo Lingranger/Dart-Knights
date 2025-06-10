@@ -159,6 +159,67 @@
   font-style: italic;
   margin: 5px 0 0;
 }
+    .nav-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  background-color: #0a9396;
+  padding: 10px 20px;
+  border-radius: 8px;
+  position: relative;
+}
+
+.nav-header .logo {
+  height: 60px;
+  border-radius: 10px;
+  margin-right: 10px;
+}
+
+.nav-title {
+  flex: 1;
+  text-align: center;
+}
+
+.nav-title h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #ffffff;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+.nav-title p {
+  margin: 5px 0 0;
+  font-size: 1rem;
+  font-style: italic;
+  color: #e9d8a6;
+}
+
+.nav-links {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.nav-links a {
+  color: #e9d8a6;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.nav-links a:hover,
+.nav-links a:focus-visible {
+  background-color: #94d2bd;
+  color: #001219;
+}
+
 
 
     footer {
@@ -193,23 +254,22 @@
     Your browser does not support the video tag.
   </video>
 
-  <div class="content-wrapper">
-  <header class="main-header">
+ <nav class="nav-header" aria-label="Primary navigation">
   <img src="images/Itim at Pula E-Sports Naglalarawan Gaming Gaming Logo (1).png" alt="Caraga Dart Knights Logo" class="logo" />
-  <div class="header-text">
+  <div class="nav-title">
     <h1>Top Darts Players in Caraga</h1>
     <p>Meet the finest talents shaping the darts scene in the region</p>
   </div>
-</header>
+  <div class="nav-links">
+    <a href="Players.html">Home</a>
+    <a href="Rankings.html">Rankings</a>
+    <a href="Photo-Bombers.html">Photo Bombers</a>
+    <a href="Photo-Gallery.html">Team Gallery</a>
+    <a href="contact.html">Contact</a>
+    <a href="#" id="logout-button" style="color: #ffb703;">Logout</a>
+  </div>
+</nav>
 
-<nav aria-label="Primary navigation">
-      <a href="Players.html">Home</a>
-      <a href="Rankings.html">Rankings</a>
-      <a href="Photo-Bombers.html">Photo Bombers</a>
-      <a href="Photo-Gallery.html">Team Gallery</a>
-      <a href="contact.html">Contact</a>
-      <a href="#" id="logout-button" style="color: #ffb703;">Logout</a>
-    </nav>
 
     <main>
       <section class="player-card">
