@@ -26,53 +26,55 @@
       filter: brightness(0.7);
     }
 
-    /* 🔥 Logo top-left */
-    .site-logo {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      width: 100px;
-      height: auto;
+    /* 🔥 Header styling */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #005f73;
+      color: #fff;
+      padding: 15px 20px;
+      border-radius: 10px 10px 0 0;
+      position: relative;
       z-index: 2;
-      border-radius: 8px;
-      box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+      flex-wrap: wrap;
     }
 
-    /* 🔥 Centered title */
-    .center-title {
+    header img {
+      height: 80px;
+      width: auto;
+      border-radius: 5px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .header-title {
       position: absolute;
-      top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%);
+      transform: translateX(-50%);
       text-align: center;
-      color: white;
-      z-index: 1;
-      padding: 20px;
-      background-color: rgba(0, 95, 115, 0.7);
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
 
-    .center-title h1 {
+    .header-title h1 {
       margin: 0;
-      font-size: 3rem;
+      font-size: 1.8em;
+      color: white;
     }
 
-    .center-title p {
-      margin-top: 10px;
+    .header-title p {
+      margin-top: 5px;
       font-size: 1.2rem;
+      color: #e9d8a6;
     }
 
     .content-wrapper {
       position: relative;
       z-index: 1;
       max-width: 1000px;
-      margin: 20px auto;
+      margin: 30px auto;
       padding: 20px;
       background-color: rgba(255, 255, 255, 0.85);
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      margin-top: 80vh; /* Push content below center title */
     }
 
     nav {
@@ -150,51 +152,30 @@
       margin-top: 40px;
       border-radius: 8px;
     }
-    /* 🔥 Header styling to match Rankings Page */
-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #005f73;
-  color: #fff;
-  padding: 15px 20px;
-  border-radius: 10px 10px 0 0;
-  position: relative;
-  z-index: 2;
-}
-
-header img {
-  height: 80px;
-  width: auto;
-  border-radius: 5px;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
-}
-
-.header-title {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
-}
-
-.header-title h1 {
-  color: white;
-  margin: 0;
-  font-size: 1.8em;
-}
-
 
     @media (max-width: 600px) {
       .player-card {
         flex: 1 1 100%;
       }
 
-      .center-title h1 {
-        font-size: 2rem;
+      .header-title h1 {
+        font-size: 1.4rem;
       }
 
-      .center-title p {
+      .header-title p {
         font-size: 1rem;
+      }
+
+      header {
+        flex-direction: column;
+        text-align: center;
+        padding-bottom: 20px;
+      }
+
+      .header-title {
+        position: static;
+        transform: none;
+        margin-top: 10px;
       }
     }
   </style>
@@ -207,15 +188,14 @@ header img {
     Your browser does not support the video tag.
   </video>
 
-  <!-- 🔥 Logo (top-left corner) -->
-<!-- 🔥 Header with Logo and Title Centered -->
-<header>
-  <img src="images/Itim at Pula E-Sports Naglalarawan Gaming Gaming Logo (1).png" alt="Logo" />
-  <div class="header-title">
-    <h1>Caraga Dart Knights</h1>
-  </div>
-</header>
-
+  <!-- 🔥 Header with Logo and Title Centered -->
+  <header>
+    <img src="images/Itim at Pula E-Sports Naglalarawan Gaming Gaming Logo (1).png" alt="Logo" />
+    <div class="header-title">
+      <h1>Caraga Dart Knights</h1>
+      <p>Meet the top dart players from the Caraga region</p>
+    </div>
+  </header>
 
   <!-- 🔥 Main Content Below -->
   <div class="content-wrapper">
@@ -229,7 +209,6 @@ header img {
     </nav>
 
     <main>
-      <p style="text-align:center; font-size:1.2rem; margin-top:20px;">Meet the top dart players from the Caraga region</p>
       <h2>Featured Dart Players of Caraga</h2>
       <div class="players">
         <div class="player-card">
