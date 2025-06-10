@@ -39,9 +39,32 @@
     header {
       background: #005f73;
       color: #fff;
-      padding: 20px 0;
-      text-align: center;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
       border-radius: 8px 8px 0 0;
+    }
+
+    header img {
+      width: 60px;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    header .header-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    header .header-text h1 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+
+    header .header-text p {
+      margin: 5px 0 0;
+      font-size: 1rem;
     }
 
     nav {
@@ -136,17 +159,20 @@
 
   <div class="content-wrapper">
     <header>
-      <h1>Caraga Dart Knights</h1>
-      <p>Contact Us</p>
+      <img src="images/logo.png" alt="Caraga Dart Knights Logo" />
+      <div class="header-text">
+        <h1>Caraga Dart Knights</h1>
+        <p>Contact Us</p>
+      </div>
     </header>
 
-    <!-- Fixed Nav Bar: Matches the style and content of working pages -->
+    <!-- Navigation Bar -->
     <nav>
       <a href="Players.html">Home</a>
       <a href="Players in Caraga.html">Top Players</a>
       <a href="Rankings.html">Rankings</a>
       <a href="Photo-Bombers.html">Photo Bombers</a>
-      <a href="Photo-Gallery.html"> Photo Gallery</a>
+      <a href="Photo-Gallery.html">Photo Gallery</a>
       <a href="#" id="logout-button" style="color: #ffb703;">Logout</a>
     </nav>
 
@@ -166,14 +192,13 @@
     </footer>
   </div>
 
-</body>
   <script>
-  document.getElementById('logout-button').addEventListener('click', function (e) {
-    e.preventDefault();
-    localStorage.removeItem('userEmail');
-    localStorage.removeItem('userPassword');
-     window.location.href = 'advertisement.html';
-  });
-</script>
-
+    document.getElementById('logout-button').addEventListener('click', function (e) {
+      e.preventDefault();
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userPassword');
+      window.location.href = 'advertisement.html';
+    });
+  </script>
+</body>
 </html>
