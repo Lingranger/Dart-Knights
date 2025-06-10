@@ -133,6 +133,33 @@
       color: #333;
       font-size: 1rem;
     }
+    .main-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.main-header .logo {
+  height: 80px;
+  border-radius: 10px;
+}
+
+.header-text h1 {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+.header-text p {
+  font-size: 1.2rem;
+  color: #005f73;
+  font-style: italic;
+  margin: 5px 0 0;
+}
+
 
     footer {
       text-align: center;
@@ -153,13 +180,7 @@
       .player-card img {
         margin-bottom: 15px;
       }
-header img.logo {
-  position: absolute;
-  top: 10px;
-  left: 20px;
-  height: 80px; /* medium size */
-  border-radius: 10px;
-}
+
 
     }
   </style>
@@ -173,16 +194,14 @@ header img.logo {
   </video>
 
   <div class="content-wrapper">
-    <header>
+  <header class="main-header">
   <img src="images/Itim at Pula E-Sports Naglalarawan Gaming Gaming Logo (1).png" alt="Caraga Dart Knights Logo" class="logo" />
-  <h1>Top Darts Players in Caraga</h1>
-  <p>Meet the finest talents shaping the darts scene in the region</p>
+  <div class="header-text">
+    <h1>Top Darts Players in Caraga</h1>
+    <p>Meet the finest talents shaping the darts scene in the region</p>
+  </div>
 </header>
 
-    <header>
-      <h1>Top Darts Players in Caraga</h1>
-      <p>Meet the finest talents shaping the darts scene in the region</p>
-    </header>
 <nav aria-label="Primary navigation">
       <a href="Players.html">Home</a>
       <a href="Rankings.html">Rankings</a>
