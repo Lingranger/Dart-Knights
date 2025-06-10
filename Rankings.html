@@ -6,21 +6,20 @@
   <title>Caraga Darts Rankings | Caraga Dart Knights</title>
   <style>
     /* Background video styling */
-   #background-video {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  min-width: 100%;
-  min-height: 100%;
-  width: auto;
-  height: auto;
-  z-index: -1;
-  object-fit: cover;
-  filter: brightness(0.6);
-}
-
+    #background-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      z-index: -1;
+      object-fit: cover;
+      filter: brightness(0.6);
+    }
 
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -52,7 +51,6 @@
       border-radius: 10px 10px 0 0;
     }
 
-    /* 👇 Make h1 title white */
     header h1 {
       color: white;
     }
@@ -137,7 +135,7 @@
       <p>From Champion to Top Contenders</p>
     </header>
 
-         <nav aria-label="Primary navigation">
+    <nav aria-label="Primary navigation">
       <a href="Players.html">Home</a>
       <a href="Players in Caraga.html">Top Players</a>
       <a href="Photo-Bombers.html">Photo Bombers</a>
@@ -205,14 +203,22 @@
     </footer>
   </div>
 
-</body>
   <script>
-  document.getElementById('logout-button').addEventListener('click', function (e) {
-    e.preventDefault();
-    localStorage.removeItem('userEmail');
-    localStorage.removeItem('userPassword');
-     window.location.href = 'advertisement.html';
-  });
-</script>
+    // Redirect to signup.html if not logged in
+    const email = localStorage.getItem("userEmail");
+    const password = localStorage.getItem("userPassword");
 
+    if (!email || !password) {
+      window.location.href = "signup.html";
+    }
+
+    // Logout functionality
+    document.getElementById("logout-button").addEventListener("click", function (e) {
+      e.preventDefault();
+      localStorage.removeItem("userEmail");
+      localStorage.removeItem("userPassword");
+      window.location.href = "advertisement.html";
+    });
+  </script>
+</body>
 </html>
