@@ -3,18 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Team Photo Gallery | Caraga Dart Knights</title>
+  <title>Photo Bombers & Group Photos | Caraga Dart Knights</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       padding: 0;
       color: #333;
+      background: transparent;
       line-height: 1.6;
-      background: transparent; /* video will show behind */
     }
 
-    /* Background video styles */
     #bg-video {
       position: fixed;
       top: 0;
@@ -23,7 +22,7 @@
       height: 100vh;
       object-fit: cover;
       z-index: -1;
-      filter: brightness(0.7);
+      filter: brightness(0.75);
     }
 
     .content-wrapper {
@@ -32,47 +31,64 @@
       max-width: 1000px;
       margin: 20px auto;
       padding: 20px;
-      background-color: rgba(255, 255, 255, 0.85);
+      background-color: rgba(255, 255, 255, 0.9);
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      animation: fadeIn 1s ease forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
     }
 
     header {
-      background: #005f73;
+      background: #14213d;
       color: #fff;
-      padding: 20px 0;
-      text-align: center;
+      padding: 20px;
       border-radius: 8px;
-      position: relative;
     }
 
-    header img.logo {
-      position: absolute;
-      top: 15px;
-      left: 20px;
-      height: 60px;
-      border-radius: 8px;
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 20px;
+      flex-wrap: wrap;
+      text-align: left;
     }
+
     .logo {
-  max-width: 150px;
-  height: auto;
-  display: block;
-  margin: 0 auto 10px auto;
-}
+      max-height: 120px;
+      height: auto;
+      width: auto;
+      display: block;
+    }
 
+    .header-text h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      color: #fff;
+    }
+
+    .header-text p {
+      margin: 5px 0 0;
+      color: #ddd;
+    }
 
     nav {
-      background: #0a9396;
+      background: #0077b6;
       display: flex;
       justify-content: center;
       gap: 20px;
       padding: 15px 0;
       border-radius: 8px;
       margin-top: 10px;
+      flex-wrap: wrap;
     }
 
     nav a {
-      color: #e9d8a6;
+      color: #caf0f8;
       text-decoration: none;
       font-weight: bold;
       padding: 8px 15px;
@@ -80,9 +96,16 @@
       transition: background 0.3s;
     }
 
-    nav a:hover {
-      background: #94d2bd;
-      color: #001219;
+    nav a:hover,
+    nav a:focus {
+      background: #90e0ef;
+      color: #03045e;
+      outline: none;
+    }
+
+    nav a:focus-visible {
+      outline: 3px solid #90e0ef;
+      outline-offset: 2px;
     }
 
     main {
@@ -91,14 +114,14 @@
     }
 
     h2 {
+      color: #14213d;
       text-align: center;
-      color: #005f73;
       margin-bottom: 30px;
     }
 
     .gallery {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
     }
 
@@ -106,19 +129,24 @@
       width: 100%;
       height: auto;
       border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
       object-fit: cover;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.03);
     }
 
     .caption {
       text-align: center;
       font-style: italic;
-      margin-top: 5px;
-      color: #666;
+      margin-top: 8px;
+      color: #555;
     }
 
     footer {
-      background: #005f73;
+      background: #14213d;
       color: #fff;
       text-align: center;
       padding: 15px 0;
@@ -130,10 +158,13 @@
       .gallery {
         grid-template-columns: 1fr;
       }
-      header img.logo {
-        height: 40px;
-        top: 10px;
-        left: 10px;
+      .header-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .logo {
+        margin: 0 auto;
       }
     }
   </style>
@@ -141,48 +172,50 @@
 <body>
 
   <!-- Background Video -->
-  <video autoplay muted loop playsinline id="bg-video">
+  <video autoplay muted loop playsinline id="bg-video" aria-hidden="true" tabindex="-1">
     <source src="videos/71943-540487063_small.mp4" type="video/mp4" />
     Your browser does not support the video tag.
   </video>
 
   <div class="content-wrapper">
     <header>
-  <img src="images/Itim at Pula E-Sports Naglalarawan Gaming Gaming Logo (1).png" alt="Caraga Dart Knights Logo" class="logo" />
-  <h1>Team Photo Gallery</h1>
-  <p>Moments with the Dart Knights</p>
-</header>
-
+      <div class="header-content">
+        <img src="images/Itim at Pula E-Sports Naglalarawan Gaming Gaming Logo (1).png" alt="Caraga Dart Knights Logo" class="logo" />
+        <div class="header-text">
+          <h1>Photo Bombers & Group Photos</h1>
+          <p>Candid moments and unforgettable memories with the Caraga Dart Knights</p>
+        </div>
+      </div>
+    </header>
 
     <nav aria-label="Primary navigation">
       <a href="Players.html">Home</a>
       <a href="Players in Caraga.html">Top Players</a>
       <a href="Rankings.html">Rankings</a>
-      <a href="Photo-Bombers.html">Photo Bombers</a>
+      <a href="Photo-Gallery.html">Team Gallery</a>
       <a href="contact.html">Contact</a>
       <a href="#" id="logout-button" style="color: #ffb703;">Logout</a>
     </nav>
 
     <main>
-      <h2>📸 Dart Knights in Action</h2>
+      <h2>Gallery</h2>
       <div class="gallery">
         <div>
-          <img src="images/481074110_1209637234499358_6025397972022840981_n.jpg" alt="Regional Tournament">
-          <p class="caption">Caraga Dart Knights - Regional Tournament</p>
+          <img src="images/475234994_1027038786133555_7561344266609300130_n.jpg" alt="Team group photo" loading="lazy" />
+          <p class="caption">Caraga Dart Knights - Regional Meet</p>
         </div>
         <div>
-          <img src="images/481446976_1209637007832714_5805303659941586874_n.jpg" alt="Team photo 2" />
-          <p class="caption">Celebrating a Win Together</p>
+          <img src="images/475153219_1027038946133539_4464767148433026097_n.jpg" alt="Funny photobomb moment" loading="lazy" />
+          <p class="caption">Serious Plays</p>
         </div>
         <div>
-          <img src="images/499551139_9925972457450540_6427566351992090346_n.jpg" alt="Team photo 3" />
-          <p class="caption">Focused at the Oche</p>
+          <img src="images/475641397_1027039212800179_759110381442927676_n.jpg" alt="Group huddle" loading="lazy" />
+          <p class="caption">During finals match</p>
         </div>
         <div>
-          <img src="images/501045805_122157981992482065_636365277328380324_n.jpg" alt="Team photo 4" />
-          <p class="caption">After the Finals - Smiles All Around</p>
+          <img src="images/475168459_1027039076133526_1312350449243275226_n.jpg" alt="Photobomb selfie" loading="lazy" />
+          <p class="caption">Unexpected guest in a team selfie</p>
         </div>
-        <!-- Add more photos here as needed -->
       </div>
     </main>
 
@@ -199,6 +232,5 @@
       window.location.href = 'advertisement.html';
     });
   </script>
-
 </body>
 </html>
