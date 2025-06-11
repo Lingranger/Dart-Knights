@@ -123,44 +123,9 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
       max-width: 320px;
       text-align: center;
+      cursor: pointer;
     }
 
-    .modal {
-  display: none;
-  position: fixed;
-  z-index: 999;
-  left: 0; top: 0;
-  width: 100%; height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.7);
-}
-
-.modal-content {
-  background-color: #fff;
-  margin: 10% auto;
-  padding: 20px;
-  border-radius: 10px;
-  width: 90%;
-  max-width: 500px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  position: relative;
-}
-
-.close {
-  color: #aaa;
-  position: absolute;
-  top: 10px;
-  right: 20px;
-  font-size: 28px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.close:hover {
-  color: #000;
-}
-
-    
     .event-card h3 {
       margin-bottom: 10px;
       color: #005f73;
@@ -169,6 +134,43 @@
     .event-card p {
       font-size: 0.95rem;
       margin: 8px 0;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .modal-content {
+      background-color: #fff;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+
+    .close {
+      color: #aaa;
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover {
+      color: #000;
     }
 
     footer {
@@ -209,11 +211,13 @@
 </head>
 <body>
 
+  <!-- Background Video -->
   <video autoplay muted loop playsinline id="bg-video">
     <source src="videos/71943-540487063_small.mp4" type="video/mp4" />
     Your browser does not support the video tag.
   </video>
 
+  <!-- Header Section -->
   <header>
     <img src="images/Itim at Pula E-Sports Naglalarawan Gaming Gaming Logo (1).png" alt="Logo" />
     <div class="header-title">
@@ -222,7 +226,10 @@
     </div>
   </header>
 
+  <!-- Main Content -->
   <div class="content-wrapper">
+    
+    <!-- Navigation (Preserved) -->
     <nav>
       <a href="Players in Caraga.html">Top Players</a>
       <a href="Rankings.html">Rankings</a>
@@ -235,95 +242,96 @@
     </nav>
 
     <main>
-  <h2>Upcoming Dart Events & Games</h2>
-  <div class="events">
-    <div class="event-card" onclick="openModal('event1')">
-      <h3>Caraga Regional Open</h3>
-      <p><strong>Date:</strong> July 15, 2025</p>
-      <p><strong>Location:</strong> Butuan City Sports Complex</p>
-      <p>Click for details</p>
-    </div>
-    <div class="event-card" onclick="openModal('event2')">
-      <h3>Youth League Showdown</h3>
-      <p><strong>Date:</strong> August 5, 2025</p>
-      <p><strong>Location:</strong> Surigao City Arena</p>
-      <p>Click for details</p>
-    </div>
-    <div class="event-card" onclick="openModal('event3')">
-      <h3>Mindanao Dart Cup</h3>
-      <p><strong>Date:</strong> September 10, 2025</p>
-      <p><strong>Location:</strong> Tandag Convention Hall</p>
-      <p>Click for details</p>
-    </div>
-  </div>
+      <h2>Upcoming Dart Events & Games</h2>
+      <div class="events">
+        <div class="event-card" onclick="openModal('event1')">
+          <h3>Caraga Regional Open</h3>
+          <p><strong>Date:</strong> July 15, 2025</p>
+          <p><strong>Location:</strong> Butuan City Sports Complex</p>
+          <p>Click for details</p>
+        </div>
+        <div class="event-card" onclick="openModal('event2')">
+          <h3>Youth League Showdown</h3>
+          <p><strong>Date:</strong> August 5, 2025</p>
+          <p><strong>Location:</strong> Surigao City Arena</p>
+          <p>Click for details</p>
+        </div>
+        <div class="event-card" onclick="openModal('event3')">
+          <h3>Mindanao Dart Cup</h3>
+          <p><strong>Date:</strong> September 10, 2025</p>
+          <p><strong>Location:</strong> Tandag Convention Hall</p>
+          <p>Click for details</p>
+        </div>
+      </div>
 
-  <h2 style="margin-top: 50px;">Recent Match Results</h2>
-  <div class="events">
-    <div class="event-card">
-      <h3>Caraga Clash - June 5</h3>
-      <p><strong>Winner:</strong> Marco Sanchez</p>
-      <p><strong>Score:</strong> 5–3</p>
-      <p><strong>Runner-Up:</strong> Kenji Alvarado</p>
-    </div>
-    <div class="event-card">
-      <h3>Davao vs Caraga – May 22</h3>
-      <p><strong>Winner:</strong> Caraga Team</p>
-      <p><strong>Score:</strong> 6–4</p>
-      <p><strong>Highlights:</strong> Close game, sudden death finish!</p>
-    </div>
-  </div>
-</main>
-
+      <h2 style="margin-top: 50px;">Recent Match Results</h2>
+      <div class="events">
+        <div class="event-card">
+          <h3>Caraga Clash - June 5</h3>
+          <p><strong>Winner:</strong> Marco Sanchez</p>
+          <p><strong>Score:</strong> 5–3</p>
+          <p><strong>Runner-Up:</strong> Kenji Alvarado</p>
+        </div>
+        <div class="event-card">
+          <h3>Davao vs Caraga – May 22</h3>
+          <p><strong>Winner:</strong> Caraga Team</p>
+          <p><strong>Score:</strong> 6–4</p>
+          <p><strong>Highlights:</strong> Close game, sudden death finish!</p>
+        </div>
+      </div>
+    </main>
 
     <footer>
       &copy; 2025 Caraga Dart Knights. All rights reserved.
     </footer>
   </div>
 
+  <!-- JavaScript Logic -->
   <script>
     document.getElementById('logout-button').addEventListener('click', function (e) {
       e.preventDefault();
       window.location.href = 'advertisement.html';
     });
+
     function openModal(id) {
-  document.getElementById(id).style.display = "block";
-}
-function closeModal(id) {
-  document.getElementById(id).style.display = "none";
-}
+      document.getElementById(id).style.display = "block";
+    }
 
+    function closeModal(id) {
+      document.getElementById(id).style.display = "none";
+    }
   </script>
-  <!-- Event Detail Modals -->
-<div id="event1" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal('event1')">&times;</span>
-    <h3>Caraga Regional Open</h3>
-    <p><strong>Date:</strong> July 15, 2025</p>
-    <p><strong>Location:</strong> Butuan City Sports Complex</p>
-    <p>The biggest dart tournament in Caraga, featuring over 50 players. Prizes up to ₱50,000. Spectators welcome!</p>
-  </div>
-</div>
 
-<div id="event2" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal('event2')">&times;</span>
-    <h3>Youth League Showdown</h3>
-    <p><strong>Date:</strong> August 5, 2025</p>
-    <p><strong>Location:</strong> Surigao City Arena</p>
-    <p>Watch young talents battle it out. Open to under-21 players across Mindanao. Free entry!</p>
+  <!-- Modals for Event Details -->
+  <div id="event1" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('event1')">&times;</span>
+      <h3>Caraga Regional Open</h3>
+      <p><strong>Date:</strong> July 15, 2025</p>
+      <p><strong>Location:</strong> Butuan City Sports Complex</p>
+      <p>The biggest dart tournament in Caraga, featuring over 50 players. Prizes up to ₱50,000. Spectators welcome!</p>
+    </div>
   </div>
-</div>
 
-<div id="event3" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal('event3')">&times;</span>
-    <h3>Mindanao Dart Cup</h3>
-    <p><strong>Date:</strong> September 10, 2025</p>
-    <p><strong>Location:</strong> Tandag Convention Hall</p>
-    <p>Caraga vs Northern Mindanao face-off. Don't miss the intensity of regional pride!</p>
+  <div id="event2" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('event2')">&times;</span>
+      <h3>Youth League Showdown</h3>
+      <p><strong>Date:</strong> August 5, 2025</p>
+      <p><strong>Location:</strong> Surigao City Arena</p>
+      <p>Watch young talents battle it out. Open to under-21 players across Mindanao. Free entry!</p>
+    </div>
   </div>
-</div>
 
+  <div id="event3" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('event3')">&times;</span>
+      <h3>Mindanao Dart Cup</h3>
+      <p><strong>Date:</strong> September 10, 2025</p>
+      <p><strong>Location:</strong> Tandag Convention Hall</p>
+      <p>Caraga vs Northern Mindanao face-off. Don't miss the intensity of regional pride!</p>
+    </div>
+  </div>
 
 </body>
 </html>
