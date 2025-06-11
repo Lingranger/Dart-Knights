@@ -239,16 +239,69 @@
     </nav>
 
     <main>
-     <div style="text-align: center; margin-bottom: 20px;">
+    <!-- Month/Year Navigation -->
+<div style="text-align: center; margin-bottom: 20px;">
   <button onclick="changeMonth(-1)">←</button>
   <span id="monthYear" style="font-weight: bold; font-size: 18px; margin: 0 10px;"></span>
   <button onclick="changeMonth(1)">→</button>
 </div>
 
+<script>
+  // Month/year tracking
+  let currentMonth = new Date().getMonth();
+  let currentYear = new Date().getFullYear();
+
+  // Restore from localStorage if available
+  const savedMonth = localStorage.getItem("selectedMonth");
+  const savedYear = localStorage.getItem("selectedYear");
+
+  if (savedMonth !== null && savedYear !== null) {
+    currentMonth = parseInt(savedMonth);
+    currentYear = parseInt(savedYear);
+  }
+
+  // Update month/year display
+  function updateCalendar() {
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    document.getElementById("monthYear").textContent =
+      `${monthNames[currentMonth]} ${currentYear}`;
+  }
+
+  // Save to localStorage
+  function saveToLocalStorage() {
+    localStorage.setItem("selectedMonth", currentMonth);
+    localStorage.setItem("selectedYear", currentYear);
+  }
+
+  // Change month with arrow buttons
+  function changeMonth(direction) {
+    currentMonth += direction;
+
+    if (currentMonth < 0) {
+      currentMonth = 11;
+      currentYear--;
+    } else if (currentMonth > 11) {
+      currentMonth = 0;
+      currentYear++;
+    }
+
+    saveToLocalStorage();
+    updateCalendar();
+    filterLogs(); // Make sure this function exists
+  }
+
+  // Initial load
+  updateCalendar();
+  filterLogs(); // This should filter your match logs
+</script>
+
 
       <h2>Previous Match Results</h2>
       <section style="margin-bottom: 30px;">
-  <h2 style="text-align: center;">Add New Match</h2>
+  <h2 style="text-align: center;">Add History Logs</h2>
   <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 20px;">
     <input type="text" id="newDate" placeholder="Date (e.g. June 10, 2025)" style="padding: 8px; width: 200px;" />
     <input type="text" id="newMatch" placeholder="Match (e.g. Player A vs Player B)" style="padding: 8px; width: 250px;" />
@@ -303,9 +356,7 @@
             </td>
           </tr>
         </tbody>
-        <p id="noMatchMessage" style="text-align: center; margin-top: 20px; display: none; color: red;">
-  No match history for now.
-</p>
+    
       </table>
 
       <a href="Players.html" class="back-btn">← Back to Players</a>
@@ -413,21 +464,43 @@
     }
     updateMonthYearDisplay();
     filterLogs();
+ function filterLogs() {
+  const rows = document.querySelectorAll("#logTable tbody tr");
+  let visibleCount = 0;
+
+  rows.forEach(row => {
+    const dateAttr = row.getAttribute("data-date");
+    if (dateAttr) {
+      const rowDate = new Date(dateAttr);
+      const isVisible = rowDate.getMonth() === currentMonth && rowDate.getFullYear() === currentYear;
+      row.style.display = isVisible ? "" : "none";
+      if (isVisible) visibleCount++;
+    }
+  });
+
+  const noMatchMessage = document.getElementById("noMatchRow");
+
+  if (visibleCount === 0) {
+    // If not already added, insert the row
+    if (!noMatchMessage) {
+      const tbody = document.querySelector("#logTable tbody");
+      const newRow = document.createElement("tr");
+      newRow.id = "noMatchRow";
+      const td = document.createElement("td");
+      td.colSpan = 3; // Adjust to match your table's column count
+      td.style.textAlign = "center";
+      td.style.color = "red";
+      td.textContent = "No match history for now.";
+      newRow.appendChild(td);
+      tbody.appendChild(newRow);
+    }
+  } else {
+    if (noMatchMessage) {
+      noMatchMessage.remove();
+    }
   }
+}
 
-  function filterLogs() {
-    const rows = document.querySelectorAll("#logTable tbody tr");
-    let visibleCount = 0;
-
-    rows.forEach(row => {
-      const dateAttr = row.getAttribute("data-date");
-      if (dateAttr) {
-        const rowDate = new Date(dateAttr);
-        const isVisible = rowDate.getMonth() === currentMonth && rowDate.getFullYear() === currentYear;
-        row.style.display = isVisible ? "" : "none";
-        if (isVisible) visibleCount++;
-      }
-    });
 
     noMatchMessage.style.display = visibleCount === 0 ? "block" : "none";
   }
