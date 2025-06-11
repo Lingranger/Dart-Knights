@@ -420,6 +420,64 @@
   // Call initially
   updateScheduleTable();
 </script>
+<script>
+  function editScheduleRow(button) {
+    const row = button.closest('tr');
+    const cells = row.querySelectorAll('td');
+
+    // Convert cells to input fields
+    for (let i = 0; i < 4; i++) {
+      const input = document.createElement('input');
+      input.value = cells[i].textContent;
+      cells[i].textContent = '';
+      cells[i].appendChild(input);
+    }
+
+    // Change Edit button to Save
+    button.textContent = 'Save';
+    button.onclick = function () {
+      const newDate = cells[0].querySelector('input').value;
+      const newTime = cells[1].querySelector('input').value;
+      const newMatch = cells[2].querySelector('input').value;
+      const newLocation = cells[3].querySelector('input').value;
+
+      const opts = { year: 'numeric', month: 'long' };
+      const key = currentDate.toLocaleDateString('en-US', opts);
+
+      const index = Array.from(row.parentElement.children).indexOf(row);
+
+      // Update scheduleData
+      scheduleData[key][index] = {
+        date: newDate,
+        time: newTime,
+        match: newMatch,
+        location: newLocation
+      };
+
+      saveScheduleData();
+      updateScheduleTable();
+    };
+  }
+
+  function deleteScheduleRow(button) {
+    if (!confirm('Are you sure you want to delete this match?')) return;
+
+    const row = button.closest('tr');
+    const index = Array.from(row.parentElement.children).indexOf(row);
+
+    const opts = { year: 'numeric', month: 'long' };
+    const key = currentDate.toLocaleDateString('en-US', opts);
+
+    scheduleData[key].splice(index, 1);
+
+    if (scheduleData[key].length === 0) {
+      delete scheduleData[key];
+    }
+
+    saveScheduleData();
+    updateScheduleTable();
+  }
+</script>
 
 
 </body>
