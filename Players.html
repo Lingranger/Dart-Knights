@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Caraga Dart Knights - Players</title>
+  <title>Caraga Dart Knights - Home</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -14,7 +14,6 @@
       background: transparent;
     }
 
-    /* 🔥 Background video */
     #bg-video {
       position: fixed;
       top: 0;
@@ -26,7 +25,6 @@
       filter: brightness(0.7);
     }
 
-    /* 🔥 Header styling */
     header {
       display: flex;
       align-items: center;
@@ -111,37 +109,30 @@
       margin-bottom: 25px;
     }
 
-    .players {
+    .events {
       display: flex;
       flex-wrap: wrap;
       gap: 20px;
       justify-content: center;
     }
 
-    .player-card {
+    .event-card {
       background: #ffffff;
       padding: 15px;
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-      max-width: 280px;
+      max-width: 320px;
       text-align: center;
     }
 
-    .player-card img {
-      width: 100%;
-      height: auto;
-      border-radius: 8px;
+    .event-card h3 {
       margin-bottom: 10px;
-    }
-
-    .player-card h3 {
-      margin: 10px 0 5px;
       color: #005f73;
     }
 
-    .player-card p {
-      margin: 0;
+    .event-card p {
       font-size: 0.95rem;
+      margin: 8px 0;
     }
 
     footer {
@@ -154,7 +145,7 @@
     }
 
     @media (max-width: 600px) {
-      .player-card {
+      .event-card {
         flex: 1 1 100%;
       }
 
@@ -182,24 +173,21 @@
 </head>
 <body>
 
-  <!-- 🔥 Background Video -->
   <video autoplay muted loop playsinline id="bg-video">
     <source src="videos/71943-540487063_small.mp4" type="video/mp4" />
     Your browser does not support the video tag.
   </video>
 
-  <!-- 🔥 Header with Logo and Title Centered -->
   <header>
     <img src="images/Itim at Pula E-Sports Naglalarawan Gaming Gaming Logo (1).png" alt="Logo" />
     <div class="header-title">
       <h1>Caraga Dart Knights</h1>
-      <p>Meet the top dart players from the Caraga region</p>
+      <p>Your Gateway to the Best Dart Events in Caraga</p>
     </div>
   </header>
 
-  <!-- 🔥 Main Content Below -->
   <div class="content-wrapper">
-    <nav aria-label="Primary navigation">
+    <nav>
       <a href="Players in Caraga.html">Top Players</a>
       <a href="Rankings.html">Rankings</a>
       <a href="Photo-Bombers.html">Photo Bombers</a>
@@ -211,35 +199,25 @@
     </nav>
 
     <main>
-      <h2>Featured Dart Players of Caraga</h2>
-      <div class="players">
-        <div class="player-card">
-          <img src="images/348606664_3393093387621073_7068113774532448902_n.jpg" alt="Player 1" />
-          <h3>Godofredo Abuzo IV</h3>
-          <p><strong>City:</strong> Butuan City</p>
-          <p><strong>Specialty:</strong> Consistent Finisher</p>
-          <p><strong>Achievements:</strong> 3x Regional Champion</p>
+      <h2>Upcoming Dart Events & Games</h2>
+      <div class="events">
+        <div class="event-card">
+          <h3>Caraga Regional Open</h3>
+          <p><strong>Date:</strong> July 15, 2025</p>
+          <p><strong>Location:</strong> Butuan City Sports Complex</p>
+          <p>Top players from across the region will compete in this thrilling tournament.</p>
         </div>
-        <div class="player-card">
-          <img src="images/589918353_1069540748553208_5446723276674800216_n.jpg" alt="Player 2" />
-          <h3>Anna Mae Castillo</h3>
-          <p><strong>City:</strong> Surigao City</p>
-          <p><strong>Specialty:</strong> Bullseye Precision</p>
-          <p><strong>Achievements:</strong> 2024 Women’s League Winner</p>
+        <div class="event-card">
+          <h3>Youth League Showdown</h3>
+          <p><strong>Date:</strong> August 5, 2025</p>
+          <p><strong>Location:</strong> Surigao City Arena</p>
+          <p>Catch the rising stars of darts in this exciting youth division tournament.</p>
         </div>
-        <div class="player-card">
-          <img src="images/500679085_122387622896024248_1622523027296102270_n.jpg" alt="Player 3" />
-          <h3>Carlito Reyes</h3>
-          <p><strong>City:</strong> Tandag</p>
-          <p><strong>Specialty:</strong> Long Shot Accuracy</p>
-          <p><strong>Achievements:</strong> Top 5 Mindanao Darts 2023</p>
-        </div>
-        <div class="player-card">
-          <img src="images/489918353_1069540748553208_5446723276674800216_n.jpg" alt="Player 4" />
-          <h3>Eliza Manlapig</h3>
-          <p><strong>City:</strong> Cabadbaran</p>
-          <p><strong>Specialty:</strong> Fast Throws</p>
-          <p><strong>Achievements:</strong> Darts Rising Star Award 2022</p>
+        <div class="event-card">
+          <h3>Mindanao Dart Cup</h3>
+          <p><strong>Date:</strong> September 10, 2025</p>
+          <p><strong>Location:</strong> Tandag Convention Hall</p>
+          <p>Caraga's elite take on the best of Mindanao in this regional showdown.</p>
         </div>
       </div>
     </main>
