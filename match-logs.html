@@ -239,6 +239,19 @@
 
     <main>
       <h2>Previous Match Results</h2>
+      <section style="margin-bottom: 30px;">
+  <h2 style="text-align: center;">Add New Match</h2>
+  <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 20px;">
+    <input type="text" id="newDate" placeholder="Date (e.g. June 10, 2025)" style="padding: 8px; width: 200px;" />
+    <input type="text" id="newMatch" placeholder="Match (e.g. Player A vs Player B)" style="padding: 8px; width: 250px;" />
+    <input type="text" id="newScore" placeholder="Score (e.g. 3 - 2)" style="padding: 8px; width: 120px;" />
+    <input type="text" id="newWinner" placeholder="Winner" style="padding: 8px; width: 180px;" />
+    <button onclick="addMatch()" style="padding: 8px 16px; background-color: #005f73; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">
+      Add Match
+    </button>
+  </div>
+</section>
+
       <table class="log-table" id="logTable">
         <thead>
           <tr>
@@ -321,6 +334,49 @@
       }
     }
   </script>
+  <script>
+  function addMatch() {
+    const table = document.getElementById("logTable").querySelector("tbody");
+
+    // ✅ Check if there are already 20 matches
+    if (table.rows.length >= 20) {
+      alert("Maximum of 20 matches reached.");
+      return;
+    }
+
+    const date = document.getElementById("newDate").value.trim();
+    const match = document.getElementById("newMatch").value.trim();
+    const score = document.getElementById("newScore").value.trim();
+    const winner = document.getElementById("newWinner").value.trim();
+
+    if (!date || !match || !score || !winner) {
+      alert("Please fill in all fields.");
+      return;
+    }
+
+    const newRow = document.createElement("tr");
+
+    newRow.innerHTML = `
+      <td>${date}</td>
+      <td>${match}</td>
+      <td>${score}</td>
+      <td>${winner}</td>
+      <td>
+        <button onclick="editRow(this)">Edit</button>
+        <button onclick="deleteRow(this)">Delete</button>
+      </td>
+    `;
+
+    table.appendChild(newRow);
+
+    // Clear inputs after adding
+    document.getElementById("newDate").value = "";
+    document.getElementById("newMatch").value = "";
+    document.getElementById("newScore").value = "";
+    document.getElementById("newWinner").value = "";
+  }
+</script>
+
 
 </body>
 </html>
