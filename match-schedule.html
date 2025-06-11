@@ -202,13 +202,18 @@
       .header-title p {
         font-size: 1rem;
       }
-     .schedule-header {
+   .schedule-header {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   gap: 10px;
-  font-size: 1.5rem;
 }
+
+#scheduleContent {
+  margin-top: 20px;
+  font-size: 16px;
+}
+
 
 .schedule-header button {
   background: none;
@@ -268,11 +273,58 @@
       <a href="#" id="logout-button" style="color: #ffb703;">Logout</a>
     </nav>
     <main>
-     <h2 class="schedule-header">
+   <h2 class="schedule-header">
   <button onclick="prevMonth()">&#8592;</button>
   <span id="monthYear">June 2025</span>
   <button onclick="nextMonth()">&#8594;</button>
 </h2>
+
+<div id="scheduleContent"></div>
+       <script>
+    const scheduleData = {
+      'June 2025': [
+        'June 5 - Team A vs Team B',
+        'June 12 - Team C vs Team D',
+        'June 20 - Team E vs Team F'
+      ],
+      'July 2025': [
+        'July 3 - Team A vs Team C',
+        'July 15 - Team B vs Team D'
+      ],
+      // Add more months/years as needed
+    };
+
+    let currentDate = new Date(2025, 5); // June is 5 (0-indexed)
+
+    function updateSchedule() {
+      const options = { year: 'numeric', month: 'long' };
+      const formattedDate = currentDate.toLocaleDateString('en-US', options);
+      document.getElementById('monthYear').textContent = formattedDate;
+
+      const schedule = scheduleData[formattedDate];
+      const scheduleContent = document.getElementById('scheduleContent');
+
+      if (schedule && schedule.length > 0) {
+        scheduleContent.innerHTML = `<ul>${schedule.map(item => `<li>${item}</li>`).join('')}</ul>`;
+      } else {
+        scheduleContent.textContent = 'No schedule for now.';
+      }
+    }
+
+    function prevMonth() {
+      currentDate.setMonth(currentDate.getMonth() - 1);
+      updateSchedule();
+    }
+
+    function nextMonth() {
+      currentDate.setMonth(currentDate.getMonth() + 1);
+      updateSchedule();
+    }
+
+    // Initialize on load
+    updateSchedule();
+  </script>
+
 
 
       <table class="schedule-table" id="scheduleTable">
