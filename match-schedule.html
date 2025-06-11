@@ -2,382 +2,244 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Caraga Dart Knights - Match Schedule</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Match Schedule - Caraga Dart Knights</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       margin: 0;
       padding: 0;
+      background: #f0f0f0;
       color: #333;
-      background: transparent;
-    }
-
-    #bg-video {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      object-fit: cover;
-      z-index: -1;
-      filter: brightness(0.7);
     }
 
     header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
       background: #005f73;
-      color: #fff;
-      padding: 15px 20px;
-      border-radius: 10px 10px 0 0;
-      position: relative;
-      z-index: 2;
-      flex-wrap: wrap;
-    }
-
-    header img {
-      height: 80px;
-      width: auto;
-      border-radius: 5px;
-      box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
-    }
-
-    .header-title {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
+      color: white;
+      padding: 20px;
       text-align: center;
     }
 
-    .header-title h1 {
+    h1 {
       margin: 0;
-      font-size: 1.8em;
-      color: white;
-    }
-
-    .header-title p {
-      margin-top: 5px;
-      font-size: 1.2rem;
-      color: #e9d8a6;
     }
 
     .content-wrapper {
-      position: relative;
-      z-index: 1;
-      max-width: 1000px;
-      margin: 30px auto;
-      padding: 20px;
-      background-color: rgba(255, 255, 255, 0.85);
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    nav {
       background: #0a9396;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      padding: 15px 0;
-      border-radius: 8px;
-      flex-wrap: wrap;
+      padding: 10px;
+      text-align: center;
     }
 
-    nav a {
-      color: #e9d8a6;
+    .content-wrapper nav a {
+      color: white;
+      margin: 0 10px;
       text-decoration: none;
-      font-weight: bold;
-      padding: 8px 15px;
-      border-radius: 5px;
-      transition: background 0.3s;
+      font-weight: 500;
     }
 
-    nav a:hover {
-      background: #94d2bd;
+    .content-wrapper nav a:hover {
+      color: #ffb703;
+    }
+
+    .calendar-container {
+      max-width: 800px;
+      margin: 30px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .calendar-header h2 {
+      margin: 0;
+    }
+
+    .calendar-header button {
+      background-color: #0a9396;
+      color: white;
+      border: none;
+      padding: 10px 14px;
+      margin: 0 5px;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+
+    .calendar-header button:hover {
+      background-color: #94d2bd;
       color: #001219;
     }
 
-    main {
-      margin-top: 30px;
-      padding: 0 20px;
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 25px;
-    }
-
-    .schedule-table {
+    table {
       width: 100%;
       border-collapse: collapse;
     }
 
-    .schedule-table th, .schedule-table td {
-      padding: 12px;
+    th, td {
+      width: 14.2%;
       text-align: center;
+      padding: 10px;
       border: 1px solid #ccc;
     }
 
-    .schedule-table th {
-      background-color: #0a9396;
+    th {
+      background: #0a9396;
       color: white;
     }
 
-    .schedule-table tbody tr:nth-child(odd) {
-      background-color: #f0fdfa;
-    }
-
-    .back-btn {
-      display: block;
-      text-align: center;
-      margin: 25px auto 0;
-      padding: 10px 20px;
-      background-color: #005f73;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      text-decoration: none;
+    td.today {
+      background: #e9d8a6;
       font-weight: bold;
-      transition: background 0.3s;
-      width: max-content;
     }
 
-    .back-btn:hover {
-      background-color: #0a9396;
+    td.event {
+      background-color: #ffb703;
+      color: #001219;
+      font-weight: bold;
     }
 
     footer {
       background: #005f73;
-      color: #fff;
+      color: white;
       text-align: center;
       padding: 15px 0;
-      margin-top: 40px;
-      border-radius: 8px;
-    }
-    form#addMatchForm {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  background-color: #e0fbfc;
-  padding: 20px;
-  border-radius: 10px;
-  margin-top: 20px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-}
-
-form#addMatchForm label {
-  font-weight: bold;
-  color: #005f73;
-  display: flex;
-  flex-direction: column;
-  font-size: 0.95rem;
-}
-
-form#addMatchForm input[type="date"],
-form#addMatchForm input[type="time"],
-form#addMatchForm input[type="text"] {
-  padding: 8px 12px;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  margin-top: 5px;
-}
-
-form#addMatchForm button[type="submit"] {
-  align-self: center;
-  background-color: #005f73;
-  color: white;
-  padding: 10px 20px;
-  font-size: 1rem;
-  border: none;
-  border-radius: 5px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-form#addMatchForm button[type="submit"]:hover {
-  background-color: #0a9396;
-}
-
-#limitMsg {
-  text-align: center;
-  font-weight: bold;
-}
-
-
-    @media (max-width: 600px) {
-      .header-title h1 {
-        font-size: 1.4rem;
-      }
-
-      .header-title p {
-        font-size: 1rem;
-      }
-
-      header {
-        flex-direction: column;
-        text-align: center;
-        padding-bottom: 20px;
-      }
-
-      .header-title {
-        position: static;
-        transform: none;
-        margin-top: 10px;
-      }
-
-      .schedule-table th, .schedule-table td {
-        padding: 8px;
-        font-size: 0.85rem;
-      }
+      margin-top: 30px;
     }
   </style>
 </head>
 <body>
 
-  <video autoplay muted loop playsinline id="bg-video">
-    <source src="videos/71943-540487063_small.mp4" type="video/mp4" />
-    Your browser does not support the video tag.
-  </video>
+<header>
+  <h1>Caraga Dart Knights</h1>
+  <p>Match Schedule</p>
+</header>
 
-  <header>
-    <img src="images/Itim at Pula E-Sports Naglalarawan Gaming Gaming Logo (1).png" alt="Logo" />
-    <div class="header-title">
-      <h1>Caraga Dart Knights</h1>
-      <p>Upcoming Match Schedule</p>
+<div class="content-wrapper">
+  <nav>
+    <a href="Players.html">Home</a>
+    <a href="Players in Caraga.html">Top Players</a>
+    <a href="Rankings.html">Rankings</a>
+    <a href="Photo-Gallery.html">Gallery</a>
+    <a href="Photo-Bombers.html">Photo Bombers</a>
+    <a href="contact.html">Contact</a>
+    <a href="match-logs.html">Match Logs</a>
+    <a href="#" id="logout-button" style="color: #ffb703;">Logout</a>
+  </nav>
+</div>
+
+<div class="calendar-container">
+  <div class="calendar-header">
+    <div>
+      <button onclick="changeYear(-1)">«</button>
+      <button onclick="changeMonth(-1)">‹</button>
     </div>
-  </header>
-
-  <div class="content-wrapper">
-    <nav>
-      <a href="Players.html">Home</a>
-      <a href="Players in Caraga.html">Top Players</a>
-      <a href="Rankings.html">Rankings</a>
-      <a href="Photo-Gallery.html">Gallery</a>
-      <a href="Photo-Bombers.html">Photo Bombers</a>
-      <a href="contact.html">Contact</a>
-      <a href="match-logs.html">Match Logs</a>
-      <a href="#" id="logout-button" style="color: #ffb703;">Logout</a>
-    </nav>
-
-    <main>
-      <h2>Match Schedule - June 2025</h2>
-     <table class="schedule-table" id="scheduleTable">
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Time</th>
-      <th>Match</th>
-      <th>Location</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>June 15, 2025</td>
-      <td>3:00 PM</td>
-      <td>Godofredo Abuzo IV vs Anna Mae Castillo</td>
-      <td>Butuan City Sports Complex</td>
-      <td>
-        <button onclick="editScheduleRow(this)">Edit</button>
-        <button onclick="deleteScheduleRow(this)">Delete</button>
-      </td>
-    </tr>
-    <tr>
-      <td>June 18, 2025</td>
-      <td>4:00 PM</td>
-      <td>Carlito Reyes vs Eliza Manlapig</td>
-      <td>Surigao City Arena</td>
-      <td>
-        <button onclick="editScheduleRow(this)">Edit</button>
-        <button onclick="deleteScheduleRow(this)">Delete</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
-        <h3>Add New Match</h3>
-  <form id="addMatchForm">
-    <label>Date: <input type="date" id="matchDate" required></label>
-    <label>Time: <input type="time" id="matchTime" required></label>
-    <label>Match: <input type="text" id="matchTitle" placeholder="Player A vs Player B" required></label>
-    <label>Location: <input type="text" id="matchLocation" required></label>
-    <button type="submit">Add Match</button>
-    <p id="limitMsg" style="color: red;"></p>
-  </form>
-
-
-
-      <a href="players.html" class="back-btn">← Back to Players</a>
-    </main>
-
-    <footer>
-      &copy; 2025 Caraga Dart Knights. All rights reserved.
-    </footer>
+    <h2 id="monthYear"></h2>
+    <div>
+      <button onclick="changeMonth(1)">›</button>
+      <button onclick="changeYear(1)">»</button>
+    </div>
   </div>
 
-  <script>
-    document.getElementById('logout-button').addEventListener('click', function (e) {
-      e.preventDefault();
-      window.location.href = 'advertisement.html';
-    });
-  </script>
-    <script>
-    function deleteScheduleRow(button) {
-      const row = button.closest("tr");
-      row.remove();
+  <table id="calendar">
+    <thead>
+      <tr>
+        <th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<footer>
+  &copy; 2025 Caraga Dart Knights. All rights reserved.
+</footer>
+
+<script>
+  const calendarBody = document.querySelector("#calendar tbody");
+  const monthYearDisplay = document.getElementById("monthYear");
+  const eventDates = {
+    "2025-06-12": "Regionals",
+    "2025-06-18": "City Showdown",
+    "2025-06-25": "Inter-Club Challenge"
+  };
+
+  let today = new Date();
+  let currentMonth = today.getMonth();
+  let currentYear = today.getFullYear();
+
+  function renderCalendar(month, year) {
+    calendarBody.innerHTML = "";
+    let firstDay = new Date(year, month).getDay();
+    let daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+
+    monthYearDisplay.textContent = `${monthNames[month]} ${year}`;
+
+    let row = document.createElement("tr");
+
+    for (let i = 0; i < firstDay; i++) {
+      let cell = document.createElement("td");
+      row.appendChild(cell);
     }
 
-    function editScheduleRow(button) {
-      const row = button.closest("tr");
-      const cells = row.querySelectorAll("td");
-
-      const date = prompt("Enter new date:", cells[0].innerText);
-      const time = prompt("Enter new time:", cells[1].innerText);
-      const match = prompt("Enter new match:", cells[2].innerText);
-      const location = prompt("Enter new location:", cells[3].innerText);
-
-      if (date && time && match && location) {
-        cells[0].innerText = date;
-        cells[1].innerText = time;
-        cells[2].innerText = match;
-        cells[3].innerText = location;
+    for (let day = 1; day <= daysInMonth; day++) {
+      if ((firstDay + day - 1) % 7 === 0 && day !== 1) {
+        calendarBody.appendChild(row);
+        row = document.createElement("tr");
       }
+
+      let cell = document.createElement("td");
+      let dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+      if (eventDates[dateStr]) {
+        cell.classList.add("event");
+        cell.title = eventDates[dateStr];
+      }
+
+      if (
+        day === today.getDate() &&
+        month === today.getMonth() &&
+        year === today.getFullYear()
+      ) {
+        cell.classList.add("today");
+      }
+
+      cell.textContent = day;
+      row.appendChild(cell);
     }
 
-    document.getElementById('addMatchForm').addEventListener('submit', function(e) {
-      e.preventDefault();
+    calendarBody.appendChild(row);
+  }
 
-      const table = document.getElementById("scheduleTable").getElementsByTagName('tbody')[0];
-      const currentMatches = table.getElementsByTagName('tr').length;
+  function changeMonth(direction) {
+    currentMonth += direction;
+    if (currentMonth < 0) {
+      currentMonth = 11;
+      currentYear--;
+    } else if (currentMonth > 11) {
+      currentMonth = 0;
+      currentYear++;
+    }
+    renderCalendar(currentMonth, currentYear);
+  }
 
-      if (currentMatches >= 10) {
-        document.getElementById("limitMsg").textContent = "You can only add up to 10 matches.";
-        return;
-      }
+  function changeYear(direction) {
+    currentYear += direction;
+    renderCalendar(currentMonth, currentYear);
+  }
 
-      const date = document.getElementById("matchDate").value;
-      const time = document.getElementById("matchTime").value;
-      const match = document.getElementById("matchTitle").value;
-      const location = document.getElementById("matchLocation").value;
+  renderCalendar(currentMonth, currentYear);
+</script>
 
-      const row = table.insertRow();
-      row.innerHTML = `
-        <td>${date}</td>
-        <td>${time}</td>
-        <td>${match}</td>
-        <td>${location}</td>
-        <td>
-          <button onclick="editScheduleRow(this)">Edit</button>
-          <button onclick="deleteScheduleRow(this)">Delete</button>
-        </td>
-      `;
-
-      // Reset form
-      this.reset();
-      document.getElementById("limitMsg").textContent = "";
-    });
-  </script>
 </body>
 </html>
