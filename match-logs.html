@@ -183,6 +183,27 @@
       border-radius: 8px;
     }
 
+    #month-nav {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    #month-nav button {
+      background-color: #0a9396;
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #month-nav span {
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin: 0 15px;
+    }
+
     @media (max-width: 600px) {
       .header-title h1 {
         font-size: 1.4rem;
@@ -239,444 +260,102 @@
     </nav>
 
     <main>
-<div class="calendar-header">
-  <button id="prevMonth">←</button>
-  <span id="currentMonthYear"></span>
-  <button id="nextMonth">→</button>
-</div>
+      <div id="month-nav">
+        <button id="prev-month">◀</button>
+        <span id="current-month-year">Loading...</span>
+        <button id="next-month">▶</button>
+      </div>
 
-<table id="matchLogsTable" border="1">
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Player 1</th>
-      <th>Player 2</th>
-      <th>Winner</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr class="log-entry" data-date="2025-06-09">
-      <td>2025-06-09</td>
-      <td>John</td>
-      <td>Mark</td>
-      <td>John</td>
-    </tr>
-    <tr class="log-entry" data-date="2025-06-15">
-      <td>2025-06-15</td>
-      <td>Luke</td>
-      <td>Paul</td>
-      <td>Paul</td>
-    </tr>
-    <tr class="log-entry" data-date="2025-07-02">
-      <td>2025-07-02</td>
-      <td>Anna</td>
-      <td>Mike</td>
-      <td>Anna</td>
-    </tr>
-  </tbody>
-</table>
-
-<div id="noLogsMessage" style="display: none; margin-top: 1em; color: red;">
-  No match logs found for this month.
-</div>
-
-
-<script>
-  // Initialize current date to today's month and year
-  let currentMonth = new Date().getMonth();
-  let currentYear = new Date().getFullYear();
-
-  // Retrieve saved month/year from localStorage if available
-  const savedMonth = localStorage.getItem("selectedMonth");
-  const savedYear = localStorage.getItem("selectedYear");
-
-  if (savedMonth !== null && savedYear !== null) {
-    currentMonth = parseInt(savedMonth);
-    currentYear = parseInt(savedYear);
-  }
-
-  // Month names for display
-  const monthNames = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-  ];
-
-  // Function to update the calendar UI and filter logs
-  function updateCalendar() {
-    const currentDisplay = document.getElementById("currentMonthYear");
-    currentDisplay.textContent = `${monthNames[currentMonth]} ${currentYear}`;
-    filterLogs();
-    // Save current selection
-    localStorage.setItem("selectedMonth", currentMonth);
-    localStorage.setItem("selectedYear", currentYear);
-  }
-
-  // Navigate to previous month
-  function prevMonth() {
-    currentMonth--;
-    if (currentMonth < 0) {
-      currentMonth = 11;
-      currentYear--;
-    }
-    updateCalendar();
-  }
-
-  // Navigate to next month
-  function nextMonth() {
-    currentMonth++;
-    if (currentMonth > 11) {
-      currentMonth = 0;
-      currentYear++;
-    }
-    updateCalendar();
-  }
-
-  // Attach event listeners to arrows
-  document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("prevMonth").addEventListener("click", prevMonth);
-    document.getElementById("nextMonth").addEventListener("click", nextMonth);
-
-    // Initial load
-    updateCalendar();
-  });
-
-  // Filter logs based on selected month and year
-  function filterLogs() {
-    const logs = document.querySelectorAll(".log-entry");
-    let logsFound = false;
-
-    logs.forEach(log => {
-      const logDate = new Date(log.getAttribute("data-date")); // Format: YYYY-MM-DD
-      if (
-        logDate.getMonth() === currentMonth &&
-        logDate.getFullYear() === currentYear
-      ) {
-        log.style.display = "block";
-        logsFound = true;
-      } else {
-        log.style.display = "none";
-      }
-    });
-
-    const noLogsMessage = document.getElementById("noLogsMessage");
-    if (noLogsMessage) {
-      noLogsMessage.style.display = logsFound ? "none" : "block";
-    }
-  }
-</script>
-
-
-
-      <h2>Previous Match Results</h2>
-      <section style="margin-bottom: 30px;">
-  <h2 style="text-align: center;">Add History Logs</h2>
-  <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 20px;">
-    <input type="text" id="newDate" placeholder="Date (e.g. June 10, 2025)" style="padding: 8px; width: 200px;" />
-    <input type="text" id="newMatch" placeholder="Match (e.g. Player A vs Player B)" style="padding: 8px; width: 250px;" />
-    <input type="text" id="newScore" placeholder="Score (e.g. 3 - 2)" style="padding: 8px; width: 120px;" />
-    <input type="text" id="newWinner" placeholder="Winner" style="padding: 8px; width: 180px;" />
-    <button onclick="addMatch()" style="padding: 8px 16px; background-color: #005f73; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">
-      Add Match
-    </button>
-  </div>
-</section>
-      <div class="log-entry" data-date="2025-06-09">
-  <!-- Match details here -->
-</div>
-<div class="log-entry" data-date="2025-07-15">
-  <!-- Match details here -->
-</div>
-<!-- Add more entries as needed -->
-<div id="noLogsMessage" style="display: none;">No match logs found for this month.</div>
-
-
-      <table class="log-table" id="logTable">
-
+      <table class="log-table">
         <thead>
           <tr>
             <th>Date</th>
-            <th>Match</th>
+            <th>Player 1</th>
+            <th>Player 2</th>
             <th>Score</th>
-            <th>Winner</th>
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody>
-          <tr data-date="2025-06-01">
-  <td>June 1, 2025</td>
-            <td>Godofredo Abuzo IV vs Carlito Reyes</td>
-            <td>3 - 2</td>
-            <td>Godofredo Abuzo IV</td>
+        <tbody id="log-body">
+          <!-- Example logs -->
+          <tr data-month="6" data-year="2025">
+            <td>June 10, 2025</td>
+            <td>John</td>
+            <td>Mike</td>
+            <td>3-2</td>
             <td>
-              <button class="action-btn edit-btn" onclick="editRow(this)">Edit</button>
-              <button class="action-btn delete-btn" onclick="deleteRow(this)">Delete</button>
+              <button class="action-btn edit-btn">Edit</button>
+              <button class="action-btn delete-btn">Delete</button>
             </td>
           </tr>
-          <tr data-date="2025-06-01">
-  <td>June 3, 2025</td>
-            <td>Anna Mae Castillo vs Eliza Manlapig</td>
-            <td>1 - 3</td>
-            <td>Eliza Manlapig</td>
+          <tr data-month="5" data-year="2025">
+            <td>May 20, 2025</td>
+            <td>Anna</td>
+            <td>Paul</td>
+            <td>2-4</td>
             <td>
-              <button class="action-btn edit-btn" onclick="editRow(this)">Edit</button>
-              <button class="action-btn delete-btn" onclick="deleteRow(this)">Delete</button>
-            </td>
-          </tr>
-          <tr data-date="2025-06-01">
-  <td>June 6, 2025</td>
-            <td>Winners Match</td>
-            <td>4 - 3</td>
-            <td>Eliza Manlapig</td>
-            <td>
-              <button class="action-btn edit-btn" onclick="editRow(this)">Edit</button>
-              <button class="action-btn delete-btn" onclick="deleteRow(this)">Delete</button>
+              <button class="action-btn edit-btn">Edit</button>
+              <button class="action-btn delete-btn">Delete</button>
             </td>
           </tr>
         </tbody>
-    
       </table>
 
-      <a href="Players.html" class="back-btn">← Back to Players</a>
-    </main>
+      <p id="no-logs-message" style="text-align:center; font-style:italic; display:none;">No history logs for now.</p>
 
-    <footer>
-      &copy; 2025 Caraga Dart Knights. All rights reserved.
-    </footer>
+      <a href="Players.html" class="back-btn">← Back to Home</a>
+    </main>
   </div>
 
+  <footer>
+    &copy; 2025 Caraga Dart Knights. All rights reserved.
+  </footer>
+
   <script>
-    document.getElementById('logout-button').addEventListener('click', function (e) {
-      e.preventDefault();
-      window.location.href = 'advertisement.html';
+    const logRows = document.querySelectorAll("#log-body tr");
+    const monthYearDisplay = document.getElementById("current-month-year");
+    const noLogsMessage = document.getElementById("no-logs-message");
+
+    let currentDate = new Date();
+
+    function updateTable() {
+      const currentMonth = currentDate.getMonth() + 1;
+      const currentYear = currentDate.getFullYear();
+
+      monthYearDisplay.textContent = new Date(currentYear, currentMonth - 1).toLocaleString('default', {
+        month: 'long',
+        year: 'numeric'
+      });
+
+      let hasVisibleRows = false;
+
+      logRows.forEach(row => {
+        const rowMonth = parseInt(row.getAttribute("data-month"));
+        const rowYear = parseInt(row.getAttribute("data-year"));
+
+        if (rowMonth === currentMonth && rowYear === currentYear) {
+          row.style.display = "";
+          hasVisibleRows = true;
+        } else {
+          row.style.display = "none";
+        }
+      });
+
+      noLogsMessage.style.display = hasVisibleRows ? "none" : "block";
+    }
+
+    document.getElementById("prev-month").addEventListener("click", () => {
+      currentDate.setMonth(currentDate.getMonth() - 1);
+      updateTable();
     });
 
-    function deleteRow(button) {
-      const row = button.closest("tr");
-      if (confirm("Are you sure you want to delete this match log?")) {
-        row.remove();
-      }
-    }
+    document.getElementById("next-month").addEventListener("click", () => {
+      currentDate.setMonth(currentDate.getMonth() + 1);
+      updateTable();
+    });
 
-    function editRow(button) {
-      const row = button.closest("tr");
-      const cells = row.querySelectorAll("td");
-
-      const date = prompt("Enter new date:", cells[0].innerText);
-      const match = prompt("Enter new match:", cells[1].innerText);
-      const score = prompt("Enter new score:", cells[2].innerText);
-      const winner = prompt("Enter new winner:", cells[3].innerText);
-
-      if (date && match && score && winner) {
-        cells[0].innerText = date;
-        cells[1].innerText = match;
-        cells[2].innerText = score;
-        cells[3].innerText = winner;
-      }
-    }
+    window.addEventListener("DOMContentLoaded", updateTable);
   </script>
-  <script>
-  function addMatch() {
-    const table = document.getElementById("logTable").querySelector("tbody");
-
-    // ✅ Check if there are already 20 matches
-    if (table.rows.length >= 20) {
-      alert("Maximum of 20 matches reached.");
-      return;
-    }
-
-    const date = document.getElementById("newDate").value.trim();
-    const match = document.getElementById("newMatch").value.trim();
-    const score = document.getElementById("newScore").value.trim();
-    const winner = document.getElementById("newWinner").value.trim();
-
-    if (!date || !match || !score || !winner) {
-      alert("Please fill in all fields.");
-      return;
-    }
-
-    const newRow = document.createElement("tr");
-
-    newRow.innerHTML = `
-      <td>${date}</td>
-      <td>${match}</td>
-      <td>${score}</td>
-      <td>${winner}</td>
-      <td>
-        <button onclick="editRow(this)">Edit</button>
-        <button onclick="deleteRow(this)">Delete</button>
-      </td>
-    `;
-
-    table.appendChild(newRow);
-
-    // Clear inputs after adding
-    document.getElementById("newDate").value = "";
-    document.getElementById("newMatch").value = "";
-    document.getElementById("newScore").value = "";
-    document.getElementById("newWinner").value = "";
-  }
-</script>
- <script>
-  const monthYearDisplay = document.getElementById("monthYear");
-  const noMatchMessage = document.getElementById("noMatchMessage");
-
-  let currentDate = new Date();
-  let currentMonth = currentDate.getMonth();
-  let currentYear = currentDate.getFullYear();
-
-  function updateMonthYearDisplay() {
-    const options = { year: "numeric", month: "long" };
-    const displayDate = new Date(currentYear, currentMonth);
-    monthYearDisplay.textContent = displayDate.toLocaleDateString("en-US", options);
-  }
-
-  function changeMonth(direction) {
-    currentMonth += direction;
-    if (currentMonth < 0) {
-      currentMonth = 11;
-      currentYear--;
-    } else if (currentMonth > 11) {
-      currentMonth = 0;
-      currentYear++;
-    }
-    updateMonthYearDisplay();
-    filterLogs();
- function filterLogs() {
-  const rows = document.querySelectorAll("#logTable tbody tr");
-  let visibleCount = 0;
-
-  rows.forEach(row => {
-    const dateAttr = row.getAttribute("data-date");
-    if (dateAttr) {
-      const rowDate = new Date(dateAttr);
-      const isVisible = rowDate.getMonth() === currentMonth && rowDate.getFullYear() === currentYear;
-      row.style.display = isVisible ? "" : "none";
-      if (isVisible) visibleCount++;
-    }
-  });
-
-  const noMatchMessage = document.getElementById("noMatchRow");
-
-  if (visibleCount === 0) {
-    // If not already added, insert the row
-    if (!noMatchMessage) {
-      const tbody = document.querySelector("#logTable tbody");
-      const newRow = document.createElement("tr");
-      newRow.id = "noMatchRow";
-      const td = document.createElement("td");
-      td.colSpan = 3; // Adjust to match your table's column count
-      td.style.textAlign = "center";
-      td.style.color = "red";
-      td.textContent = "No match history for now.";
-      newRow.appendChild(td);
-      tbody.appendChild(newRow);
-    }
-  } else {
-    if (noMatchMessage) {
-      noMatchMessage.remove();
-    }
-  }
-}
-
-
-    noMatchMessage.style.display = visibleCount === 0 ? "block" : "none";
-  }
-
-  function addDataDateAttributes() {
-    const rows = document.querySelectorAll("#logTable tbody tr");
-    rows.forEach(row => {
-      const dateText = row.cells[0].innerText;
-      const parsedDate = new Date(dateText);
-      if (!isNaN(parsedDate)) {
-        row.setAttribute("data-date", parsedDate.toISOString());
-      }
-    });
-  }
-
-  // On page load
-  window.addEventListener("DOMContentLoaded", () => {
-    addDataDateAttributes();
-    updateMonthYearDisplay();
-    filterLogs();
-  });
-</script>
-
- <script>
-  const monthYearDisplay = document.getElementById("currentMonthYear");
-  const logTableBody = document.querySelector("#logTable tbody");
-
-  const monthNames = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-  ];
-
-  function updateCalendar() {
-    monthYearDisplay.textContent = `${monthNames[currentMonth]} ${currentYear}`;
-  }
-
-  function saveToLocalStorage() {
-    localStorage.setItem("selectedMonth", currentMonth);
-    localStorage.setItem("selectedYear", currentYear);
-  }
-
-  function changeMonth(direction) {
-    currentMonth += direction;
-    if (currentMonth < 0) {
-      currentMonth = 11;
-      currentYear--;
-    } else if (currentMonth > 11) {
-      currentMonth = 0;
-      currentYear++;
-    }
-    saveToLocalStorage();
-    updateCalendar();
-    filterLogs();
-  }
-
-  function filterLogs() {
-    const rows = logTableBody.querySelectorAll("tr");
-
-    rows.forEach(row => {
-      const dateCell = row.cells[0].textContent.trim();
-      const rowDate = new Date(dateCell);
-
-      // If the date string can't be parsed, show the row by default
-      if (isNaN(rowDate)) {
-        row.style.display = "";
-        return;
-      }
-
-      const rowMonth = rowDate.getMonth();
-      const rowYear = rowDate.getFullYear();
-
-      if (rowMonth === currentMonth && rowYear === currentYear) {
-        row.style.display = "";
-      } else {
-        row.style.display = "none";
-      }
-    });
-  }
-
-  // Event listeners for navigation buttons
-  document.getElementById("prevBtn").addEventListener("click", () => changeMonth(-1));
-  document.getElementById("nextBtn").addEventListener("click", () => changeMonth(1));
-
-  // Initial setup
-  const savedMonth = localStorage.getItem("selectedMonth");
-  const savedYear = localStorage.getItem("selectedYear");
-
-  if (savedMonth !== null && savedYear !== null) {
-    currentMonth = parseInt(savedMonth);
-    currentYear = parseInt(savedYear);
-  } else {
-    const now = new Date();
-    currentMonth = now.getMonth();
-    currentYear = now.getFullYear();
-  }
-
-  updateCalendar();
-  filterLogs();
-</script>
 
 </body>
 </html>
