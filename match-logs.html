@@ -239,12 +239,47 @@
     </nav>
 
     <main>
-    <!-- Month/Year Navigation -->
 <div class="calendar-header">
   <button id="prevMonth">←</button>
   <span id="currentMonthYear"></span>
   <button id="nextMonth">→</button>
 </div>
+
+<table id="matchLogsTable" border="1">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Player 1</th>
+      <th>Player 2</th>
+      <th>Winner</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="log-entry" data-date="2025-06-09">
+      <td>2025-06-09</td>
+      <td>John</td>
+      <td>Mark</td>
+      <td>John</td>
+    </tr>
+    <tr class="log-entry" data-date="2025-06-15">
+      <td>2025-06-15</td>
+      <td>Luke</td>
+      <td>Paul</td>
+      <td>Paul</td>
+    </tr>
+    <tr class="log-entry" data-date="2025-07-02">
+      <td>2025-07-02</td>
+      <td>Anna</td>
+      <td>Mike</td>
+      <td>Anna</td>
+    </tr>
+  </tbody>
+</table>
+
+<div id="noLogsMessage" style="display: none; margin-top: 1em; color: red;">
+  No match logs found for this month.
+</div>
+
 
 <script>
   // Initialize current date to today's month and year
