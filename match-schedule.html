@@ -202,6 +202,29 @@
       .header-title p {
         font-size: 1rem;
       }
+      .schedule-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.schedule-header button {
+  background-color: #0a9396;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.schedule-header button:hover {
+  background-color: #94d2bd;
+  color: #001219;
+}
+
 
       header {
         flex-direction: column;
@@ -239,7 +262,7 @@
 
   <div class="content-wrapper">
     <nav>
-      <a href="players.html">Players</a>
+      <a href="Players.html">Players</a>
       <a href="Rankings.html">Rankings</a>
       <a href="Photo-Gallery.html">Gallery</a>
       <a href="contact.html">Contact</a>
@@ -247,7 +270,12 @@
     </nav>
 
     <main>
-      <h2>Match Schedule - June 2025</h2>
+      <div class="schedule-header">
+  <button onclick="prevMonth()">&#8592;</button>
+  <h2 id="monthYear">June 2025</h2>
+  <button onclick="nextMonth()">&#8594;</button>
+</div>
+
       <table class="schedule-table" id="scheduleTable">
         <h3>Add New Match</h3>
 <form id="addMatchForm">
@@ -385,6 +413,27 @@
     this.reset();
     document.getElementById("limitMsg").textContent = "";
   });
+</script>
+<script>
+  const monthYearElement = document.getElementById('monthYear');
+  let currentDate = new Date(2025, 5); // June is month index 5
+
+  function updateMonthYear() {
+    const options = { year: 'numeric', month: 'long' };
+    monthYearElement.textContent = currentDate.toLocaleDateString(undefined, options);
+  }
+
+  function prevMonth() {
+    currentDate.setMonth(currentDate.getMonth() - 1);
+    updateMonthYear();
+  }
+
+  function nextMonth() {
+    currentDate.setMonth(currentDate.getMonth() + 1);
+    updateMonthYear();
+  }
+
+  updateMonthYear(); // Initialize on page load
 </script>
 
 
