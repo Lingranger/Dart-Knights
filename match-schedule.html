@@ -245,6 +245,16 @@
     </tr>
   </tbody>
 </table>
+        <h3>Add New Match</h3>
+  <form id="addMatchForm">
+    <label>Date: <input type="date" id="matchDate" required></label>
+    <label>Time: <input type="time" id="matchTime" required></label>
+    <label>Match: <input type="text" id="matchTitle" placeholder="Player A vs Player B" required></label>
+    <label>Location: <input type="text" id="matchLocation" required></label>
+    <button type="submit">Add Match</button>
+    <p id="limitMsg" style="color: red;"></p>
+  </form>
+
 
 
       <a href="players.html" class="back-btn">← Back to Players</a>
@@ -261,6 +271,61 @@
       window.location.href = 'advertisement.html';
     });
   </script>
+    <script>
+    function deleteScheduleRow(button) {
+      const row = button.closest("tr");
+      row.remove();
+    }
 
+    function editScheduleRow(button) {
+      const row = button.closest("tr");
+      const cells = row.querySelectorAll("td");
+
+      const date = prompt("Enter new date:", cells[0].innerText);
+      const time = prompt("Enter new time:", cells[1].innerText);
+      const match = prompt("Enter new match:", cells[2].innerText);
+      const location = prompt("Enter new location:", cells[3].innerText);
+
+      if (date && time && match && location) {
+        cells[0].innerText = date;
+        cells[1].innerText = time;
+        cells[2].innerText = match;
+        cells[3].innerText = location;
+      }
+    }
+
+    document.getElementById('addMatchForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const table = document.getElementById("scheduleTable").getElementsByTagName('tbody')[0];
+      const currentMatches = table.getElementsByTagName('tr').length;
+
+      if (currentMatches >= 10) {
+        document.getElementById("limitMsg").textContent = "You can only add up to 10 matches.";
+        return;
+      }
+
+      const date = document.getElementById("matchDate").value;
+      const time = document.getElementById("matchTime").value;
+      const match = document.getElementById("matchTitle").value;
+      const location = document.getElementById("matchLocation").value;
+
+      const row = table.insertRow();
+      row.innerHTML = `
+        <td>${date}</td>
+        <td>${time}</td>
+        <td>${match}</td>
+        <td>${location}</td>
+        <td>
+          <button onclick="editScheduleRow(this)">Edit</button>
+          <button onclick="deleteScheduleRow(this)">Delete</button>
+        </td>
+      `;
+
+      // Reset form
+      this.reset();
+      document.getElementById("limitMsg").textContent = "";
+    });
+  </script>
 </body>
 </html>
