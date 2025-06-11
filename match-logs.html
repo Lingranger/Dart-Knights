@@ -524,61 +524,82 @@
   });
 </script>
 
-  <script>
-  let currentMonth = new Date().getMonth();
-  let currentYear = new Date().getFullYear();
+ <script>
+  const monthYearDisplay = document.getElementById("currentMonthYear");
+  const logTableBody = document.querySelector("#logTable tbody");
 
-  function updateMonthYearDisplay() {
-    const monthNames = [
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
-    ];
-    document.getElementById("currentMonthYear").textContent = ${monthNames[currentMonth]} ${currentYear};
-    filterLogs();
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+
+  function updateCalendar() {
+    monthYearDisplay.textContent = `${monthNames[currentMonth]} ${currentYear}`;
   }
 
-  function prevMonth() {
-    currentMonth--;
+  function saveToLocalStorage() {
+    localStorage.setItem("selectedMonth", currentMonth);
+    localStorage.setItem("selectedYear", currentYear);
+  }
+
+  function changeMonth(direction) {
+    currentMonth += direction;
     if (currentMonth < 0) {
       currentMonth = 11;
       currentYear--;
-    }
-    updateMonthYearDisplay();
-  }
-
-  function nextMonth() {
-    currentMonth++;
-    if (currentMonth > 11) {
+    } else if (currentMonth > 11) {
       currentMonth = 0;
       currentYear++;
     }
-    updateMonthYearDisplay();
+    saveToLocalStorage();
+    updateCalendar();
+    filterLogs();
   }
 
- function filterLogs() {
-  const rows = document.querySelectorAll("#logTable tbody tr");
-  let visibleCount = 0;
+  function filterLogs() {
+    const rows = logTableBody.querySelectorAll("tr");
 
-  rows.forEach(row => {
-    const dateAttr = row.getAttribute("data-date");
-    if (dateAttr) {
-      const rowDate = new Date(dateAttr);
-      const isVisible = rowDate.getMonth() === currentMonth && rowDate.getFullYear() === currentYear;
-      row.style.display = isVisible ? "" : "none";
-      if (isVisible) visibleCount++;
-    }
-  });
+    rows.forEach(row => {
+      const dateCell = row.cells[0].textContent.trim();
+      const rowDate = new Date(dateCell);
 
-  // Show or hide the "No match history" message
-  const message = document.getElementById("noMatchMessage");
-  message.style.display = visibleCount === 0 ? "block" : "none";
-}
+      // If the date string can't be parsed, show the row by default
+      if (isNaN(rowDate)) {
+        row.style.display = "";
+        return;
+      }
 
+      const rowMonth = rowDate.getMonth();
+      const rowYear = rowDate.getFullYear();
+
+      if (rowMonth === currentMonth && rowYear === currentYear) {
+        row.style.display = "";
+      } else {
+        row.style.display = "none";
+      }
     });
   }
 
-  window.onload = updateMonthYearDisplay;
-</script> update this line
+  // Event listeners for navigation buttons
+  document.getElementById("prevBtn").addEventListener("click", () => changeMonth(-1));
+  document.getElementById("nextBtn").addEventListener("click", () => changeMonth(1));
+
+  // Initial setup
+  const savedMonth = localStorage.getItem("selectedMonth");
+  const savedYear = localStorage.getItem("selectedYear");
+
+  if (savedMonth !== null && savedYear !== null) {
+    currentMonth = parseInt(savedMonth);
+    currentYear = parseInt(savedYear);
+  } else {
+    const now = new Date();
+    currentMonth = now.getMonth();
+    currentYear = now.getFullYear();
+  }
+
+  updateCalendar();
+  filterLogs();
+</script>
 
 </body>
 </html>
