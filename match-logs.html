@@ -260,6 +260,10 @@
 </section>
 
       <table class="log-table" id="logTable">
+        <p id="noMatchMessage" style="text-align: center; margin-top: 20px; display: none; color: red;">
+  No match history for now.
+</p>
+
         <thead>
           <tr>
             <th>Date</th>
@@ -414,15 +418,25 @@
     updateMonthYearDisplay();
   }
 
-  function filterLogs() {
-    const rows = document.querySelectorAll("#logTable tbody tr");
-    rows.forEach(row => {
-      const dateAttr = row.getAttribute("data-date");
-      if (dateAttr) {
-        const rowDate = new Date(dateAttr);
-        const isVisible = rowDate.getMonth() === currentMonth && rowDate.getFullYear() === currentYear;
-        row.style.display = isVisible ? "" : "none";
-      }
+ function filterLogs() {
+  const rows = document.querySelectorAll("#logTable tbody tr");
+  let visibleCount = 0;
+
+  rows.forEach(row => {
+    const dateAttr = row.getAttribute("data-date");
+    if (dateAttr) {
+      const rowDate = new Date(dateAttr);
+      const isVisible = rowDate.getMonth() === currentMonth && rowDate.getFullYear() === currentYear;
+      row.style.display = isVisible ? "" : "none";
+      if (isVisible) visibleCount++;
+    }
+  });
+
+  // Show or hide the "No match history" message
+  const message = document.getElementById("noMatchMessage");
+  message.style.display = visibleCount === 0 ? "block" : "none";
+}
+
     });
   }
 
