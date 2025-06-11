@@ -239,11 +239,12 @@
     </nav>
 
     <main>
-      <div style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 20px;">
-  <button onclick="prevMonth()" style="padding: 5px 10px;">←</button>
-  <h3 id="currentMonthYear" style="margin: 0;"></h3>
-  <button onclick="nextMonth()" style="padding: 5px 10px;">→</button>
+     <div style="text-align: center; margin-bottom: 20px;">
+  <button onclick="changeMonth(-1)">←</button>
+  <span id="monthYear" style="font-weight: bold; font-size: 18px; margin: 0 10px;"></span>
+  <button onclick="changeMonth(1)">→</button>
 </div>
+
 
       <h2>Previous Match Results</h2>
       <section style="margin-bottom: 30px;">
@@ -260,7 +261,7 @@
 </section>
 
       <table class="log-table" id="logTable">
-        <p id="noMatchMessage" style="text-align: center; margin-top: 20px; display: none; color: red;">
+<p id="noMatchMessage" style="text-align: center; margin-top: 20px; display: none; color: red;">
   No match history for now.
 </p>
 
@@ -387,6 +388,69 @@
     document.getElementById("newWinner").value = "";
   }
 </script>
+  <script>
+  const monthYearDisplay = document.getElementById("monthYear");
+  const noMatchMessage = document.getElementById("noMatchMessage");
+
+  let currentDate = new Date();
+  let currentMonth = currentDate.getMonth();
+  let currentYear = currentDate.getFullYear();
+
+  function updateMonthYearDisplay() {
+    const options = { year: "numeric", month: "long" };
+    const displayDate = new Date(currentYear, currentMonth);
+    monthYearDisplay.textContent = displayDate.toLocaleDateString("en-US", options);
+  }
+
+  function changeMonth(direction) {
+    currentMonth += direction;
+    if (currentMonth < 0) {
+      currentMonth = 11;
+      currentYear--;
+    } else if (currentMonth > 11) {
+      currentMonth = 0;
+      currentYear++;
+    }
+    updateMonthYearDisplay();
+    filterLogs();
+  }
+
+  function filterLogs() {
+    const rows = document.querySelectorAll("#logTable tbody tr");
+    let visibleCount = 0;
+
+    rows.forEach(row => {
+      const dateAttr = row.getAttribute("data-date");
+      if (dateAttr) {
+        const rowDate = new Date(dateAttr);
+        const isVisible = rowDate.getMonth() === currentMonth && rowDate.getFullYear() === currentYear;
+        row.style.display = isVisible ? "" : "none";
+        if (isVisible) visibleCount++;
+      }
+    });
+
+    noMatchMessage.style.display = visibleCount === 0 ? "block" : "none";
+  }
+
+  function addDataDateAttributes() {
+    const rows = document.querySelectorAll("#logTable tbody tr");
+    rows.forEach(row => {
+      const dateText = row.cells[0].innerText;
+      const parsedDate = new Date(dateText);
+      if (!isNaN(parsedDate)) {
+        row.setAttribute("data-date", parsedDate.toISOString());
+      }
+    });
+  }
+
+  // On page load
+  window.addEventListener("DOMContentLoaded", () => {
+    addDataDateAttributes();
+    updateMonthYearDisplay();
+    filterLogs();
+  });
+</script>
+
   <script>
   let currentMonth = new Date().getMonth();
   let currentYear = new Date().getFullYear();
