@@ -240,18 +240,18 @@
 
     <main>
     <!-- Month/Year Navigation -->
-<div style="text-align: center; margin-bottom: 20px;">
-  <button id="prevBtn">←</button>
-  <span id="currentMonthYear" style="font-weight: bold; font-size: 18px; margin: 0 10px;"></span>
-  <button id="nextBtn">→</button>
+<div class="calendar-header">
+  <button id="prevMonth">←</button>
+  <span id="currentMonthYear"></span>
+  <button id="nextMonth">→</button>
 </div>
 
 <script>
-  // Month/year tracking
+  // Initialize current date to today's month and year
   let currentMonth = new Date().getMonth();
   let currentYear = new Date().getFullYear();
 
-  // Restore from localStorage if available
+  // Retrieve saved month/year from localStorage if available
   const savedMonth = localStorage.getItem("selectedMonth");
   const savedYear = localStorage.getItem("selectedYear");
 
@@ -260,43 +260,76 @@
     currentYear = parseInt(savedYear);
   }
 
-  // Update month/year display
-  function updateCalendar() {
-    const monthNames = [
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
-    ];
-    document.getElementById("currentMonthYear")
-      `${monthNames[currentMonth]} ${currentYear}`;
-  }
+  // Month names for display
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
 
-  // Save to localStorage
-  function saveToLocalStorage() {
+  // Function to update the calendar UI and filter logs
+  function updateCalendar() {
+    const currentDisplay = document.getElementById("currentMonthYear");
+    currentDisplay.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+    filterLogs();
+    // Save current selection
     localStorage.setItem("selectedMonth", currentMonth);
     localStorage.setItem("selectedYear", currentYear);
   }
 
-  // Change month with arrow buttons
-  function changeMonth(direction) {
-    currentMonth += direction;
-
+  // Navigate to previous month
+  function prevMonth() {
+    currentMonth--;
     if (currentMonth < 0) {
       currentMonth = 11;
       currentYear--;
-    } else if (currentMonth > 11) {
+    }
+    updateCalendar();
+  }
+
+  // Navigate to next month
+  function nextMonth() {
+    currentMonth++;
+    if (currentMonth > 11) {
       currentMonth = 0;
       currentYear++;
     }
-
-    saveToLocalStorage();
     updateCalendar();
-    filterLogs(); // Make sure this function exists
   }
 
-  // Initial load
-  updateCalendar();
-  filterLogs(); // This should filter your match logs
+  // Attach event listeners to arrows
+  document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("prevMonth").addEventListener("click", prevMonth);
+    document.getElementById("nextMonth").addEventListener("click", nextMonth);
+
+    // Initial load
+    updateCalendar();
+  });
+
+  // Filter logs based on selected month and year
+  function filterLogs() {
+    const logs = document.querySelectorAll(".log-entry");
+    let logsFound = false;
+
+    logs.forEach(log => {
+      const logDate = new Date(log.getAttribute("data-date")); // Format: YYYY-MM-DD
+      if (
+        logDate.getMonth() === currentMonth &&
+        logDate.getFullYear() === currentYear
+      ) {
+        log.style.display = "block";
+        logsFound = true;
+      } else {
+        log.style.display = "none";
+      }
+    });
+
+    const noLogsMessage = document.getElementById("noLogsMessage");
+    if (noLogsMessage) {
+      noLogsMessage.style.display = logsFound ? "none" : "block";
+    }
+  }
 </script>
+
 
 
       <h2>Previous Match Results</h2>
@@ -312,6 +345,15 @@
     </button>
   </div>
 </section>
+      <div class="log-entry" data-date="2025-06-09">
+  <!-- Match details here -->
+</div>
+<div class="log-entry" data-date="2025-07-15">
+  <!-- Match details here -->
+</div>
+<!-- Add more entries as needed -->
+<div id="noLogsMessage" style="display: none;">No match logs found for this month.</div>
+
 
       <table class="log-table" id="logTable">
 
