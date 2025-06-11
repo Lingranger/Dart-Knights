@@ -103,86 +103,95 @@
       padding: 0 20px;
     }
 
-    h2 {
-      text-align: center;
-      margin-bottom: 25px;
+    h2.schedule-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
     }
 
-    .schedule-table {
+    h3 {
+      margin-top: 40px;
+      color: #353b48;
+    }
+
+    button {
+      padding: 6px 12px;
+      background-color: #2980b9;
+      border: none;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #2471a3;
+    }
+
+    #addMatchForm {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+
+    #addMatchForm input,
+    #addMatchForm button {
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    table {
       width: 100%;
       border-collapse: collapse;
+      margin-bottom: 20px;
     }
 
-    .schedule-table th, .schedule-table td {
-      padding: 12px;
-      text-align: center;
-      border: 1px solid #ccc;
+    table th,
+    table td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
     }
-    <style>
-  form#addMatchForm {
-    margin-top: 30px;
-    padding: 15px;
-    background-color: #e9f5f5;
-    border-radius: 8px;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
 
-  form#addMatchForm label {
-    display: flex;
-    flex-direction: column;
-    font-weight: bold;
-  }
-
-  form#addMatchForm input {
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-  }
-
-  form#addMatchForm button {
-    background-color: #005f73;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-
-  form#addMatchForm button:hover {
-    background-color: #0a9396;
-  }
-    .schedule-table th {
-      background-color: #0a9396;
+    table thead {
+      background-color: #3498db;
       color: white;
     }
 
-    .schedule-table tbody tr:nth-child(odd) {
-      background-color: #f0fdfa;
+    table tbody tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    table td button {
+      margin-right: 5px;
+      background-color: #e67e22;
+    }
+
+    table td button:hover {
+      background-color: #ca6f1e;
+    }
+
+    table td button:last-child {
+      background-color: #c0392b;
+    }
+
+    table td button:last-child:hover {
+      background-color: #a93226;
     }
 
     .back-btn {
-      display: block;
-      text-align: center;
-      margin: 25px auto 0;
-      padding: 10px 20px;
-      background-color: #005f73;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
+      display: inline-block;
+      margin-top: 10px;
       text-decoration: none;
-      font-weight: bold;
-      transition: background 0.3s;
-      width: max-content;
+      color: #2980b9;
     }
 
     .back-btn:hover {
-      background-color: #0a9396;
+      text-decoration: underline;
     }
 
     footer {
