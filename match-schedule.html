@@ -315,8 +315,12 @@
     <a href="Players.html" class="back-btn">← Back to Players</a>
   </main>
 
-  <script>
-  const scheduleData = {
+<script>
+  const monthYearEl = document.getElementById('monthYear');
+  const tbody = document.querySelector('#scheduleTable tbody');
+
+  // Load from localStorage or use default data
+  let scheduleData = JSON.parse(localStorage.getItem('scheduleData')) || {
     'June 2025': [
       { date: 'June 5, 2025', time: '3:00 PM', match: 'Team A vs Team B', location: 'Venue 1' },
       { date: 'June 12, 2025', time: '4:00 PM', match: 'Team C vs Team D', location: 'Venue 2' },
@@ -328,15 +332,16 @@
     ]
   };
 
-  const monthYearEl = document.getElementById('monthYear');
-  const tbody = document.querySelector('#scheduleTable tbody');
-
-  // Get saved date or default to June 2025
+  // Load month/year from localStorage or set default (June 2025)
   const savedMonth = localStorage.getItem('selectedMonth');
   const savedYear = localStorage.getItem('selectedYear');
   let currentDate = savedMonth && savedYear
     ? new Date(parseInt(savedYear), parseInt(savedMonth))
-    : new Date(2025, 5); // June is month 5 (0-indexed)
+    : new Date(2025, 5); // Default to June 2025
+
+  function saveScheduleData() {
+    localStorage.setItem('scheduleData', JSON.stringify(scheduleData));
+  }
 
   function updateScheduleTable() {
     const opts = { year: 'numeric', month: 'long' };
@@ -365,7 +370,7 @@
       tbody.appendChild(tr);
     }
 
-    // Save selected month and year to localStorage
+    // Save month/year
     localStorage.setItem('selectedMonth', currentDate.getMonth());
     localStorage.setItem('selectedYear', currentDate.getFullYear());
   }
@@ -404,16 +409,18 @@
     if (!scheduleData[key]) {
       scheduleData[key] = [];
     }
-    scheduleData[key].push(match);
 
+    scheduleData[key].push(match);
+    saveScheduleData();
     updateScheduleTable();
 
     this.reset();
   });
 
-  // Initialize
+  // Call initially
   updateScheduleTable();
 </script>
+
 
 </body>
 </html>
