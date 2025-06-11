@@ -68,7 +68,7 @@
       max-width: 1000px;
       margin: 30px auto;
       padding: 20px;
-      background-color: rgba(255, 255, 255, 0.85);
+      background-color: rgba(255, 255, 255, 0.9);
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
@@ -125,6 +125,34 @@
 
     .log-table tbody tr:nth-child(odd) {
       background-color: #f0fdfa;
+    }
+
+    .action-btn {
+      padding: 5px 10px;
+      margin: 2px;
+      font-size: 0.9rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .edit-btn {
+      background-color: #f4a261;
+      color: white;
+    }
+
+    .edit-btn:hover {
+      background-color: #e76f51;
+    }
+
+    .delete-btn {
+      background-color: #e63946;
+      color: white;
+    }
+
+    .delete-btn:hover {
+      background-color: #c1121f;
     }
 
     .back-btn {
@@ -212,49 +240,48 @@
     <main>
       <h2>Previous Match Results</h2>
       <table class="log-table" id="logTable">
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Match</th>
-      <th>Score</th>
-      <th>Winner</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>June 1, 2025</td>
-      <td>Godofredo Abuzo IV vs Carlito Reyes</td>
-      <td>3 - 2</td>
-      <td>Godofredo Abuzo IV</td>
-      <td>
-        <button onclick="editRow(this)">Edit</button>
-        <button onclick="deleteRow(this)">Delete</button>
-      </td>
-    </tr>
-    <tr>
-      <td>June 3, 2025</td>
-      <td>Anna Mae Castillo vs Eliza Manlapig</td>
-      <td>1 - 3</td>
-      <td>Eliza Manlapig</td>
-      <td>
-        <button onclick="editRow(this)">Edit</button>
-        <button onclick="deleteRow(this)">Delete</button>
-      </td>
-    </tr>
-    <tr>
-      <td>June 6, 2025</td>
-      <td>Winners Match</td>
-      <td>4 - 3</td>
-      <td>Eliza Manlapig</td>
-      <td>
-        <button onclick="editRow(this)">Edit</button>
-        <button onclick="deleteRow(this)">Delete</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Match</th>
+            <th>Score</th>
+            <th>Winner</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>June 1, 2025</td>
+            <td>Godofredo Abuzo IV vs Carlito Reyes</td>
+            <td>3 - 2</td>
+            <td>Godofredo Abuzo IV</td>
+            <td>
+              <button class="action-btn edit-btn" onclick="editRow(this)">Edit</button>
+              <button class="action-btn delete-btn" onclick="deleteRow(this)">Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td>June 3, 2025</td>
+            <td>Anna Mae Castillo vs Eliza Manlapig</td>
+            <td>1 - 3</td>
+            <td>Eliza Manlapig</td>
+            <td>
+              <button class="action-btn edit-btn" onclick="editRow(this)">Edit</button>
+              <button class="action-btn delete-btn" onclick="deleteRow(this)">Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td>June 6, 2025</td>
+            <td>Winners Match</td>
+            <td>4 - 3</td>
+            <td>Eliza Manlapig</td>
+            <td>
+              <button class="action-btn edit-btn" onclick="editRow(this)">Edit</button>
+              <button class="action-btn delete-btn" onclick="deleteRow(this)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
       <a href="players.html" class="back-btn">← Back to Players</a>
     </main>
@@ -269,33 +296,31 @@
       e.preventDefault();
       window.location.href = 'advertisement.html';
     });
+
+    function deleteRow(button) {
+      const row = button.closest("tr");
+      if (confirm("Are you sure you want to delete this match log?")) {
+        row.remove();
+      }
+    }
+
+    function editRow(button) {
+      const row = button.closest("tr");
+      const cells = row.querySelectorAll("td");
+
+      const date = prompt("Enter new date:", cells[0].innerText);
+      const match = prompt("Enter new match:", cells[1].innerText);
+      const score = prompt("Enter new score:", cells[2].innerText);
+      const winner = prompt("Enter new winner:", cells[3].innerText);
+
+      if (date && match && score && winner) {
+        cells[0].innerText = date;
+        cells[1].innerText = match;
+        cells[2].innerText = score;
+        cells[3].innerText = winner;
+      }
+    }
   </script>
-  <script>
-  function deleteRow(button) {
-    const row = button.closest("tr");
-    if (confirm("Are you sure you want to delete this match log?")) {
-      row.remove();
-    }
-  }
-
-  function editRow(button) {
-    const row = button.closest("tr");
-    const cells = row.querySelectorAll("td");
-
-    const date = prompt("Enter new date:", cells[0].innerText);
-    const match = prompt("Enter new match:", cells[1].innerText);
-    const score = prompt("Enter new score:", cells[2].innerText);
-    const winner = prompt("Enter new winner:", cells[3].innerText);
-
-    if (date && match && score && winner) {
-      cells[0].innerText = date;
-      cells[1].innerText = match;
-      cells[2].innerText = score;
-      cells[3].innerText = winner;
-    }
-  }
-</script>
-
 
 </body>
 </html>
