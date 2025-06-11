@@ -5,238 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Caraga Dart Knights - Match Logs</title>
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: transparent;
-      color: #333;
-    }
-
-    #bg-video {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      object-fit: cover;
-      z-index: -1;
-      filter: brightness(0.7);
-    }
-
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #005f73;
-      color: #fff;
-      padding: 15px 20px;
-      border-radius: 10px 10px 0 0;
-      position: relative;
-      z-index: 2;
-      flex-wrap: wrap;
-    }
-
-    header img {
-      height: 80px;
-      width: auto;
-      border-radius: 5px;
-      box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
-    }
-
-    .header-title {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      text-align: center;
-    }
-
-    .header-title h1 {
-      margin: 0;
-      font-size: 1.8em;
-    }
-
-    .header-title p {
-      margin-top: 5px;
-      font-size: 1.2rem;
-      color: #e9d8a6;
-    }
-
-    .content-wrapper {
-      position: relative;
-      z-index: 1;
-      max-width: 1000px;
-      margin: 30px auto;
-      padding: 20px;
-      background-color: rgba(255, 255, 255, 0.9);
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    nav {
-      background: #0a9396;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      padding: 15px 0;
-      border-radius: 8px;
-      flex-wrap: wrap;
-    }
-
-    nav a {
-      color: #e9d8a6;
-      text-decoration: none;
-      font-weight: bold;
-      padding: 8px 15px;
-      border-radius: 5px;
-      transition: background 0.3s;
-    }
-
-    nav a:hover {
-      background: #94d2bd;
-      color: #001219;
-    }
-
-    main {
-      margin-top: 30px;
-      padding: 0 20px;
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 25px;
-    }
-
-    .log-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .log-table th, .log-table td {
-      padding: 12px;
-      text-align: center;
-      border: 1px solid #ccc;
-    }
-
-    .log-table th {
-      background-color: #0a9396;
-      color: white;
-    }
-
-    .log-table tbody tr:nth-child(odd) {
-      background-color: #f0fdfa;
-    }
-
-    .action-btn {
-      padding: 5px 10px;
-      margin: 2px;
-      font-size: 0.9rem;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
-
-    .edit-btn {
-      background-color: #f4a261;
-      color: white;
-    }
-
-    .edit-btn:hover {
-      background-color: #e76f51;
-    }
-
-    .delete-btn {
-      background-color: #e63946;
-      color: white;
-    }
-
-    .delete-btn:hover {
-      background-color: #c1121f;
-    }
-
-    .back-btn {
-      display: block;
-      text-align: center;
-      margin: 25px auto 0;
-      padding: 10px 20px;
-      background-color: #005f73;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      text-decoration: none;
-      font-weight: bold;
-      transition: background 0.3s;
-      width: max-content;
-    }
-
-    .back-btn:hover {
-      background-color: #0a9396;
-    }
-
-    footer {
-      background: #005f73;
-      color: #fff;
-      text-align: center;
-      padding: 15px 0;
-      margin-top: 40px;
-      border-radius: 8px;
-    }
-
-    #month-nav {
-      text-align: center;
-      margin: 20px 0;
-    }
-
-    #month-nav button {
-      background-color: #0a9396;
-      border: none;
-      color: white;
-      font-size: 1.2rem;
-      padding: 5px 10px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    #month-nav span {
-      font-weight: bold;
-      font-size: 1.1rem;
-      margin: 0 15px;
-    }
-
-    @media (max-width: 600px) {
-      .header-title h1 {
-        font-size: 1.4rem;
-      }
-
-      .header-title p {
-        font-size: 1rem;
-      }
-
-      header {
-        flex-direction: column;
-        text-align: center;
-        padding-bottom: 20px;
-      }
-
-      .header-title {
-        position: static;
-        transform: none;
-        margin-top: 10px;
-      }
-
-      .log-table th, .log-table td {
-        padding: 8px;
-        font-size: 0.85rem;
-      }
-    }
+    /* Full CSS omitted for brevity - already included in previous message */
   </style>
 </head>
 <body>
-
   <video autoplay muted loop playsinline id="bg-video">
     <source src="videos/71943-540487063_small.mp4" type="video/mp4" />
-    Your browser does not support the video tag.
   </video>
 
   <header>
@@ -260,50 +34,29 @@
     </nav>
 
     <main>
-      <div id="month-nav">
-        <button id="prev-month">◀</button>
-        <span id="current-month-year">Loading...</span>
-        <button id="next-month">▶</button>
+      <h2>Match Logs</h2>
+      <div class="month-year-nav">
+        <button onclick="changeMonth(-1)">&#8592;</button>
+        <span id="monthYearDisplay"></span>
+        <button onclick="changeMonth(1)">&#8594;</button>
       </div>
 
       <table class="log-table">
         <thead>
           <tr>
             <th>Date</th>
-            <th>Player 1</th>
-            <th>Player 2</th>
+            <th>Player A</th>
+            <th>Player B</th>
             <th>Score</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody id="log-body">
-          <!-- Example logs -->
-          <tr data-month="6" data-year="2025">
-            <td>June 10, 2025</td>
-            <td>John</td>
-            <td>Mike</td>
-            <td>3-2</td>
-            <td>
-              <button class="action-btn edit-btn">Edit</button>
-              <button class="action-btn delete-btn">Delete</button>
-            </td>
-          </tr>
-          <tr data-month="5" data-year="2025">
-            <td>May 20, 2025</td>
-            <td>Anna</td>
-            <td>Paul</td>
-            <td>2-4</td>
-            <td>
-              <button class="action-btn edit-btn">Edit</button>
-              <button class="action-btn delete-btn">Delete</button>
-            </td>
-          </tr>
+          <!-- Match logs go here (already shown in earlier code) -->
         </tbody>
       </table>
-
-      <p id="no-logs-message" style="text-align:center; font-style:italic; display:none;">No history logs for now.</p>
-
-      <a href="Players.html" class="back-btn">← Back to Home</a>
+      <p id="noLogsMessage" style="display: none; text-align: center; margin-top: 20px; color: #e63946;">No history logs for now.</p>
+      <a href="Players.html" class="back-btn">Back to Home</a>
     </main>
   </div>
 
@@ -312,50 +65,48 @@
   </footer>
 
   <script>
+    const monthYearDisplay = document.getElementById("monthYearDisplay");
     const logRows = document.querySelectorAll("#log-body tr");
-    const monthYearDisplay = document.getElementById("current-month-year");
-    const noLogsMessage = document.getElementById("no-logs-message");
+    const noLogsMessage = document.getElementById("noLogsMessage");
 
     let currentDate = new Date();
+    const storedMonth = localStorage.getItem("selectedMonth");
+    const storedYear = localStorage.getItem("selectedYear");
+    if (storedMonth && storedYear) {
+      currentDate.setMonth(parseInt(storedMonth) - 1);
+      currentDate.setFullYear(parseInt(storedYear));
+    }
 
     function updateTable() {
       const currentMonth = currentDate.getMonth() + 1;
       const currentYear = currentDate.getFullYear();
 
-      monthYearDisplay.textContent = new Date(currentYear, currentMonth - 1).toLocaleString('default', {
-        month: 'long',
-        year: 'numeric'
-      });
+      monthYearDisplay.textContent = `${currentDate.toLocaleString('default', { month: 'long' })} ${currentYear}`;
 
-      let hasVisibleRows = false;
-
+      let visibleCount = 0;
       logRows.forEach(row => {
         const rowMonth = parseInt(row.getAttribute("data-month"));
         const rowYear = parseInt(row.getAttribute("data-year"));
-
         if (rowMonth === currentMonth && rowYear === currentYear) {
           row.style.display = "";
-          hasVisibleRows = true;
+          visibleCount++;
         } else {
           row.style.display = "none";
         }
       });
 
-      noLogsMessage.style.display = hasVisibleRows ? "none" : "block";
+      noLogsMessage.style.display = visibleCount === 0 ? "block" : "none";
+
+      localStorage.setItem("selectedMonth", currentMonth);
+      localStorage.setItem("selectedYear", currentYear);
     }
 
-    document.getElementById("prev-month").addEventListener("click", () => {
-      currentDate.setMonth(currentDate.getMonth() - 1);
+    function changeMonth(delta) {
+      currentDate.setMonth(currentDate.getMonth() + delta);
       updateTable();
-    });
+    }
 
-    document.getElementById("next-month").addEventListener("click", () => {
-      currentDate.setMonth(currentDate.getMonth() + 1);
-      updateTable();
-    });
-
-    window.addEventListener("DOMContentLoaded", updateTable);
+    updateTable();
   </script>
-
 </body>
 </html>
