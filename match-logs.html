@@ -2,353 +2,189 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Caraga Dart Knights - Match Logs</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Match Logs</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
       margin: 0;
       padding: 0;
-      background: transparent;
-      color: #333;
     }
-
-    #bg-video {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      object-fit: cover;
-      z-index: -1;
-      filter: brightness(0.7);
-    }
-
     header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #005f73;
-      color: #fff;
-      padding: 15px 20px;
-      border-radius: 10px 10px 0 0;
-      position: relative;
-      z-index: 2;
-      flex-wrap: wrap;
-    }
-
-    header img {
-      height: 80px;
-      width: auto;
-      border-radius: 5px;
-      box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
-    }
-
-    .header-title {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      text-align: center;
-    }
-
-    .header-title h1 {
-      margin: 0;
-      font-size: 1.8em;
-    }
-
-    .header-title p {
-      margin-top: 5px;
-      font-size: 1.2rem;
-      color: #e9d8a6;
-    }
-
-    .content-wrapper {
-      position: relative;
-      z-index: 1;
-      max-width: 1000px;
-      margin: 30px auto;
-      padding: 20px;
-      background-color: rgba(255, 255, 255, 0.9);
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    nav {
-      background: #0a9396;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      padding: 15px 0;
-      border-radius: 8px;
-      flex-wrap: wrap;
-    }
-
-    nav a {
-      color: #e9d8a6;
-      text-decoration: none;
-      font-weight: bold;
-      padding: 8px 15px;
-      border-radius: 5px;
-      transition: background 0.3s;
-    }
-
-    nav a:hover {
-      background: #94d2bd;
-      color: #001219;
-    }
-
-    main {
-      margin-top: 30px;
-      padding: 0 20px;
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 25px;
-    }
-
-    .filter-controls, .add-log-form {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-
-    .add-log-form input {
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-
-    .add-log-form button {
-      padding: 8px 12px;
-      background: #005f73;
+      background: #333;
       color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
+      padding: 1rem;
+      text-align: center;
     }
-
-    .log-table {
+    .container {
+      max-width: 1000px;
+      margin: 2rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    .form-section, .search-section, .filter-section, .table-section {
+      margin-bottom: 2rem;
+    }
+    input, select, button {
+      padding: 0.5rem;
+      margin-right: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    table {
       width: 100%;
       border-collapse: collapse;
     }
-
-    .log-table th, .log-table td {
-      padding: 12px;
+    th, td {
+      padding: 0.75rem;
+      border: 1px solid #ddd;
       text-align: center;
-      border: 1px solid #ccc;
     }
-
-    .log-table th {
-      background-color: #0a9396;
+    th {
+      background: #333;
       color: white;
     }
-
-    .log-table tbody tr:nth-child(odd) {
-      background-color: #f0fdfa;
+    .actions button {
+      margin: 0 5px;
+      padding: 0.25rem 0.5rem;
     }
-
-    .action-btn {
-      padding: 5px 10px;
-      margin: 2px;
-      font-size: 0.9rem;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .edit-btn {
-      background-color: #f4a261;
-      color: white;
-    }
-
-    .edit-btn:hover {
-      background-color: #e76f51;
-    }
-
-    .delete-btn {
-      background-color: #e63946;
-      color: white;
-    }
-
-    .delete-btn:hover {
-      background-color: #c1121f;
-    }
-
-    footer {
-      background: #005f73;
-      color: #fff;
-      text-align: center;
-      padding: 15px 0;
-      margin-top: 40px;
-      border-radius: 8px;
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 <body>
-  <video autoplay muted loop playsinline id="bg-video">
-    <source src="videos/71943-540487063_small.mp4" type="video/mp4" />
-    Your browser does not support the video tag.
-  </video>
-
   <header>
-    <img src="images/Itim at Pula E-Sports Naglalarawan Gaming Gaming Logo (1).png" alt="Logo" />
-    <div class="header-title">
-      <h1>Caraga Dart Knights</h1>
-      <p>Match History Logs</p>
-    </div>
+    <h1>Caraga Dart Knights - Match Logs</h1>
   </header>
+  <div class="container">
 
-  <div class="content-wrapper">
-    <nav>
-      <a href="Players.html">Home</a>
-      <a href="Players in Caraga.html">Top Players</a>
-      <a href="Rankings.html">Rankings</a>
-      <a href="Photo-Gallery.html">Gallery</a>
-      <a href="Photo-Bombers.html">Photo Bombers</a>
-      <a href="match-schedule.html">Match Schedule</a>
-      <a href="contact.html">Contact</a>
-      <a href="#" id="logout-button" style="color: #ffb703;">Logout</a>
-    </nav>
+    <div class="form-section">
+      <h2>Add Match Log</h2>
+      <form id="add-log-form">
+        <input type="text" id="player" placeholder="Player Name" required />
+        <input type="text" id="opponent" placeholder="Opponent Name" required />
+        <input type="date" id="date" required />
+        <button type="submit">Add Log</button>
+      </form>
+    </div>
 
-    <main>
-      <h2>Match Logs</h2>
+    <div class="search-section">
+      <input type="text" id="search-bar" placeholder="Search by month/year (e.g., 2024-06)" />
+    </div>
 
-      <div class="add-log-form">
-        <input type="date" id="log-date" />
-        <input type="text" id="log-player" placeholder="Player" />
-        <input type="text" id="log-opponent" placeholder="Opponent" />
-        <input type="text" id="log-winner" placeholder="Winner" />
-        <button onclick="addLog()">Add Log</button>
-      </div>
+    <div class="filter-section">
+      <button onclick="changeMonth(-1)">&lt;</button>
+      <span id="current-month"></span>
+      <button onclick="changeMonth(1)">&gt;</button>
+    </div>
 
-      <div class="filter-controls">
-        <button onclick="prevMonth()">&#9664;</button>
-        <h3 id="monthYearDisplay"></h3>
-        <button onclick="nextMonth()">&#9654;</button>
-      </div>
-
-      <table class="log-table">
+    <div class="table-section">
+      <table id="log-table">
         <thead>
           <tr>
-            <th>Date</th>
             <th>Player</th>
             <th>Opponent</th>
-            <th>Winner</th>
+            <th>Date</th>
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody id="log-table-body">
-          <!-- logs inserted here -->
-        </tbody>
+        <tbody></tbody>
       </table>
-      <p id="no-logs" style="text-align:center;margin-top:20px;color:#e63946;font-weight:bold;"></p>
-    </main>
+      <p id="no-logs-message" class="hidden">No history logs for now.</p>
+    </div>
+
   </div>
 
-  <footer>
-    <p>&copy; 2025 Caraga Dart Knights. All rights reserved.</p>
-  </footer>
-
   <script>
-    let logs = JSON.parse(localStorage.getItem('matchLogs')) || [];
+    const logTableBody = document.querySelector('#log-table tbody');
+    const noLogsMessage = document.getElementById('no-logs-message');
+    const currentMonthDisplay = document.getElementById('current-month');
+    const searchBar = document.getElementById('search-bar');
+
+    let logs = JSON.parse(localStorage.getItem('logs')) || [];
     let currentDate = new Date(localStorage.getItem('selectedDate')) || new Date();
 
-    function formatDate(dateStr) {
-      const d = new Date(dateStr);
-      return d.toISOString().split('T')[0];
+    function saveState() {
+      localStorage.setItem('logs', JSON.stringify(logs));
+      localStorage.setItem('selectedDate', currentDate.toISOString());
     }
 
     function renderLogs() {
-      const tbody = document.getElementById('log-table-body');
-      const noLogs = document.getElementById('no-logs');
-      tbody.innerHTML = '';
+      const month = currentDate.getMonth();
+      const year = currentDate.getFullYear();
+      const searchQuery = searchBar.value.trim();
 
-      const currentMonth = currentDate.getMonth();
-      const currentYear = currentDate.getFullYear();
-      document.getElementById('monthYearDisplay').innerText = `${currentDate.toLocaleString('default', { month: 'long' })} ${currentYear}`;
-
-      const filteredLogs = logs.filter(log => {
+      let filteredLogs = logs.filter(log => {
         const logDate = new Date(log.date);
-        return logDate.getMonth() === currentMonth && logDate.getFullYear() === currentYear;
+        if (searchQuery) {
+          return log.date.startsWith(searchQuery);
+        }
+        return logDate.getMonth() === month && logDate.getFullYear() === year;
       });
 
+      logTableBody.innerHTML = '';
       if (filteredLogs.length === 0) {
-        noLogs.textContent = 'No history logs for now';
-        return;
+        noLogsMessage.classList.remove('hidden');
+      } else {
+        noLogsMessage.classList.add('hidden');
+        filteredLogs.forEach((log, index) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${log.player}</td>
+            <td>${log.opponent}</td>
+            <td>${log.date}</td>
+            <td class="actions">
+              <button onclick="editLog(${index})">Edit</button>
+              <button onclick="deleteLog(${index})">Delete</button>
+            </td>
+          `;
+          logTableBody.appendChild(row);
+        });
       }
-
-      noLogs.textContent = '';
-      filteredLogs.forEach((log, index) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${formatDate(log.date)}</td>
-          <td>${log.player}</td>
-          <td>${log.opponent}</td>
-          <td>${log.winner}</td>
-          <td>
-            <button class="action-btn edit-btn" onclick="editLog(${index})">Edit</button>
-            <button class="action-btn delete-btn" onclick="deleteLog(${index})">Delete</button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-
-      localStorage.setItem('selectedDate', currentDate);
+      currentMonthDisplay.textContent = currentDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
     }
 
-    function addLog() {
-      const date = document.getElementById('log-date').value;
-      const player = document.getElementById('log-player').value;
-      const opponent = document.getElementById('log-opponent').value;
-      const winner = document.getElementById('log-winner').value;
+    function changeMonth(direction) {
+      currentDate.setMonth(currentDate.getMonth() + direction);
+      saveState();
+      renderLogs();
+    }
 
-      if (!date || !player || !opponent || !winner) return alert('Please complete all fields.');
+    function addLog(e) {
+      e.preventDefault();
+      const player = document.getElementById('player').value;
+      const opponent = document.getElementById('opponent').value;
+      const date = document.getElementById('date').value;
+      logs.push({ player, opponent, date });
+      saveState();
+      document.getElementById('add-log-form').reset();
+      renderLogs();
+    }
 
-      logs.push({ date, player, opponent, winner });
-      localStorage.setItem('matchLogs', JSON.stringify(logs));
-
-      document.getElementById('log-date').value = '';
-      document.getElementById('log-player').value = '';
-      document.getElementById('log-opponent').value = '';
-      document.getElementById('log-winner').value = '';
-
+    function deleteLog(index) {
+      logs.splice(index, 1);
+      saveState();
       renderLogs();
     }
 
     function editLog(index) {
       const log = logs[index];
-      const newDate = prompt('Edit Date', log.date);
-      const newPlayer = prompt('Edit Player', log.player);
-      const newOpponent = prompt('Edit Opponent', log.opponent);
-      const newWinner = prompt('Edit Winner', log.winner);
-
-      if (newDate && newPlayer && newOpponent && newWinner) {
-        logs[index] = { date: newDate, player: newPlayer, opponent: newOpponent, winner: newWinner };
-        localStorage.setItem('matchLogs', JSON.stringify(logs));
+      const newPlayer = prompt("Edit Player Name:", log.player);
+      const newOpponent = prompt("Edit Opponent Name:", log.opponent);
+      const newDate = prompt("Edit Date:", log.date);
+      if (newPlayer && newOpponent && newDate) {
+        logs[index] = { player: newPlayer, opponent: newOpponent, date: newDate };
+        saveState();
         renderLogs();
       }
     }
 
-    function deleteLog(index) {
-      if (confirm('Delete this match log?')) {
-        logs.splice(index, 1);
-        localStorage.setItem('matchLogs', JSON.stringify(logs));
-        renderLogs();
-      }
-    }
-
-    function prevMonth() {
-      currentDate.setMonth(currentDate.getMonth() - 1);
-      renderLogs();
-    }
-
-    function nextMonth() {
-      currentDate.setMonth(currentDate.getMonth() + 1);
-      renderLogs();
-    }
+    document.getElementById('add-log-form').addEventListener('submit', addLog);
+    searchBar.addEventListener('input', renderLogs);
 
     renderLogs();
   </script>
