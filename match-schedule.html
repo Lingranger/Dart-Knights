@@ -212,36 +212,40 @@
 
     <main>
       <h2>Match Schedule - June 2025</h2>
-      <table class="schedule-table">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Match</th>
-            <th>Venue</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>June 15, 2025</td>
-            <td>2:00 PM</td>
-            <td>Godofredo Abuzo IV vs Carlito Reyes</td>
-            <td>Butuan Dart Arena</td>
-          </tr>
-          <tr>
-            <td>June 17, 2025</td>
-            <td>4:00 PM</td>
-            <td>Anna Mae Castillo vs Eliza Manlapig</td>
-            <td>Surigao Sports Hall</td>
-          </tr>
-          <tr>
-            <td>June 20, 2025</td>
-            <td>6:00 PM</td>
-            <td>Winners Match</td>
-            <td>Tandag Main Stage</td>
-          </tr>
-        </tbody>
-      </table>
+     <table class="schedule-table" id="scheduleTable">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Time</th>
+      <th>Match</th>
+      <th>Location</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>June 15, 2025</td>
+      <td>3:00 PM</td>
+      <td>Godofredo Abuzo IV vs Anna Mae Castillo</td>
+      <td>Butuan City Sports Complex</td>
+      <td>
+        <button onclick="editScheduleRow(this)">Edit</button>
+        <button onclick="deleteScheduleRow(this)">Delete</button>
+      </td>
+    </tr>
+    <tr>
+      <td>June 18, 2025</td>
+      <td>4:00 PM</td>
+      <td>Carlito Reyes vs Eliza Manlapig</td>
+      <td>Surigao City Arena</td>
+      <td>
+        <button onclick="editScheduleRow(this)">Edit</button>
+        <button onclick="deleteScheduleRow(this)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
 
       <a href="players.html" class="back-btn">← Back to Players</a>
     </main>
