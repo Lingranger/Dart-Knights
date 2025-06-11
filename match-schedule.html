@@ -272,219 +272,151 @@
       <a href="contact.html">Contact</a>
       <a href="#" id="logout-button" style="color: #ffb703;">Logout</a>
     </nav>
-    <main>
-   <h2 class="schedule-header">
-  <button onclick="prevMonth()">&#8592;</button>
-  <span id="monthYear">June 2025</span>
-  <button onclick="nextMonth()">&#8594;</button>
-</h2>
+ <main>
+    <h2 class="schedule-header">
+      <button onclick="prevMonth()">&#8592;</button>
+      <span id="monthYear">June 2025</span>
+      <button onclick="nextMonth()">&#8594;</button>
+    </h2>
 
-<div id="scheduleContent"></div>
-       <script>
+    <h3>Add New Match</h3>
+    <form id="addMatchForm">
+      <input type="date" id="matchDate" required />
+      <input type="time" id="matchTime" required />
+      <input type="text" id="matchTitle" placeholder="Match Title" required />
+      <input type="text" id="matchLocation" placeholder="Location" required />
+      <button type="submit">Add Match</button>
+    </form>
+
+    <table id="scheduleTable">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Match</th>
+          <th>Location</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- dynamically populated -->
+      </tbody>
+    </table>
+
+    <a href="players.html" class="back-btn">← Back to Players</a>
+  </main>
+
+  <script>
     const scheduleData = {
       'June 2025': [
-        'June 5 - Team A vs Team B',
-        'June 12 - Team C vs Team D',
-        'June 20 - Team E vs Team F'
+        { date: 'June 5, 2025', time: '3:00 PM', match: 'Team A vs Team B', location: 'Venue 1' },
+        { date: 'June 12, 2025', time: '4:00 PM', match: 'Team C vs Team D', location: 'Venue 2' },
+        { date: 'June 20, 2025', time: '5:00 PM', match: 'Team E vs Team F', location: 'Venue 3' }
       ],
       'July 2025': [
-        'July 3 - Team A vs Team C',
-        'July 15 - Team B vs Team D'
-      ],
-      // Add more months/years as needed
+        { date: 'July 3, 2025', time: '2:00 PM', match: 'Team A vs Team C', location: 'Venue 4' },
+        { date: 'July 15, 2025', time: '6:00 PM', match: 'Team B vs Team D', location: 'Venue 5' }
+      ]
     };
 
-    let currentDate = new Date(2025, 5); // June is 5 (0-indexed)
+    let currentDate = new Date(2025, 5); // June 2025
+    const monthYearEl = document.getElementById('monthYear');
+    const tbody = document.querySelector('#scheduleTable tbody');
 
-    function updateSchedule() {
-      const options = { year: 'numeric', month: 'long' };
-      const formattedDate = currentDate.toLocaleDateString('en-US', options);
-      document.getElementById('monthYear').textContent = formattedDate;
+    function updateScheduleTable() {
+      const opts = { year: 'numeric', month: 'long' };
+      const key = currentDate.toLocaleDateString('en-US', opts);
+      monthYearEl.textContent = key;
+      tbody.innerHTML = '';
 
-      const schedule = scheduleData[formattedDate];
-      const scheduleContent = document.getElementById('scheduleContent');
-
-      if (schedule && schedule.length > 0) {
-        scheduleContent.innerHTML = `<ul>${schedule.map(item => `<li>${item}</li>`).join('')}</ul>`;
+      const list = scheduleData[key];
+      if (list && list.length) {
+        list.forEach(item => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${item.date}</td>
+            <td>${item.time}</td>
+            <td>${item.match}</td>
+            <td>${item.location}</td>
+            <td>
+              <button onclick="editScheduleRow(this)">Edit</button>
+              <button onclick="deleteScheduleRow(this)">Delete</button>
+            </td>`;
+          tbody.appendChild(row);
+        });
       } else {
-        scheduleContent.textContent = 'No schedule for now.';
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td colspan="5" style="font-style:italic; color:#666;">No schedule for now.</td>`;
+        tbody.appendChild(tr);
       }
     }
 
     function prevMonth() {
       currentDate.setMonth(currentDate.getMonth() - 1);
-      updateSchedule();
+      updateScheduleTable();
     }
 
     function nextMonth() {
       currentDate.setMonth(currentDate.getMonth() + 1);
-      updateSchedule();
+      updateScheduleTable();
     }
 
-    // Initialize on load
-    updateSchedule();
-  </script>
+    document.getElementById('addMatchForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const d = document.getElementById('matchDate').value;
+      const t = document.getElementById('matchTime').value;
+      const m = document.getElementById('matchTitle').value;
+      const l = document.getElementById('matchLocation').value;
 
+      const formattedDate = new Date(d).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
 
+      const key = currentDate.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long'
+      });
 
-      <table class="schedule-table" id="scheduleTable">
-        <h3>Add New Match</h3>
-<form id="addMatchForm">
-  <label>Date: <input type="date" id="matchDate" required></label>
-  <label>Time: <input type="time" id="matchTime" required></label>
-  <label>Match: <input type="text" id="matchTitle" placeholder="Player A vs Player B" required></label>
-  <label>Location: <input type="text" id="matchLocation" required></label>
-  <button type="submit">Add Match</button>
-  <p id="limitMsg" style="color: red;"></p>
-</form>
+      if (!scheduleData[key]) scheduleData[key] = [];
+      scheduleData[key].push({ date: formattedDate, time: t, match: m, location: l });
+      updateScheduleTable();
+      e.target.reset();
+    });
 
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Time</th>
-      <th>Match</th>
-      <th>Location</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>June 15, 2025</td>
-      <td>3:00 PM</td>
-      <td>Godofredo Abuzo IV vs Anna Mae Castillo</td>
-      <td>Butuan City Sports Complex</td>
-      <td>
-        <button onclick="editScheduleRow(this)">Edit</button>
-        <button onclick="deleteScheduleRow(this)">Delete</button>
-      </td>
-    </tr>
-    <tr>
-      <td>June 18, 2025</td>
-      <td>4:00 PM</td>
-      <td>Carlito Reyes vs Eliza Manlapig</td>
-      <td>Surigao City Arena</td>
-      <td>
-        <button onclick="editScheduleRow(this)">Edit</button>
-        <button onclick="deleteScheduleRow(this)">Delete</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+    function deleteScheduleRow(button) {
+      if (!confirm("Are you sure you want to delete this scheduled match?")) return;
+      const row = button.closest("tr");
+      const index = [...row.parentNode.children].indexOf(row);
+      const key = currentDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+      scheduleData[key].splice(index, 1);
+      updateScheduleTable();
+    }
 
-      <a href="players.html" class="back-btn">← Back to Players</a>
-    </main>
+    function editScheduleRow(button) {
+      const cells = button.closest("tr").querySelectorAll("td");
+      const [d, t, m, l] = [
+        prompt("New date:", cells[0].innerText),
+        prompt("New time:", cells[1].innerText),
+        prompt("New match:", cells[2].innerText),
+        prompt("New location:", cells[3].innerText)
+      ];
+      if (d && t && m && l) {
+        const row = button.closest("tr");
+        const index = [...row.parentNode.children].indexOf(row);
+        const key = currentDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+        scheduleData[key][index] = { date: d, time: t, match: m, location: l };
+        updateScheduleTable();
+      }
+    }
 
-    <footer>
-      &copy; 2025 Caraga Dart Knights. All rights reserved.
-    </footer>
-  </div>
-
-  <script>
     document.getElementById('logout-button').addEventListener('click', function (e) {
       e.preventDefault();
       window.location.href = 'advertisement.html';
     });
+
+    updateScheduleTable();
   </script>
-<script>
-  function deleteScheduleRow(button) {
-    const row = button.closest("tr");
-    if (confirm("Are you sure you want to delete this scheduled match?")) {
-      row.remove();
-    }
-  }
-
-  function editScheduleRow(button) {
-    const row = button.closest("tr");
-    const cells = row.querySelectorAll("td");
-
-    const date = prompt("Enter new date:", cells[0].innerText);
-    const time = prompt("Enter new time:", cells[1].innerText);
-    const match = prompt("Enter new match:", cells[2].innerText);
-    const location = prompt("Enter new location:", cells[3].innerText);
-
-    if (date && time && match && location) {
-      cells[0].innerText = date;
-      cells[1].innerText = time;
-      cells[2].innerText = match;
-      cells[3].innerText = location;
-    }
-  }
-  <script>
-  function deleteScheduleRow(button) {
-    const row = button.closest("tr");
-    row.remove();
-  }
-
-  function editScheduleRow(button) {
-    const row = button.closest("tr");
-    const cells = row.querySelectorAll("td");
-
-    const date = prompt("Enter new date:", cells[0].innerText);
-    const time = prompt("Enter new time:", cells[1].innerText);
-    const match = prompt("Enter new match:", cells[2].innerText);
-    const location = prompt("Enter new location:", cells[3].innerText);
-
-    if (date && time && match && location) {
-      cells[0].innerText = date;
-      cells[1].innerText = time;
-      cells[2].innerText = match;
-      cells[3].innerText = location;
-    }
-  }
-
-  document.getElementById('addMatchForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const table = document.getElementById("scheduleTable").getElementsByTagName('tbody')[0];
-    const currentMatches = table.getElementsByTagName('tr').length;
-
-    if (currentMatches >= 10) {
-      document.getElementById("limitMsg").textContent = "You can only add up to 10 matches.";
-      return;
-    }
-
-    const date = document.getElementById("matchDate").value;
-    const time = document.getElementById("matchTime").value;
-    const match = document.getElementById("matchTitle").value;
-    const location = document.getElementById("matchLocation").value;
-
-    const row = table.insertRow();
-    row.innerHTML = `
-      <td>${date}</td>
-      <td>${time}</td>
-      <td>${match}</td>
-      <td>${location}</td>
-      <td>
-        <button onclick="editScheduleRow(this)">Edit</button>
-        <button onclick="deleteScheduleRow(this)">Delete</button>
-      </td>
-    `;
-
-    // Clear form and message
-    this.reset();
-    document.getElementById("limitMsg").textContent = "";
-  });
-</script>
-<script>
-  const monthYearElement = document.getElementById('monthYear');
-  let currentDate = new Date(2025, 5); // June = 5
-
-  function updateMonthYear() {
-    const options = { year: 'numeric', month: 'long' };
-    monthYearElement.textContent = currentDate.toLocaleDateString(undefined, options);
-  }
-
-  function prevMonth() {
-    currentDate.setMonth(currentDate.getMonth() - 1);
-    updateMonthYear();
-  }
-
-  function nextMonth() {
-    currentDate.setMonth(currentDate.getMonth() + 1);
-    updateMonthYear();
-  }
-
-  updateMonthYear();
-</script>
 </body>
 </html>
