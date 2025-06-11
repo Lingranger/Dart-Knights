@@ -316,116 +316,104 @@
   </main>
 
   <script>
-    const scheduleData = {
-      'June 2025': [
-        { date: 'June 5, 2025', time: '3:00 PM', match: 'Team A vs Team B', location: 'Venue 1' },
-        { date: 'June 12, 2025', time: '4:00 PM', match: 'Team C vs Team D', location: 'Venue 2' },
-        { date: 'June 20, 2025', time: '5:00 PM', match: 'Team E vs Team F', location: 'Venue 3' }
-      ],
-      'July 2025': [
-        { date: 'July 3, 2025', time: '2:00 PM', match: 'Team A vs Team C', location: 'Venue 4' },
-        { date: 'July 15, 2025', time: '6:00 PM', match: 'Team B vs Team D', location: 'Venue 5' }
-      ]
-    };
+  const scheduleData = {
+    'June 2025': [
+      { date: 'June 5, 2025', time: '3:00 PM', match: 'Team A vs Team B', location: 'Venue 1' },
+      { date: 'June 12, 2025', time: '4:00 PM', match: 'Team C vs Team D', location: 'Venue 2' },
+      { date: 'June 20, 2025', time: '5:00 PM', match: 'Team E vs Team F', location: 'Venue 3' }
+    ],
+    'July 2025': [
+      { date: 'July 3, 2025', time: '2:00 PM', match: 'Team A vs Team C', location: 'Venue 4' },
+      { date: 'July 15, 2025', time: '6:00 PM', match: 'Team B vs Team D', location: 'Venue 5' }
+    ]
+  };
 
-    let currentDate = new Date(2025, 5); // June 2025
-    const monthYearEl = document.getElementById('monthYear');
-    const tbody = document.querySelector('#scheduleTable tbody');
+  const monthYearEl = document.getElementById('monthYear');
+  const tbody = document.querySelector('#scheduleTable tbody');
 
-    function updateScheduleTable() {
-      const opts = { year: 'numeric', month: 'long' };
-      const key = currentDate.toLocaleDateString('en-US', opts);
-      monthYearEl.textContent = key;
-      tbody.innerHTML = '';
+  // Get saved date or default to June 2025
+  const savedMonth = localStorage.getItem('selectedMonth');
+  const savedYear = localStorage.getItem('selectedYear');
+  let currentDate = savedMonth && savedYear
+    ? new Date(parseInt(savedYear), parseInt(savedMonth))
+    : new Date(2025, 5); // June is month 5 (0-indexed)
 
-      const list = scheduleData[key];
-      if (list && list.length) {
-        list.forEach(item => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${item.date}</td>
-            <td>${item.time}</td>
-            <td>${item.match}</td>
-            <td>${item.location}</td>
-            <td>
-              <button onclick="editScheduleRow(this)">Edit</button>
-              <button onclick="deleteScheduleRow(this)">Delete</button>
-            </td>`;
-          tbody.appendChild(row);
-        });
-      } else {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td colspan="5" style="font-style:italic; color:#666;">No schedule for now.</td>`;
-        tbody.appendChild(tr);
-      }
-    }
+  function updateScheduleTable() {
+    const opts = { year: 'numeric', month: 'long' };
+    const key = currentDate.toLocaleDateString('en-US', opts);
+    monthYearEl.textContent = key;
+    tbody.innerHTML = '';
 
-    function prevMonth() {
-      currentDate.setMonth(currentDate.getMonth() - 1);
-      updateScheduleTable();
-    }
-
-    function nextMonth() {
-      currentDate.setMonth(currentDate.getMonth() + 1);
-      updateScheduleTable();
-    }
-
-    document.getElementById('addMatchForm').addEventListener('submit', function (e) {
-      e.preventDefault();
-      const d = document.getElementById('matchDate').value;
-      const t = document.getElementById('matchTime').value;
-      const m = document.getElementById('matchTitle').value;
-      const l = document.getElementById('matchLocation').value;
-
-      const formattedDate = new Date(d).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
+    const list = scheduleData[key];
+    if (list && list.length) {
+      list.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${item.date}</td>
+          <td>${item.time}</td>
+          <td>${item.match}</td>
+          <td>${item.location}</td>
+          <td>
+            <button onclick="editScheduleRow(this)">Edit</button>
+            <button onclick="deleteScheduleRow(this)">Delete</button>
+          </td>`;
+        tbody.appendChild(row);
       });
+    } else {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td colspan="5" style="font-style:italic; color:#666;">No schedule for now.</td>`;
+      tbody.appendChild(tr);
+    }
 
-      const key = currentDate.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long'
-      });
+    // Save selected month and year to localStorage
+    localStorage.setItem('selectedMonth', currentDate.getMonth());
+    localStorage.setItem('selectedYear', currentDate.getFullYear());
+  }
 
-      if (!scheduleData[key]) scheduleData[key] = [];
-      scheduleData[key].push({ date: formattedDate, time: t, match: m, location: l });
-      updateScheduleTable();
-      e.target.reset();
+  function prevMonth() {
+    currentDate.setMonth(currentDate.getMonth() - 1);
+    updateScheduleTable();
+  }
+
+  function nextMonth() {
+    currentDate.setMonth(currentDate.getMonth() + 1);
+    updateScheduleTable();
+  }
+
+  // Add Match Form Handler
+  document.getElementById('addMatchForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const d = document.getElementById('matchDate').value;
+    const t = document.getElementById('matchTime').value;
+    const m = document.getElementById('matchTitle').value;
+    const l = document.getElementById('matchLocation').value;
+
+    const formattedDate = new Date(d).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
     });
 
-    function deleteScheduleRow(button) {
-      if (!confirm("Are you sure you want to delete this scheduled match?")) return;
-      const row = button.closest("tr");
-      const index = [...row.parentNode.children].indexOf(row);
-      const key = currentDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
-      scheduleData[key].splice(index, 1);
-      updateScheduleTable();
-    }
-
-    function editScheduleRow(button) {
-      const cells = button.closest("tr").querySelectorAll("td");
-      const [d, t, m, l] = [
-        prompt("New date:", cells[0].innerText),
-        prompt("New time:", cells[1].innerText),
-        prompt("New match:", cells[2].innerText),
-        prompt("New location:", cells[3].innerText)
-      ];
-      if (d && t && m && l) {
-        const row = button.closest("tr");
-        const index = [...row.parentNode.children].indexOf(row);
-        const key = currentDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
-        scheduleData[key][index] = { date: d, time: t, match: m, location: l };
-        updateScheduleTable();
-      }
-    }
-
-    document.getElementById('logout-button').addEventListener('click', function (e) {
-      e.preventDefault();
-      window.location.href = 'advertisement.html';
+    const key = currentDate.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long'
     });
+
+    const match = { date: formattedDate, time: t, match: m, location: l };
+
+    if (!scheduleData[key]) {
+      scheduleData[key] = [];
+    }
+    scheduleData[key].push(match);
 
     updateScheduleTable();
-  </script>
+
+    this.reset();
+  });
+
+  // Initialize
+  updateScheduleTable();
+</script>
+
 </body>
 </html>
