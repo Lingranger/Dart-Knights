@@ -18,17 +18,16 @@
     }
 
     video#bg-video {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  min-width: 100%;
-  min-height: 100%;
-  width: auto;
-  height: auto;
-  transform: translate(-50%, -50%);
-  z-index: -1;
-}
-
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      transform: translate(-50%, -50%);
+      z-index: -1;
+    }
 
     .ad-wrapper {
       position: relative;
@@ -61,11 +60,14 @@
 
     .cta-buttons {
       margin-top: 30px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
     }
 
     .cta-buttons a {
       padding: 12px 25px;
-      margin: 0 10px;
       border: none;
       background-color: #00b4d8;
       color: white;
@@ -77,6 +79,14 @@
 
     .cta-buttons a:hover {
       background-color: #0096c7;
+    }
+
+    .cta-buttons a.admin-btn {
+      background-color: #ff6b6b;
+    }
+
+    .cta-buttons a.admin-btn:hover {
+      background-color: #e74c3c;
     }
   </style>
 </head>
@@ -93,8 +103,10 @@
     <p>The ultimate destination for dart enthusiasts. Join the league of champions now!</p>
     
     <div class="cta-buttons">
-      <a href="signup.html">Sign Up</a>
-      <a href="login.html">Login</a>
+      <a href="signup.html">User Sign Up</a>
+      <a href="login.html">User Login</a>
+      <a href="admin-signup.html" class="admin-btn">Admin Sign Up</a>
+      <a href="admin-login.html" class="admin-btn">Admin Login</a>
     </div>
   </div>
 
