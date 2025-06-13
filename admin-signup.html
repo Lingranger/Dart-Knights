@@ -70,7 +70,7 @@
 <body>
   <div class="form-container">
     <h2>Admin Sign Up</h2>
-    <form>
+    <form id="adminSignupForm">
       <input type="text" placeholder="Full Name" required />
       <input type="email" placeholder="Email Address" required />
       <input type="password" placeholder="Create Password" required />
@@ -79,5 +79,14 @@
     </form>
     <a href="advertisement.html" class="back-link">← Back to Advertisement</a>
   </div>
+
+  <script>
+    // Redirect to login after form submission
+    document.getElementById('adminSignupForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent form from reloading the page
+      // You can add form validation or saving to localStorage here if needed
+      window.location.href = 'admin-login.html';
+    });
+  </script>
 </body>
 </html>
