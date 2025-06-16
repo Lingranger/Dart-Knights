@@ -53,13 +53,14 @@
   <h1>Registered Users</h1>
   <table id="userTable">
     <thead>
-      <tr>
-        <th>Name</th>
-        <th>Age</th>
-        <th>Gender</th>
-        <th>Email</th>
-      </tr>
-    </thead>
+  <tr>
+    <th>Name</th>
+    <th>Age</th>
+    <th>Gender</th>
+    <th>Email</th>
+    <th>Signed Up</th> <!-- ✅ New Column -->
+  </tr>
+</thead>
     <tbody></tbody>
   </table>
 
@@ -70,16 +71,17 @@
     if (users.length === 0) {
       tableBody.innerHTML = `<tr><td colspan="4" class="no-users">No users have signed up yet.</td></tr>`;
     } else {
-      users.forEach(user => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${user.name}</td>
-          <td>${user.age}</td>
-          <td>${user.gender}</td>
-          <td>${user.email}</td>
-        `;
-        tableBody.appendChild(row);
-      });
+     users.forEach(user => {
+  const row = document.createElement("tr");
+  row.innerHTML = `
+    <td>${user.name}</td>
+    <td>${user.age}</td>
+    <td>${user.gender}</td>
+    <td>${user.email}</td>
+    <td>${user.signupDate || 'N/A'}</td> <!-- ✅ Show date -->
+  `;
+  tableBody.appendChild(row);
+});
     }
   </script>
 </body>
