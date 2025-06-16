@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Login - Caraga Dart Knights</title>
+  <title>Admin Login</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -13,7 +13,6 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      margin: 0;
     }
 
     .form-container {
@@ -24,13 +23,7 @@
       max-width: 400px;
     }
 
-    h2 {
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    input[type="email"],
-    input[type="password"] {
+    input {
       width: 100%;
       padding: 12px;
       margin: 10px 0;
@@ -42,39 +35,37 @@
       width: 100%;
       padding: 12px;
       background-color: #ff6b6b;
-      color: #fff;
+      color: white;
       border: none;
       border-radius: 6px;
       font-size: 1rem;
-      cursor: pointer;
     }
 
     button:hover {
       background-color: #e74c3c;
     }
 
-    .back-link {
-      display: block;
-      margin-top: 15px;
+    h2 {
       text-align: center;
-      color: #00b4d8;
-      text-decoration: none;
-    }
-
-    .back-link:hover {
-      text-decoration: underline;
     }
   </style>
 </head>
 <body>
   <div class="form-container">
     <h2>Admin Login</h2>
-    <form>
-      <input type="email" placeholder="Email Address" required />
+    <form id="adminLoginForm">
+      <input type="email" placeholder="Email" required />
       <input type="password" placeholder="Password" required />
       <button type="submit">Login</button>
     </form>
-    <a href="advertisement.html" class="back-link">← Back to Advertisement</a>
   </div>
+
+  <script>
+    document.getElementById('adminLoginForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      // You can add validation here if needed
+      window.location.href = 'index.html'; 
+    });
+  </script>
 </body>
 </html>
