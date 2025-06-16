@@ -8,74 +8,80 @@
     body {
       font-family: Arial, sans-serif;
       background: #0f172a;
-      color: #fff;
+      color: white;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
     }
-    form {
+
+    .login-container {
       background: #1e293b;
       padding: 30px;
-      border-radius: 10px;
+      border-radius: 8px;
       width: 100%;
       max-width: 400px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
-    h2 {
+
+    .login-container h2 {
       text-align: center;
+      margin-bottom: 20px;
       color: #38bdf8;
     }
-    input {
+
+    .login-container input {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       margin: 10px 0;
       border: none;
-      border-radius: 6px;
+      border-radius: 5px;
       background: #334155;
       color: white;
     }
-    button {
+
+    .login-container button {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       background: #38bdf8;
-      border: none;
-      border-radius: 6px;
       color: #0f172a;
       font-weight: bold;
+      border: none;
+      border-radius: 5px;
       cursor: pointer;
+    }
+
+    .login-container button:hover {
+      background: #0ea5e9;
     }
   </style>
 </head>
 <body>
-  <form id="adminLoginForm">
+  <div class="login-container">
     <h2>Admin Login</h2>
-    <input type="email" id="email" placeholder="Email" required />
-    <input type="password" id="password" placeholder="Password" required />
-    <button type="submit">Login</button>
-  </form>
+    <form id="adminLoginForm">
+      <input type="email" id="login-email" placeholder="Email" required />
+      <input type="password" id="login-password" placeholder="Password" required />
+      <button type="submit">Login</button>
+    </form>
+  </div>
 
   <script>
     document.getElementById("adminLoginForm").addEventListener("submit", function (e) {
       e.preventDefault();
 
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
+      const email = document.getElementById("login-email").value.trim();
+      const password = document.getElementById("login-password").value;
       const admin = JSON.parse(localStorage.getItem("admin"));
 
-      if (!admin || email !== admin.email || password !== admin.password) {
-        alert("Invalid admin credentials.");
-        return;
+      if (admin && admin.email === email && admin.password === password) {
+        const loginDate = new Date().toLocaleString();
+        localStorage.setItem("adminLoginDate", loginDate);
+        alert("Login successful!");
+        window.location.href = "admin-dashboard.html";
+      } else {
+        alert("Invalid credentials!");
       }
-
-      // Save login timestamp
-      localStorage.setItem("adminLoginDate", new Date().toLocaleString());
-
-      // Optional: Save current session keys
-      localStorage.setItem("adminEmail", email);
-      localStorage.setItem("adminPassword", password);
-
-      alert("Welcome back, admin!");
-      window.location.href = "index.html";
     });
   </script>
 </body>
