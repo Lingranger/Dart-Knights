@@ -81,11 +81,6 @@
   </table>
 
   <script>
-    const adminEmail = localStorage.getItem("adminEmail");
-if (!adminEmail) {
-  alert("Unauthorized access. Please log in as admin.");
-  window.location.href = "admin-login.html"; // or your login page
-}
     const users = JSON.parse(localStorage.getItem("users")) || [];
     const tableBody = document.querySelector("#userTable tbody");
 
