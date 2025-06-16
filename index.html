@@ -2,56 +2,83 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Dashboard - User History</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #111;
+      background: #0f172a;
       color: #fff;
       padding: 40px;
     }
 
     h1 {
-      font-size: 2rem;
-      margin-bottom: 20px;
+      text-align: center;
+      color: #38bdf8;
     }
 
-    ul {
-      list-style: none;
-      padding-left: 0;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 30px;
     }
 
-    li {
-      background: #222;
-      margin-bottom: 10px;
-      padding: 10px 15px;
-      border-radius: 5px;
+    th, td {
+      padding: 12px;
+      border: 1px solid #334155;
+      text-align: left;
+    }
+
+    th {
+      background: #1e293b;
+    }
+
+    tr:nth-child(even) {
+      background: #1e293b;
+    }
+
+    tr:nth-child(odd) {
+      background: #0f172a;
     }
 
     .no-users {
-      color: #ccc;
+      text-align: center;
+      padding: 20px;
+      color: #94a3b8;
     }
   </style>
 </head>
 <body>
-  <h1>User Signup History</h1>
-  <ul id="userList"></ul>
+
+  <h1>Registered Users</h1>
+  <table id="userTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Gender</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
   <script>
-    const users = JSON.parse(localStorage.getItem('userHistory')) || [];
-    const userList = document.getElementById('userList');
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const tableBody = document.querySelector("#userTable tbody");
 
     if (users.length === 0) {
-      const li = document.createElement('li');
-      li.className = 'no-users';
-      li.textContent = 'No users have signed up yet.';
-      userList.appendChild(li);
+      tableBody.innerHTML = `<tr><td colspan="4" class="no-users">No users have signed up yet.</td></tr>`;
     } else {
       users.forEach(user => {
-        const li = document.createElement('li');
-        li.textContent = user;
-        userList.appendChild(li);
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${user.name}</td>
+          <td>${user.age}</td>
+          <td>${user.gender}</td>
+          <td>${user.email}</td>
+        `;
+        tableBody.appendChild(row);
       });
     }
   </script>
