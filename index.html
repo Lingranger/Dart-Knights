@@ -1,18 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Dashboard</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #0f172a; color: #fff; padding: 40px; }
-    h1 { text-align: center; color: #38bdf8; }
-    table { width: 100%; border-collapse: collapse; margin-top: 30px; }
-    th, td { padding: 12px; border: 1px solid #334155; text-align: left; }
-    th { background: #1e293b; }
-    tr:nth-child(even) { background: #1e293b; }
-    tr:nth-child(odd) { background: #0f172a; }
-    .logout-btn {
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: #fff;
+      padding: 40px;
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #38bdf8;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      margin-bottom: 30px;
+    }
+
+    th, td {
+      padding: 12px;
+      border: 1px solid #334155;
+      text-align: left;
+    }
+
+    th {
+      background: #1e293b;
+    }
+
+    tr:nth-child(even) {
+      background: #1e293b;
+    }
+
+    tr:nth-child(odd) {
+      background: #0f172a;
+    }
+
+    .no-users {
+      text-align: center;
+      padding: 20px;
+      color: #94a3b8;
+    }
+
+    #logout-btn {
       position: absolute;
       top: 20px;
       right: 20px;
@@ -25,12 +61,26 @@
       font-weight: bold;
       transition: background 0.3s;
     }
-    .logout-btn:hover { background: #dc2626; }
+
+    #logout-btn:hover {
+      background-color: #dc2626;
+    }
   </style>
 </head>
 <body>
-  <h1>Registered Users</h1>
-  <button class="logout-btn" onclick="logout()">Logout</button>
+
+  <button id="logout-btn">Logout</button>
+
+  <h1>Admin Dashboard</h1>
+
+  <h2>Admin Info</h2>
+  <table>
+    <tr><th>Email</th><td id="admin-email"></td></tr>
+    <tr><th>Signup Date</th><td id="admin-signup"></td></tr>
+    <tr><th>Last Login</th><td id="admin-login"></td></tr>
+  </table>
+
+  <h2>Registered Users</h2>
   <table id="userTable">
     <thead>
       <tr>
@@ -45,28 +95,39 @@
   </table>
 
   <script>
-    const users = JSON.parse(localStorage.getItem('users')) || [];
-    const tableBody = document.querySelector('#userTable tbody');
+    // Load and display users
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const tableBody = document.querySelector("#userTable tbody");
 
     if (users.length === 0) {
-      tableBody.innerHTML = '<tr><td colspan="5">No users have signed up yet.</td></tr>';
+      tableBody.innerHTML = `<tr><td colspan="5" class="no-users">No users have signed up yet.</td></tr>`;
     } else {
       users.forEach(user => {
-        const row = document.createElement('tr');
+        const row = document.createElement("tr");
         row.innerHTML = `
           <td>${user.name}</td>
           <td>${user.age}</td>
           <td>${user.gender}</td>
           <td>${user.email}</td>
-          <td>${user.signupDate || 'N/A'}</td>`;
+          <td>${user.signupDate || 'N/A'}</td>
+        `;
         tableBody.appendChild(row);
       });
     }
 
-    function logout() {
-      localStorage.removeItem('adminLoggedIn');
-      window.location.href = 'advertisement.html';
-    }
+    // Display admin info
+    const admin = JSON.parse(localStorage.getItem("admin")) || {};
+    document.getElementById("admin-email").textContent = admin.email || "N/A";
+    document.getElementById("admin-signup").textContent = admin.signupDate || "N/A";
+    document.getElementById("admin-login").textContent = localStorage.getItem("adminLoginDate") || "N/A";
+
+    // Logout functionality
+    document.getElementById("logout-btn").addEventListener("click", () => {
+      localStorage.removeItem("adminEmail");
+      localStorage.removeItem("adminPassword");
+      localStorage.removeItem("adminLoginDate");
+      window.location.href = "advertisement.html"; // Redirect to welcome page
+    });
   </script>
 </body>
 </html>
