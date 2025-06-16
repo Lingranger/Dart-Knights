@@ -165,14 +165,16 @@
       }
 
       // Create a new user object
-      const newUser = {
-        id: Date.now(),
-        name,
-        age,
-        gender,
-        email,
-        password
-      };
+     const newUser = {
+  id: Date.now(),
+  name,
+  age,
+  gender,
+  email,
+  password,
+  signupDate: new Date().toLocaleString() // saves readable date & time
+};
+
 
       // Save user to the users array and store it in localStorage
       users.push(newUser);
