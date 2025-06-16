@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Login</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #121212;
+      background: #0f172a;
       color: #fff;
       display: flex;
       justify-content: center;
@@ -15,56 +15,50 @@
       height: 100vh;
     }
 
-    .form-container {
-      background: rgba(0, 0, 0, 0.7);
+    .form-box {
+      background: #1e293b;
       padding: 30px;
-      border-radius: 12px;
-      width: 100%;
+      border-radius: 10px;
       max-width: 400px;
+      width: 100%;
+      text-align: center;
     }
 
-    input {
+    input, button {
       width: 100%;
       padding: 12px;
       margin: 10px 0;
-      border: none;
       border-radius: 6px;
+      border: none;
     }
 
     button {
-      width: 100%;
-      padding: 12px;
-      background-color: #ff6b6b;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-size: 1rem;
+      background: #38bdf8;
+      color: #0f172a;
+      font-weight: bold;
+      cursor: pointer;
     }
 
     button:hover {
-      background-color: #e74c3c;
-    }
-
-    h2 {
-      text-align: center;
+      background: #0ea5e9;
     }
   </style>
 </head>
 <body>
-  <div class="form-container">
+  <div class="form-box">
     <h2>Admin Login</h2>
     <form id="adminLoginForm">
-      <input type="email" placeholder="Email" required />
+      <input type="text" placeholder="Admin Username" required />
       <input type="password" placeholder="Password" required />
       <button type="submit">Login</button>
     </form>
   </div>
 
   <script>
-    document.getElementById('adminLoginForm').addEventListener('submit', function (e) {
+    document.getElementById("adminLoginForm").addEventListener("submit", function(e) {
       e.preventDefault();
-      // You can add validation here if needed
-      window.location.href = 'index.html'; 
+      // Add real validation here if needed
+      window.location.href = "index.html";
     });
   </script>
 </body>
