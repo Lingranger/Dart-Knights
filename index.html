@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard - User History</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+      padding: 40px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    li {
+      background: #222;
+      margin-bottom: 10px;
+      padding: 10px 15px;
+      border-radius: 5px;
+    }
+
+    .no-users {
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+  <h1>User Signup History</h1>
+  <ul id="userList"></ul>
+
+  <script>
+    const users = JSON.parse(localStorage.getItem('userHistory')) || [];
+    const userList = document.getElementById('userList');
+
+    if (users.length === 0) {
+      const li = document.createElement('li');
+      li.className = 'no-users';
+      li.textContent = 'No users have signed up yet.';
+      userList.appendChild(li);
+    } else {
+      users.forEach(user => {
+        const li = document.createElement('li');
+        li.textContent = user;
+        userList.appendChild(li);
+      });
+    }
+  </script>
+</body>
+</html>
