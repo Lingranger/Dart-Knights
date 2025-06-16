@@ -10,6 +10,7 @@
       background: #0f172a;
       color: #fff;
       padding: 40px;
+      position: relative;
     }
 
     h1 {
@@ -46,37 +47,41 @@
       padding: 20px;
       color: #94a3b8;
     }
-    <button id="logout-btn" style="
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  padding: 10px 20px;
-  background-color: #ef4444;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.3s;
-">
-  Logout
-</button>
 
+    #logout-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      background-color: #ef4444;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    #logout-btn:hover {
+      background-color: #dc2626;
+    }
   </style>
 </head>
 <body>
 
+  <button id="logout-btn">Logout</button>
+
   <h1>Registered Users</h1>
   <table id="userTable">
     <thead>
-  <tr>
-    <th>Name</th>
-    <th>Age</th>
-    <th>Gender</th>
-    <th>Email</th>
-    <th>Signed Up</th> <!-- ✅ New Column -->
-  </tr>
-</thead>
+      <tr>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Gender</th>
+        <th>Email</th>
+        <th>Signed Up</th> <!-- ✅ Date column -->
+      </tr>
+    </thead>
     <tbody></tbody>
   </table>
 
@@ -85,29 +90,26 @@
     const tableBody = document.querySelector("#userTable tbody");
 
     if (users.length === 0) {
-      tableBody.innerHTML = `<tr><td colspan="4" class="no-users">No users have signed up yet.</td></tr>`;
+      tableBody.innerHTML = `<tr><td colspan="5" class="no-users">No users have signed up yet.</td></tr>`;
     } else {
-     users.forEach(user => {
-  const row = document.createElement("tr");
-  row.innerHTML = `
-    <td>${user.name}</td>
-    <td>${user.age}</td>
-    <td>${user.gender}</td>
-    <td>${user.email}</td>
-    <td>${user.signupDate || 'N/A'}</td> <!-- ✅ Show date -->
-  `;
-  tableBody.appendChild(row);
-});
-      document.getElementById("logout-btn").addEventListener("click", function () {
-  // Clear current session (adjust keys if needed)
-  localStorage.removeItem("adminEmail");
-  localStorage.removeItem("adminPassword");
-
-  // Redirect to welcome or login page
-  window.location.href = "advertisement.html"; // or "login.html"
-});
-
+      users.forEach(user => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${user.name}</td>
+          <td>${user.age}</td>
+          <td>${user.gender}</td>
+          <td>${user.email}</td>
+          <td>${user.signupDate || 'N/A'}</td>
+        `;
+        tableBody.appendChild(row);
+      });
     }
+
+    document.getElementById("logout-btn").addEventListener("click", function () {
+      localStorage.removeItem("adminEmail");
+      localStorage.removeItem("adminPassword");
+      window.location.href = "advertisement.html"; // redirect on logout
+    });
   </script>
 </body>
 </html>
