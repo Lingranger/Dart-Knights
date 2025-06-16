@@ -82,35 +82,39 @@
 <body>
 
   <div class="logo">
-    <img src="images/Itim at Pula E-Sports Naglalarawan Gaming Gaming Logo (1).png" alt="Dart Knights Logo" class="logo" />
+    <img src="images/Itim at Pula E-Sports Naglalarawan Gaming Gaming Logo (1).png" alt="Logo" />
   </div>
-
 
   <div class="login-container">
     <h2>Admin Login</h2>
     <form id="adminLoginForm">
-      <input type="email" id="login-email" placeholder="Email" required />
-      <input type="password" id="login-password" placeholder="Password" required />
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Password" required />
       <button type="submit">Login</button>
     </form>
     <p>Don’t have an account? <a href="admin-signup.html">Sign up here</a></p>
   </div>
 
   <script>
-    document.getElementById("adminLoginForm").addEventListener("submit", function (e) {
+    document.getElementById("adminLoginForm").addEventListener("submit", function(e) {
       e.preventDefault();
 
-      const email = document.getElementById("login-email").value.trim();
-      const password = document.getElementById("login-password").value;
-      const admin = JSON.parse(localStorage.getItem("admin"));
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
 
-      if (admin && admin.email === email && admin.password === password) {
-        const loginDate = new Date().toLocaleString();
-        localStorage.setItem("adminLoginDate", loginDate);
+      const storedAdmin = JSON.parse(localStorage.getItem("admin"));
+
+      if (!storedAdmin) {
+        alert("No admin account found. Please sign up first.");
+        return;
+      }
+
+      if (email === storedAdmin.email && password === storedAdmin.password) {
+        localStorage.setItem("adminLoggedIn", "true");
         alert("Login successful!");
-        window.location.href = "index.html";
+        window.location.href = "admin-dashboard.html";
       } else {
-        alert("Invalid credentials!");
+        alert("Incorrect email or password.");
       }
     });
   </script>
