@@ -25,6 +25,7 @@
     .logo {
       height: 60px;
       margin-right: 10px;
+      border-radius: 8px;
     }
 
     .title {
@@ -72,13 +73,31 @@
       color: #f87171;
       margin-top: 20px;
     }
+
+    .logout-btn {
+      padding: 8px 16px;
+      background: #ef4444;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .logo-title {
+      display: flex;
+      align-items: center;
+    }
   </style>
 </head>
 <body>
 
   <header>
-    <img src="images/Itim at Pula E-Sports Naglalarawan Gaming Gaming Logo (1).png" alt="Logo" class="logo" />
-    <div class="title">Admin Dashboard</div>
+    <div class="logo-title">
+      <img src="images/Itim at Pula E-Sports Naglalarawan Gaming Gaming Logo (1).png" alt="Logo" class="logo" />
+      <div class="title">Admin Dashboard</div>
+    </div>
+    <button class="logout-btn" onclick="logout()">Logout</button>
   </header>
 
   <div class="dashboard-container">
@@ -87,8 +106,19 @@
   </div>
 
   <script>
-    const users = JSON.parse(localStorage.getItem("users")) || [];
+    // Redirect if admin is not logged in
+    if (localStorage.getItem("adminLoggedIn") !== "true") {
+      window.location.href = "admin-login.html";
+    }
 
+    // Logout function
+    function logout() {
+      localStorage.removeItem("adminLoggedIn");
+      window.location.href = "admin-login.html";
+    }
+
+    // Load users
+    const users = JSON.parse(localStorage.getItem("users")) || [];
     const container = document.getElementById("userTableContainer");
 
     if (users.length === 0) {
@@ -115,7 +145,7 @@
             <td>${user.name}</td>
             <td>${user.age}</td>
             <td>${user.gender}</td>
-            <td>${user.team}</td>
+            <td>${user.team || '—'}</td>
             <td>${user.email}</td>
             <td>${user.signupDate}</td>
           </tr>
