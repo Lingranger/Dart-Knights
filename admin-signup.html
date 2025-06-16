@@ -9,18 +9,27 @@
       font-family: Arial, sans-serif;
       background: #0f172a;
       color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+
+    .logo {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+    }
+
+    .logo img {
+      width: 80px;
+      height: auto;
     }
 
     .signup-container {
       background: #1e293b;
       padding: 30px;
       border-radius: 8px;
-      width: 100%;
       max-width: 400px;
+      margin: 100px auto;
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
 
@@ -54,9 +63,28 @@
     .signup-container button:hover {
       background: #0ea5e9;
     }
+
+    .signup-container p {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .signup-container a {
+      color: #38bdf8;
+      text-decoration: none;
+    }
+
+    .signup-container a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
+
+  <div class="logo">
+    <img src="Itim at Pula E-Sports Naglalarawan Gaming Gaming Logo (1).png" alt="Logo" />
+  </div>
+
   <div class="signup-container">
     <h2>Admin Signup</h2>
     <form id="adminSignupForm">
@@ -65,6 +93,7 @@
       <input type="password" id="password" placeholder="Password" required />
       <button type="submit">Create Account</button>
     </form>
+    <p>Already have an account? <a href="admin-login.html">Login here</a></p>
   </div>
 
   <script>
@@ -76,12 +105,7 @@
       const password = document.getElementById("password").value;
       const signupDate = new Date().toLocaleString();
 
-      const admin = {
-        name,
-        email,
-        password,
-        signupDate
-      };
+      const admin = { name, email, password, signupDate };
 
       localStorage.setItem("admin", JSON.stringify(admin));
       alert("Admin account created!");
