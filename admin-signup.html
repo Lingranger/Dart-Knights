@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Sign Up - Caraga Dart Knights</title>
+  <title>Admin Sign Up</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -13,7 +13,6 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      margin: 0;
     }
 
     .form-container {
@@ -24,14 +23,7 @@
       max-width: 400px;
     }
 
-    h2 {
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    input[type="text"],
-    input[type="email"],
-    input[type="password"] {
+    input {
       width: 100%;
       padding: 12px;
       margin: 10px 0;
@@ -42,50 +34,43 @@
     button {
       width: 100%;
       padding: 12px;
-      background-color: #ff6b6b;
-      color: #fff;
+      background-color: #00b4d8;
+      color: white;
       border: none;
       border-radius: 6px;
       font-size: 1rem;
-      cursor: pointer;
     }
 
     button:hover {
-      background-color: #e74c3c;
+      background-color: #0096c7;
     }
 
-    .back-link {
-      display: block;
-      margin-top: 15px;
+    h2 {
       text-align: center;
-      color: #00b4d8;
-      text-decoration: none;
-    }
-
-    .back-link:hover {
-      text-decoration: underline;
     }
   </style>
 </head>
 <body>
   <div class="form-container">
     <h2>Admin Sign Up</h2>
-    <form id="adminSignupForm">
-      <input type="text" placeholder="Full Name" required />
-      <input type="email" placeholder="Email Address" required />
-      <input type="password" placeholder="Create Password" required />
-      <input type="password" placeholder="Confirm Password" required />
+    <form id="userSignupForm">
+      <input type="text" id="username" placeholder="Username" required />
+      <input type="email" placeholder="Email" required />
+      <input type="password" placeholder="Password" required />
       <button type="submit">Sign Up</button>
     </form>
-    <a href="advertisement.html" class="back-link">← Back to Advertisement</a>
   </div>
 
   <script>
-    // Redirect to login after form submission
-    document.getElementById('adminSignupForm').addEventListener('submit', function(event) {
-      event.preventDefault(); // Prevent form from reloading the page
-      // You can add form validation or saving to localStorage here if needed
-      window.location.href = 'admin-login.html';
+    document.getElementById('userSignupForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const username = document.getElementById('username').value.trim();
+      if (username) {
+        let users = JSON.parse(localStorage.getItem('userHistory')) || [];
+        users.push(username);
+        localStorage.setItem('userHistory', JSON.stringify(users));
+      }
+      window.location.href = 'admin-login.html'; 
     });
   </script>
 </body>
