@@ -8,20 +8,27 @@
     body {
       font-family: Arial, sans-serif;
       background: #0f172a;
-      color: #fff;
+      color: white;
       padding: 40px;
     }
 
     h1, h2 {
       text-align: center;
+    }
+
+    h1 {
       color: #38bdf8;
+    }
+
+    h2 {
+      margin-top: 10px;
+      color: #facc15;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
-      margin-bottom: 30px;
+      margin-top: 30px;
     }
 
     th, td {
@@ -59,7 +66,6 @@
       border-radius: 6px;
       cursor: pointer;
       font-weight: bold;
-      transition: background 0.3s;
     }
 
     #logout-btn:hover {
@@ -70,17 +76,10 @@
 <body>
 
   <button id="logout-btn">Logout</button>
-
   <h1>Admin Dashboard</h1>
+  <h2 id="adminNameDisplay"></h2>
+  <h2 id="loginDateDisplay"></h2>
 
-  <h2>Admin Info</h2>
-  <table>
-    <tr><th>Email</th><td id="admin-email"></td></tr>
-    <tr><th>Signup Date</th><td id="admin-signup"></td></tr>
-    <tr><th>Last Login</th><td id="admin-login"></td></tr>
-  </table>
-
-  <h2>Registered Users</h2>
   <table id="userTable">
     <thead>
       <tr>
@@ -95,7 +94,17 @@
   </table>
 
   <script>
-    // Load and display users
+    const admin = JSON.parse(localStorage.getItem("admin"));
+    const loginDate = localStorage.getItem("adminLoginDate");
+
+    if (admin && admin.name) {
+      document.getElementById("adminNameDisplay").textContent = `Welcome, ${admin.name}`;
+    }
+
+    if (loginDate) {
+      document.getElementById("loginDateDisplay").textContent = `Logged in on: ${loginDate}`;
+    }
+
     const users = JSON.parse(localStorage.getItem("users")) || [];
     const tableBody = document.querySelector("#userTable tbody");
 
@@ -115,18 +124,10 @@
       });
     }
 
-    // Display admin info
-    const admin = JSON.parse(localStorage.getItem("admin")) || {};
-    document.getElementById("admin-email").textContent = admin.email || "N/A";
-    document.getElementById("admin-signup").textContent = admin.signupDate || "N/A";
-    document.getElementById("admin-login").textContent = localStorage.getItem("adminLoginDate") || "N/A";
-
-    // Logout functionality
-    document.getElementById("logout-btn").addEventListener("click", () => {
-      localStorage.removeItem("adminEmail");
-      localStorage.removeItem("adminPassword");
+    document.getElementById("logout-btn").addEventListener("click", function () {
       localStorage.removeItem("adminLoginDate");
-      window.location.href = "advertisement.html"; // Redirect to welcome page
+      alert("You have been logged out.");
+      window.location.href = "admin-login.html";
     });
   </script>
 </body>
