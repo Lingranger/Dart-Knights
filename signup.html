@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Sign Up - Caraga Dart Knights</title>
-  <link rel="stylesheet" href="auth.css" />
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -113,6 +112,7 @@
         <option value="Female">Female</option>
         <option value="Other">Other</option>
       </select>
+      <input type="text" id="signup-team" placeholder="Team Name (e.g. Butuan Eagles)" required />
       <input type="email" id="signup-email" placeholder="Email" required />
       <input type="password" id="signup-password" placeholder="Password" required />
       <input type="password" id="signup-confirm-password" placeholder="Confirm Password" required />
@@ -145,6 +145,7 @@
       const name = document.getElementById("signup-name").value.trim();
       const age = document.getElementById("signup-age").value.trim();
       const gender = document.getElementById("signup-gender").value;
+      const team = document.getElementById("signup-team").value.trim();
       const email = document.getElementById("signup-email").value.trim();
       const password = document.getElementById("signup-password").value;
       const confirmPassword = document.getElementById("signup-confirm-password").value;
@@ -154,33 +155,28 @@
         return;
       }
 
-      // Get existing users or initialize empty array
       const users = JSON.parse(localStorage.getItem("users")) || [];
 
-      // Check if email is already used
       const existingUser = users.find(user => user.email === email);
       if (existingUser) {
         alert("This email is already registered.");
         return;
       }
 
-      // Create a new user object
-     const newUser = {
-  id: Date.now(),
-  name,
-  age,
-  gender,
-  email,
-  password,
-  signupDate: new Date().toLocaleString() // saves readable date & time
-};
+      const newUser = {
+        id: Date.now(),
+        name,
+        age,
+        gender,
+        team, // ✅ Team is saved
+        email,
+        password,
+        signupDate: new Date().toLocaleString()
+      };
 
-
-      // Save user to the users array and store it in localStorage
       users.push(newUser);
       localStorage.setItem("users", JSON.stringify(users));
 
-      // Set current session for auto-login
       localStorage.setItem("userEmail", email);
       localStorage.setItem("userPassword", password);
 
