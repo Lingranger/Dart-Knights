@@ -38,17 +38,17 @@
       padding: 30px;
     }
 
+    #welcome-admin {
+      font-size: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #facc15;
+    }
+
     h2 {
       color: #38bdf8;
       text-align: center;
-      margin-bottom: 10px;
-    }
-
-    #welcome-admin {
-      text-align: center;
-      font-size: 18px;
-      margin-bottom: 30px;
-      color: #fbbf24;
+      margin-bottom: 20px;
     }
 
     table {
@@ -108,8 +108,9 @@
   </header>
 
   <div class="dashboard-container">
-    <h2>Registered Users</h2>
     <div id="welcome-admin"></div>
+
+    <h2>Registered Users</h2>
     <div id="userTableContainer"></div>
   </div>
 
@@ -119,16 +120,19 @@
       window.location.href = "admin-login.html";
     }
 
-    // Load admin name for welcome message
-    const admin = JSON.parse(localStorage.getItem("admin"));
+    // Show welcome admin
+    const adminData = JSON.parse(localStorage.getItem("admin"));
     const welcomeEl = document.getElementById("welcome-admin");
-    if (admin && admin.name) {
-      welcomeEl.innerHTML = `👋 Welcome, <strong>${admin.name}</strong>!`;
+    if (adminData && adminData.name) {
+      welcomeEl.innerHTML = `👋 Welcome, Admin <strong>${adminData.name}</strong>!`;
+    } else {
+      welcomeEl.innerHTML = `👋 Welcome, Admin!`;
     }
 
     // Logout function
     function logout() {
       localStorage.removeItem("adminLoggedIn");
+      localStorage.removeItem("admin");
       window.location.href = "admin-login.html";
     }
 
