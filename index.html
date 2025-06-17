@@ -116,6 +116,9 @@
     <h2>Registered Users</h2>
     <div id="userTableContainer"></div>
 
+    <h2>User Login History</h2>
+    <div id="userLoginHistoryContainer"></div>
+
     <h2>Admin Login History</h2>
     <div id="adminHistoryContainer"></div>
   </div>
@@ -131,7 +134,7 @@
     const welcome = document.getElementById("welcomeAdmin");
     welcome.textContent = `👑 Welcome, Admin ${admin?.name || "Unknown"}!`;
 
-    // Session login check
+    // Admin session tracking
     if (!sessionStorage.getItem("adminSessionLogged")) {
       const history = JSON.parse(localStorage.getItem("adminHistory")) || [];
       history.push({
@@ -178,6 +181,39 @@
       });
       table += `</tbody></table>`;
       userContainer.innerHTML = table;
+    }
+
+    // Show user login history
+    const userLoginHistory = JSON.parse(localStorage.getItem("userLoginHistory")) || [];
+    const userHistoryContainer = document.getElementById("userLoginHistoryContainer");
+
+    if (userLoginHistory.length === 0) {
+      userHistoryContainer.innerHTML = '<p class="no-users">No user login history found.</p>';
+    } else {
+      let loginTable = `
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Login Time</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      userLoginHistory.forEach(entry => {
+        loginTable += `
+          <tr>
+            <td>${entry.name}</td>
+            <td>${entry.email}</td>
+            <td>${entry.loginTime}</td>
+          </tr>
+        `;
+      });
+
+      loginTable += `</tbody></table>`;
+      userHistoryContainer.innerHTML = loginTable;
     }
 
     // Show admin login history
