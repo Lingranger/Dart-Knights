@@ -102,20 +102,21 @@
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
 
-      const storedAdmin = JSON.parse(localStorage.getItem("admin"));
+      const users = JSON.parse(localStorage.getItem("users")) || [];
 
-      if (!storedAdmin) {
-        alert("No admin account found. Please sign up first.");
-        return;
-      }
+      const foundAdmin = users.find(user =>
+        user.email === email &&
+        user.password === password &&
+        user.role === "admin"
+      );
 
-      if (email === storedAdmin.email && password === storedAdmin.password) {
+      if (foundAdmin) {
         localStorage.setItem("adminLoggedIn", "true");
-        localStorage.setItem("admin", JSON.stringify(storedAdmin)); // Save again for dashboard access
+        localStorage.setItem("admin", JSON.stringify(foundAdmin));
         alert("Login successful!");
-        window.location.href = "index.html";
+        window.location.href = "admin-dashboard.html";
       } else {
-        alert("Incorrect email or password.");
+        alert("Incorrect password or no signup found.");
       }
     });
   </script>
