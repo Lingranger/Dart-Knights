@@ -100,9 +100,18 @@
     <p>Don’t have an account? <a href="signup.html">Sign up here</a></p>
   </div>
 
+  <!-- Redirect if already logged in -->
+  <script>
+    if (localStorage.getItem("userLoggedIn") === "true") {
+      window.location.href = "Players.html"; // or dashboard page
+    }
+  </script>
+
+  <!-- Login form script -->
   <script>
     document.getElementById("login-form").addEventListener("submit", function(e) {
       e.preventDefault();
+
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
 
@@ -110,13 +119,18 @@
       const user = users.find(u => u.email === email && u.password === password);
 
       if (user) {
-        if (!sessionStorage.getItem("userSessionLogged")) {
+        // Check if session already logged
+        const alreadyLogged = sessionStorage.getItem("userSessionLogged");
+
+        if (!alreadyLogged) {
           const loginLogs = JSON.parse(localStorage.getItem("userLoginHistory")) || [];
+
           loginLogs.push({
             name: user.name || "Unknown",
             email: user.email,
             loginDate: new Date().toLocaleString()
           });
+
           localStorage.setItem("userLoginHistory", JSON.stringify(loginLogs));
           sessionStorage.setItem("userSessionLogged", "true");
         }
