@@ -97,10 +97,8 @@
 </head>
 <body>
 
-  <!-- 🔥 Logo in top-left corner -->
   <img src="images/Itim at Pula E-Sports Naglalarawan Gaming Gaming Logo (1).png" alt="Caraga Dart Knights Logo" class="site-logo" />
 
-  <!-- 🔥 Centered sign-up form -->
   <div class="auth-container">
     <h2>Create Your Account</h2>
     <form id="signup-form">
@@ -128,15 +126,9 @@
       const confirm = document.getElementById("signup-confirm-password");
       const toggle = document.querySelector(".toggle-password");
 
-      if (password.type === "password") {
-        password.type = "text";
-        confirm.type = "text";
-        toggle.textContent = "🙈 Hide Password";
-      } else {
-        password.type = "password";
-        confirm.type = "password";
-        toggle.textContent = "👁 Show Password";
-      }
+      const isHidden = password.type === "password";
+      password.type = confirm.type = isHidden ? "text" : "password";
+      toggle.textContent = isHidden ? "🙈 Hide Password" : "👁 Show Password";
     }
 
     document.getElementById("signup-form").addEventListener("submit", function (e) {
@@ -168,7 +160,7 @@
         name,
         age,
         gender,
-        team, // ✅ Team is saved
+        team,
         email,
         password,
         signupDate: new Date().toLocaleString()
@@ -176,9 +168,6 @@
 
       users.push(newUser);
       localStorage.setItem("users", JSON.stringify(users));
-
-      localStorage.setItem("userEmail", email);
-      localStorage.setItem("userPassword", password);
 
       alert("Account created successfully!");
       window.location.href = "login.html";
