@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sign Up - Caraga Dart Knights</title>
+  <title>Signup - Dark Knight</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -33,7 +33,7 @@
       border-radius: 10px;
       width: 100%;
       max-width: 400px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
       text-align: center;
     }
 
@@ -42,7 +42,7 @@
       color: #38bdf8;
     }
 
-    form input, form select {
+    form input {
       width: 100%;
       padding: 12px;
       margin: 10px 0;
@@ -72,15 +72,6 @@
       background: #0ea5e9;
     }
 
-    .toggle-password {
-      text-align: right;
-      margin-top: -8px;
-      margin-bottom: 10px;
-      font-size: 0.9rem;
-      cursor: pointer;
-      color: #94a3b8;
-    }
-
     p {
       margin-top: 15px;
     }
@@ -97,80 +88,63 @@
 </head>
 <body>
 
-  <img src="images/Itim at Pula E-Sports Naglalarawan Gaming Gaming Logo (1).png" alt="Caraga Dart Knights Logo" class="site-logo" />
+  <img src="images/Itim at Pula E-Sports Naglalarawan Gaming Gaming Logo (1).png" alt="Dark Knight Logo" class="site-logo" />
 
   <div class="auth-container">
-    <h2>Create Your Account</h2>
+    <h2>Signup</h2>
     <form id="signup-form">
-      <input type="text" id="signup-name" placeholder="Full Name" required />
-      <input type="number" id="signup-age" placeholder="Age" required min="1" />
-      <select id="signup-gender" required>
-        <option value="" disabled selected>Select Gender</option>
-        <option value="Male">Male</option>
-        <option value="Female">Female</option>
-        <option value="Other">Other</option>
-      </select>
-      <input type="text" id="signup-team" placeholder="Team Name (e.g. Butuan Eagles)" required />
-      <input type="email" id="signup-email" placeholder="Email" required />
-      <input type="password" id="signup-password" placeholder="Password" required />
-      <input type="password" id="signup-confirm-password" placeholder="Confirm Password" required />
-      <div class="toggle-password" onclick="togglePassword()">👁 Show Password</div>
+      <input type="text" id="name" placeholder="Full Name" required />
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <input type="text" id="team" placeholder="Team" required />
       <button type="submit">Sign Up</button>
     </form>
     <p>Already have an account? <a href="login.html">Log in here</a></p>
   </div>
 
   <script>
-    function togglePassword() {
-      const password = document.getElementById("signup-password");
-      const confirm = document.getElementById("signup-confirm-password");
-      const toggle = document.querySelector(".toggle-password");
+    function logUserLogin(user) {
+      if (!user || sessionStorage.getItem("userSessionLogged")) return;
 
-      const isHidden = password.type === "password";
-      password.type = confirm.type = isHidden ? "text" : "password";
-      toggle.textContent = isHidden ? "🙈 Hide Password" : "👁 Show Password";
+      const loginLogs = JSON.parse(localStorage.getItem("userLoginHistory")) || [];
+      loginLogs.push({
+        name: user.name || "Unknown",
+        email: user.email || "No Email",
+        team: user.team || "Unknown Team",
+        loginDate: new Date().toLocaleString()
+      });
+
+      localStorage.setItem("userLoginHistory", JSON.stringify(loginLogs));
+      sessionStorage.setItem("userSessionLogged", "true");
     }
 
     document.getElementById("signup-form").addEventListener("submit", function (e) {
       e.preventDefault();
 
-      const name = document.getElementById("signup-name").value.trim();
-      const age = document.getElementById("signup-age").value.trim();
-      const gender = document.getElementById("signup-gender").value;
-      const team = document.getElementById("signup-team").value.trim();
-      const email = document.getElementById("signup-email").value.trim();
-      const password = document.getElementById("signup-password").value;
-      const confirmPassword = document.getElementById("signup-confirm-password").value;
-
-      if (password !== confirmPassword) {
-        alert("Passwords do not match.");
-        return;
-      }
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const team = document.getElementById("team").value.trim();
 
       const users = JSON.parse(localStorage.getItem("users")) || [];
 
-      const existingUser = users.find(user => user.email === email);
-      if (existingUser) {
+      if (users.find(u => u.email === email)) {
         alert("This email is already registered.");
         return;
       }
 
-      const newUser = {
-        id: Date.now(),
-        name,
-        age,
-        gender,
-        team,
-        email,
-        password,
-        signupDate: new Date().toLocaleString()
-      };
-
+      const newUser = { name, email, password, team };
       users.push(newUser);
       localStorage.setItem("users", JSON.stringify(users));
+      localStorage.setItem("userLoggedIn", "true");
+      localStorage.setItem("currentUser", JSON.stringify(newUser));
+      localStorage.setItem("currentUserTeam", team);
 
-      alert("Account created successfully!");
-      window.location.href = "login.html";
+      // ✅ Record login history after signup
+      logUserLogin(newUser);
+
+      alert("Signup successful!");
+      window.location.href = "Players.html";
     });
   </script>
 </body>
