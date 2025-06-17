@@ -100,14 +100,14 @@
     <p>Don’t have an account? <a href="signup.html">Sign up here</a></p>
   </div>
 
-  <!-- Redirect if already logged in -->
+  <!-- Auto-redirect if already logged in -->
   <script>
     if (localStorage.getItem("userLoggedIn") === "true") {
-      window.location.href = "Players.html"; // or dashboard page
+      window.location.href = "Players.html";
     }
   </script>
 
-  <!-- Login form script -->
+  <!-- Login script -->
   <script>
     document.getElementById("login-form").addEventListener("submit", function(e) {
       e.preventDefault();
@@ -119,15 +119,15 @@
       const user = users.find(u => u.email === email && u.password === password);
 
       if (user) {
-        // Check if session already logged
+        // Save login session only if new
         const alreadyLogged = sessionStorage.getItem("userSessionLogged");
-
         if (!alreadyLogged) {
           const loginLogs = JSON.parse(localStorage.getItem("userLoginHistory")) || [];
 
           loginLogs.push({
             name: user.name || "Unknown",
             email: user.email,
+            team: user.team || "Unknown Team",
             loginDate: new Date().toLocaleString()
           });
 
@@ -135,12 +135,15 @@
           sessionStorage.setItem("userSessionLogged", "true");
         }
 
+        // Save session
         localStorage.setItem("userLoggedIn", "true");
-        localStorage.setItem("currentUser", JSON.stringify(user));
-        alert("Login successful!");
+        localStorage.setItem("currentUser", JSON.stringify(user)); // includes team
+        localStorage.setItem("currentUserTeam", user.team); // just in case you need quick access to team only
+
+        alert("Login successful!\nWelcome to " + (user.team || "your team") + "!");
         window.location.href = "Players.html";
       } else {
-        alert("Invalid credentials.");
+        alert("Invalid email or password.");
       }
     });
   </script>
