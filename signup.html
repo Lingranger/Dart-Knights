@@ -2,149 +2,128 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Signup - Dark Knight</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Signup - Caraga Dart Knights</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #0f172a;
+      background-color: #0f172a;
       color: #f8fafc;
       margin: 0;
-      height: 100vh;
+      padding: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      position: relative;
+      height: 100vh;
     }
 
-    .site-logo {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      width: 100px;
-      height: auto;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    }
-
-    .auth-container {
-      background: #1e293b;
+    .signup-container {
+      background-color: #1e293b;
       padding: 30px;
       border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.6);
       width: 100%;
       max-width: 400px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    }
+
+    h2 {
       text-align: center;
-    }
-
-    .auth-container h2 {
-      margin-bottom: 20px;
       color: #38bdf8;
+      margin-bottom: 20px;
     }
 
-    form input {
+    input, select, button {
       width: 100%;
-      padding: 12px;
-      margin: 10px 0;
+      padding: 10px;
+      margin-bottom: 15px;
       border: none;
       border-radius: 6px;
-      background: #334155;
+      font-size: 16px;
+    }
+
+    input, select {
+      background-color: #334155;
       color: #f8fafc;
     }
 
-    form input::placeholder {
-      color: #cbd5e1;
-    }
-
-    form button {
-      width: 100%;
-      padding: 12px;
-      background: #38bdf8;
-      border: none;
-      border-radius: 6px;
+    button {
+      background-color: #38bdf8;
       color: #0f172a;
       font-weight: bold;
       cursor: pointer;
-      transition: background 0.3s;
     }
 
-    form button:hover {
-      background: #0ea5e9;
+    button:hover {
+      background-color: #0ea5e9;
     }
 
-    p {
-      margin-top: 15px;
-    }
-
-    p a {
-      color: #38bdf8;
-      text-decoration: none;
-    }
-
-    p a:hover {
-      text-decoration: underline;
+    @media screen and (max-width: 500px) {
+      .signup-container {
+        padding: 20px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <img src="images/Itim at Pula E-Sports Naglalarawan Gaming Gaming Logo (1).png" alt="Dark Knight Logo" class="site-logo" />
-
-  <div class="auth-container">
-    <h2>Signup</h2>
-    <form id="signup-form">
+  <div class="signup-container">
+    <h2>User Signup</h2>
+    <form id="signupForm">
       <input type="text" id="name" placeholder="Full Name" required />
       <input type="email" id="email" placeholder="Email" required />
       <input type="password" id="password" placeholder="Password" required />
-      <input type="text" id="team" placeholder="Team" required />
+      <input type="number" id="age" placeholder="Age" required min="10" max="99"/>
+      <select id="gender" required>
+        <option value="" disabled selected>Select Gender</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+      </select>
+      <input type="text" id="team" placeholder="Team Name" required />
       <button type="submit">Sign Up</button>
     </form>
-    <p>Already have an account? <a href="login.html">Log in here</a></p>
   </div>
 
   <script>
-    function logUserLogin(user) {
-      if (!user || sessionStorage.getItem("userSessionLogged")) return;
-
-      const loginLogs = JSON.parse(localStorage.getItem("userLoginHistory")) || [];
-      loginLogs.push({
-        name: user.name || "Unknown",
-        email: user.email || "No Email",
-        team: user.team || "Unknown Team",
-        loginDate: new Date().toLocaleString()
-      });
-
-      localStorage.setItem("userLoginHistory", JSON.stringify(loginLogs));
-      sessionStorage.setItem("userSessionLogged", "true");
-    }
-
-    document.getElementById("signup-form").addEventListener("submit", function (e) {
+    document.getElementById("signupForm").addEventListener("submit", function (e) {
       e.preventDefault();
 
       const name = document.getElementById("name").value.trim();
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
+      const age = document.getElementById("age").value;
+      const gender = document.getElementById("gender").value;
       const team = document.getElementById("team").value.trim();
 
-      const users = JSON.parse(localStorage.getItem("users")) || [];
-
-      if (users.find(u => u.email === email)) {
-        alert("This email is already registered.");
+      if (!name || !email || !password || !age || !gender || !team) {
+        alert("Please fill in all fields.");
         return;
       }
 
-      const newUser = { name, email, password, team };
-      users.push(newUser);
+      const users = JSON.parse(localStorage.getItem("users")) || [];
+
+      // Check for duplicate email
+      if (users.some(u => u.email === email)) {
+        alert("An account with this email already exists.");
+        return;
+      }
+
+      const user = {
+        name,
+        email,
+        password,
+        age,
+        gender,
+        team,
+        signupDate: new Date().toLocaleString(),
+        role: "user"
+      };
+
+      users.push(user);
       localStorage.setItem("users", JSON.stringify(users));
-      localStorage.setItem("userLoggedIn", "true");
-      localStorage.setItem("currentUser", JSON.stringify(newUser));
-      localStorage.setItem("currentUserTeam", team);
 
-      // ✅ Record login history after signup
-      logUserLogin(newUser);
-
-      alert("Signup successful!");
-      window.location.href = "Players.html";
+      alert("Signup successful! You can now log in.");
+      window.location.href = "login.html";
     });
   </script>
 </body>
