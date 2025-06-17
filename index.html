@@ -38,14 +38,7 @@
       padding: 30px;
     }
 
-    #welcome-admin {
-      font-size: 20px;
-      margin-bottom: 20px;
-      text-align: center;
-      color: #facc15;
-    }
-
-    h2 {
+    h2, h3 {
       color: #38bdf8;
       text-align: center;
       margin-bottom: 20px;
@@ -95,6 +88,16 @@
       display: flex;
       align-items: center;
     }
+
+    .welcome-message {
+      text-align: center;
+      font-size: 18px;
+      margin-top: 10px;
+    }
+
+    .history-section {
+      margin-top: 50px;
+    }
   </style>
 </head>
 <body>
@@ -108,33 +111,37 @@
   </header>
 
   <div class="dashboard-container">
-    <div id="welcome-admin"></div>
+    <div class="welcome-message" id="welcomeAdmin"></div>
 
     <h2>Registered Users</h2>
     <div id="userTableContainer"></div>
+
+    <div class="history-section">
+      <h3>Admin Login History</h3>
+      <div id="loginHistoryContainer"></div>
+    </div>
   </div>
 
   <script>
-    // Redirect if admin is not logged in
+    // Redirect if not logged in
     if (localStorage.getItem("adminLoggedIn") !== "true") {
       window.location.href = "admin-login.html";
     }
 
-    // Show welcome admin
-    const adminData = JSON.parse(localStorage.getItem("admin"));
-    const welcomeEl = document.getElementById("welcome-admin");
-    if (adminData && adminData.name) {
-      welcomeEl.innerHTML = `👋 Welcome, Admin <strong>${adminData.name}</strong>!`;
-    } else {
-      welcomeEl.innerHTML = `👋 Welcome, Admin!`;
-    }
+    // Load admin data
+    const admin = JSON.parse(localStorage.getItem("admin"));
+    const welcome = document.getElementById("welcomeAdmin");
+    welcome.textContent = `Welcome, Admin ${admin?.name || "Unknown"}`;
 
-    // Logout function
-    function logout() {
-      localStorage.removeItem("adminLoggedIn");
-      localStorage.removeItem("admin");
-      window.location.href = "admin-login.html";
-    }
+    // Add login history
+    const loginHistory = JSON.parse(localStorage.getItem("adminLoginHistory")) || [];
+    const now = new Date().toLocaleString();
+    loginHistory.unshift(`${admin.name} logged in at ${now}`);
+    localStorage.setItem("adminLoginHistory", JSON.stringify(loginHistory.slice(0, 10))); // Limit to 10 entries
+
+    // Display login history
+    const historyContainer = document.getElementById("loginHistoryContainer");
+    historyContainer.innerHTML = "<ul>" + loginHistory.map(entry => `<li>${entry}</li>`).join("") + "</ul>";
 
     // Load users
     const users = JSON.parse(localStorage.getItem("users")) || [];
@@ -177,6 +184,12 @@
       `;
 
       container.innerHTML = table;
+    }
+
+    // Logout
+    function logout() {
+      localStorage.removeItem("adminLoggedIn");
+      window.location.href = "admin-login.html";
     }
   </script>
 </body>
