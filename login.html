@@ -113,7 +113,7 @@
         if (!sessionStorage.getItem("userSessionLogged")) {
           const loginLogs = JSON.parse(localStorage.getItem("userLoginHistory")) || [];
           loginLogs.push({
-            name: user.name,
+            name: user.name || "Unknown",
             email: user.email,
             loginDate: new Date().toLocaleString()
           });
