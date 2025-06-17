@@ -82,7 +82,7 @@
 <body>
 
   <div class="logo">
-   <img src="images/Itim at Pula E-Sports Naglalarawan Gaming Gaming Logo (1).png" alt="Dart Knights Logo" class="logo" />
+    <img src="images/Itim at Pula E-Sports Naglalarawan Gaming Gaming Logo (1).png" alt="Dart Knights Logo" class="logo" />
   </div>
 
   <div class="signup-container">
@@ -105,10 +105,29 @@
       const password = document.getElementById("password").value;
       const signupDate = new Date().toLocaleString();
 
-      const admin = { name, email, password, signupDate };
+      // Get all users (including admins)
+      const users = JSON.parse(localStorage.getItem("users")) || [];
 
-      localStorage.setItem("admin", JSON.stringify(admin));
-      alert("Admin account created!");
+      // Check if email already exists
+      const existingUser = users.find(user => user.email === email);
+      if (existingUser) {
+        alert("This email is already registered.");
+        return;
+      }
+
+      // Create new admin object
+      const admin = {
+        name,
+        email,
+        password,
+        role: "admin",
+        signupDate
+      };
+
+      users.push(admin);
+      localStorage.setItem("users", JSON.stringify(users));
+
+      alert("Admin account created successfully!");
       window.location.href = "admin-login.html";
     });
   </script>
