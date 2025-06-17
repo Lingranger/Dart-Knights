@@ -100,14 +100,14 @@
     <p>Don’t have an account? <a href="signup.html">Sign up here</a></p>
   </div>
 
-  <!-- Auto-redirect if already logged in -->
+  <!-- Redirect if already logged in -->
   <script>
     if (localStorage.getItem("userLoggedIn") === "true") {
       window.location.href = "Players.html";
     }
   </script>
 
-  <!-- Login script -->
+  <!-- Login Logic -->
   <script>
     document.getElementById("login-form").addEventListener("submit", function(e) {
       e.preventDefault();
@@ -119,14 +119,13 @@
       const user = users.find(u => u.email === email && u.password === password);
 
       if (user) {
-        // Save login session only if new
-        const alreadyLogged = sessionStorage.getItem("userSessionLogged");
-        if (!alreadyLogged) {
+        // Avoid duplicate logging per session
+        if (!sessionStorage.getItem("userSessionLogged")) {
           const loginLogs = JSON.parse(localStorage.getItem("userLoginHistory")) || [];
 
           loginLogs.push({
             name: user.name || "Unknown",
-            email: user.email,
+            email: user.email || "No Email",
             team: user.team || "Unknown Team",
             loginDate: new Date().toLocaleString()
           });
@@ -135,10 +134,10 @@
           sessionStorage.setItem("userSessionLogged", "true");
         }
 
-        // Save session
+        // Save user session
         localStorage.setItem("userLoggedIn", "true");
-        localStorage.setItem("currentUser", JSON.stringify(user)); // includes team
-        localStorage.setItem("currentUserTeam", user.team); // just in case you need quick access to team only
+        localStorage.setItem("currentUser", JSON.stringify(user));
+        localStorage.setItem("currentUserTeam", user.team || "Unknown");
 
         alert("Login successful!\nWelcome to " + (user.team || "your team") + "!");
         window.location.href = "Players.html";
