@@ -98,6 +98,25 @@
       display: flex;
       align-items: center;
     }
+
+    .logo-title .title {
+      margin-left: 10px;
+    }
+
+    @media screen and (max-width: 600px) {
+      .dashboard-container {
+        padding: 15px;
+      }
+
+      th, td {
+        font-size: 14px;
+        padding: 8px;
+      }
+
+      .welcome-message {
+        font-size: 22px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -129,12 +148,12 @@
       window.location.href = "admin-login.html";
     }
 
-    // Display welcome message
+    // Welcome Message
     const admin = JSON.parse(localStorage.getItem("admin"));
     const welcome = document.getElementById("welcomeAdmin");
     welcome.textContent = `👑 Welcome, Admin ${admin?.name || "Unknown"}!`;
 
-    // Admin session tracking
+    // Track admin login session
     if (!sessionStorage.getItem("adminSessionLogged")) {
       const history = JSON.parse(localStorage.getItem("adminHistory")) || [];
       history.push({
@@ -146,7 +165,7 @@
       sessionStorage.setItem("adminSessionLogged", "true");
     }
 
-    // Show users
+    // Load registered users
     const users = JSON.parse(localStorage.getItem("users")) || [];
     const userContainer = document.getElementById("userTableContainer");
 
@@ -170,12 +189,12 @@
       users.forEach(user => {
         table += `
           <tr>
-            <td>${user.name}</td>
-            <td>${user.age}</td>
-            <td>${user.gender}</td>
-            <td>${user.team || '—'}</td>
-            <td>${user.email}</td>
-            <td>${user.signupDate}</td>
+            <td>${user.name || "—"}</td>
+            <td>${user.age || "—"}</td>
+            <td>${user.gender || "—"}</td>
+            <td>${user.team || "—"}</td>
+            <td>${user.email || "—"}</td>
+            <td>${user.signupDate || "—"}</td>
           </tr>
         `;
       });
@@ -183,7 +202,7 @@
       userContainer.innerHTML = table;
     }
 
-    // Show user login history
+    // Load user login history
     const userLoginHistory = JSON.parse(localStorage.getItem("userLoginHistory")) || [];
     const userHistoryContainer = document.getElementById("userLoginHistoryContainer");
 
@@ -201,22 +220,20 @@
           </thead>
           <tbody>
       `;
-
       userLoginHistory.forEach(entry => {
         loginTable += `
           <tr>
-            <td>${entry.name}</td>
-            <td>${entry.email}</td>
-            <td>${entry.loginTime}</td>
+            <td>${entry.name || "—"}</td>
+            <td>${entry.email || "—"}</td>
+            <td>${entry.loginDate || "—"}</td>
           </tr>
         `;
       });
-
       loginTable += `</tbody></table>`;
       userHistoryContainer.innerHTML = loginTable;
     }
 
-    // Show admin login history
+    // Load admin login history
     const adminHistory = JSON.parse(localStorage.getItem("adminHistory")) || [];
     const historyContainer = document.getElementById("adminHistoryContainer");
 
@@ -237,9 +254,9 @@
       adminHistory.forEach(log => {
         historyTable += `
           <tr>
-            <td>${log.name}</td>
-            <td>${log.email}</td>
-            <td>${log.loginDate}</td>
+            <td>${log.name || "—"}</td>
+            <td>${log.email || "—"}</td>
+            <td>${log.loginDate || "—"}</td>
           </tr>
         `;
       });
@@ -247,6 +264,7 @@
       historyContainer.innerHTML = historyTable;
     }
 
+    // Logout Function
     function logout() {
       localStorage.removeItem("adminLoggedIn");
       sessionStorage.removeItem("adminSessionLogged");
