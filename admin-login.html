@@ -111,8 +111,9 @@
 
       if (email === storedAdmin.email && password === storedAdmin.password) {
         localStorage.setItem("adminLoggedIn", "true");
+        localStorage.setItem("admin", JSON.stringify(storedAdmin)); // Save again for dashboard access
         alert("Login successful!");
-        window.location.href = "index.html";
+        window.location.href = "admin-dashboard.html";
       } else {
         alert("Incorrect email or password.");
       }
