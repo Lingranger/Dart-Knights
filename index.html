@@ -41,7 +41,14 @@
     h2 {
       color: #38bdf8;
       text-align: center;
+      margin-bottom: 10px;
+    }
+
+    #welcome-admin {
+      text-align: center;
+      font-size: 18px;
       margin-bottom: 30px;
+      color: #fbbf24;
     }
 
     table {
@@ -102,6 +109,7 @@
 
   <div class="dashboard-container">
     <h2>Registered Users</h2>
+    <div id="welcome-admin"></div>
     <div id="userTableContainer"></div>
   </div>
 
@@ -109,6 +117,13 @@
     // Redirect if admin is not logged in
     if (localStorage.getItem("adminLoggedIn") !== "true") {
       window.location.href = "admin-login.html";
+    }
+
+    // Load admin name for welcome message
+    const admin = JSON.parse(localStorage.getItem("admin"));
+    const welcomeEl = document.getElementById("welcome-admin");
+    if (admin && admin.name) {
+      welcomeEl.innerHTML = `👋 Welcome, <strong>${admin.name}</strong>!`;
     }
 
     // Logout function
