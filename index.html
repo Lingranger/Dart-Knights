@@ -131,8 +131,6 @@
 
   <div class="welcome-message" id="welcomeAdmin"></div>
 
-  <!-- ... (everything above stays the same) ... -->
-
   <div class="dashboard-container">
     <h2>Registered Users</h2>
     <div id="userTableContainer"></div>
@@ -240,7 +238,7 @@
       adminContainer.innerHTML = adminTable;
     }
 
-    // Load user login history
+    // Load user login history with team
     const userLoginHistory = JSON.parse(localStorage.getItem("userLoginHistory")) || [];
     const userHistoryContainer = document.getElementById("userLoginHistoryContainer");
 
@@ -253,6 +251,7 @@
             <tr>
               <th>Name</th>
               <th>Email</th>
+              <th>Team</th>
               <th>Login Time</th>
             </tr>
           </thead>
@@ -263,6 +262,7 @@
           <tr>
             <td>${entry.name || "—"}</td>
             <td>${entry.email || "—"}</td>
+            <td>${entry.team || "—"}</td>
             <td>${entry.loginDate || "—"}</td>
           </tr>
         `;
