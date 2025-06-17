@@ -280,9 +280,20 @@
       </div>
     </main>
   </div>
+  <script>
+  document.getElementById("logout-button").addEventListener("click", function (e) {
+    e.preventDefault(); // Prevent default anchor behavior
+    localStorage.removeItem("userLoggedIn"); // Optional: clear login flag
+    sessionStorage.removeItem("userSessionLogged"); // Optional: clear session flag
+    window.location.href = "advertisement.html"; // Redirect to ad page
+  });
+</script>
+
 
   <footer>
     <p>&copy; 2025 Caraga Dart Knights. All rights reserved.</p>
   </footer>
+
+  
 </body>
 </html>
