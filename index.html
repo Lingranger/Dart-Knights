@@ -131,9 +131,14 @@
 
   <div class="welcome-message" id="welcomeAdmin"></div>
 
+  <!-- ... (everything above stays the same) ... -->
+
   <div class="dashboard-container">
     <h2>Registered Users</h2>
     <div id="userTableContainer"></div>
+
+    <h2>Registered Admins</h2>
+    <div id="adminTableContainer"></div>
 
     <h2>User Login History</h2>
     <div id="userLoginHistoryContainer"></div>
@@ -168,8 +173,13 @@
     // Load registered users
     const users = JSON.parse(localStorage.getItem("users")) || [];
     const userContainer = document.getElementById("userTableContainer");
+    const adminContainer = document.getElementById("adminTableContainer");
 
-    if (users.length === 0) {
+    const normalUsers = users.filter(user => user.role !== "admin");
+    const adminUsers = users.filter(user => user.role === "admin");
+
+    // Populate Registered Users
+    if (normalUsers.length === 0) {
       userContainer.innerHTML = '<p class="no-users">No registered users found.</p>';
     } else {
       let table = `
@@ -186,7 +196,7 @@
           </thead>
           <tbody>
       `;
-      users.forEach(user => {
+      normalUsers.forEach(user => {
         table += `
           <tr>
             <td>${user.name || "—"}</td>
@@ -200,6 +210,34 @@
       });
       table += `</tbody></table>`;
       userContainer.innerHTML = table;
+    }
+
+    // Populate Registered Admins
+    if (adminUsers.length === 0) {
+      adminContainer.innerHTML = '<p class="no-users">No registered admins found.</p>';
+    } else {
+      let adminTable = `
+        <table>
+          <thead>
+            <tr>
+              <th>Full Name</th>
+              <th>Email</th>
+              <th>Signup Date</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+      adminUsers.forEach(admin => {
+        adminTable += `
+          <tr>
+            <td>${admin.name || "—"}</td>
+            <td>${admin.email || "—"}</td>
+            <td>${admin.signupDate || "—"}</td>
+          </tr>
+        `;
+      });
+      adminTable += `</tbody></table>`;
+      adminContainer.innerHTML = adminTable;
     }
 
     // Load user login history
