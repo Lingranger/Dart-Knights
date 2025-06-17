@@ -38,7 +38,16 @@
       padding: 30px;
     }
 
-    h2, h3 {
+    .welcome-message {
+      font-size: 28px;
+      font-weight: 800;
+      color: #facc15;
+      text-align: center;
+      margin: 20px 0 40px;
+      text-shadow: 0 0 10px rgba(250, 204, 21, 0.6);
+    }
+
+    h2 {
       color: #38bdf8;
       text-align: center;
       margin-bottom: 20px;
@@ -51,6 +60,7 @@
       box-shadow: 0 0 10px rgba(0,0,0,0.4);
       border-radius: 8px;
       overflow: hidden;
+      margin-bottom: 40px;
     }
 
     th, td {
@@ -88,16 +98,6 @@
       display: flex;
       align-items: center;
     }
-
-    .welcome-message {
-      text-align: center;
-      font-size: 18px;
-      margin-top: 10px;
-    }
-
-    .history-section {
-      margin-top: 50px;
-    }
   </style>
 </head>
 <body>
@@ -110,58 +110,45 @@
     <button class="logout-btn" onclick="logout()">Logout</button>
   </header>
 
+  <div class="welcome-message" id="welcomeAdmin"></div>
+
   <div class="dashboard-container">
-<div class="welcome-message" id="welcomeAdmin" style="
-  font-size: 28px;
-  font-weight: 800;
-  color: #38bdf8;
-  background: linear-gradient(90deg, #0ea5e9, #22d3ee);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-align: center;
-  margin: 30px auto;
-  text-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
-">
-</div>
-
-
     <h2>Registered Users</h2>
     <div id="userTableContainer"></div>
 
-    <div class="history-section">
-      <h3>Admin Login History</h3>
-      <div id="loginHistoryContainer"></div>
-    </div>
+    <h2>Admin Login History</h2>
+    <div id="adminHistoryContainer"></div>
   </div>
 
   <script>
-    // Redirect if not logged in
+    // Redirect if admin is not logged in
     if (localStorage.getItem("adminLoggedIn") !== "true") {
       window.location.href = "admin-login.html";
     }
 
-    // Load admin data
+    // Display welcome message
     const admin = JSON.parse(localStorage.getItem("admin"));
     const welcome = document.getElementById("welcomeAdmin");
-   welcome.innerHTML = `👑 Welcome back, <span style="text-decoration: underline;">Admin ${admin?.name || "Unknown"}</span>!`;
+    welcome.textContent = `👑 Welcome, Admin ${admin?.name || "Unknown"}!`;
 
+    // Session login check
+    if (!sessionStorage.getItem("adminSessionLogged")) {
+      const history = JSON.parse(localStorage.getItem("adminHistory")) || [];
+      history.push({
+        name: admin?.name || "Unknown",
+        email: admin?.email || "Unknown",
+        loginDate: new Date().toLocaleString()
+      });
+      localStorage.setItem("adminHistory", JSON.stringify(history));
+      sessionStorage.setItem("adminSessionLogged", "true");
+    }
 
-    // Add login history
-    const loginHistory = JSON.parse(localStorage.getItem("adminLoginHistory")) || [];
-    const now = new Date().toLocaleString();
-    loginHistory.unshift(`${admin.name} logged in at ${now}`);
-    localStorage.setItem("adminLoginHistory", JSON.stringify(loginHistory.slice(0, 10))); // Limit to 10 entries
-
-    // Display login history
-    const historyContainer = document.getElementById("loginHistoryContainer");
-    historyContainer.innerHTML = "<ul>" + loginHistory.map(entry => `<li>${entry}</li>`).join("") + "</ul>";
-
-    // Load users
+    // Show users
     const users = JSON.parse(localStorage.getItem("users")) || [];
-    const container = document.getElementById("userTableContainer");
+    const userContainer = document.getElementById("userTableContainer");
 
     if (users.length === 0) {
-      container.innerHTML = '<p class="no-users">No registered users found.</p>';
+      userContainer.innerHTML = '<p class="no-users">No registered users found.</p>';
     } else {
       let table = `
         <table>
@@ -177,7 +164,6 @@
           </thead>
           <tbody>
       `;
-
       users.forEach(user => {
         table += `
           <tr>
@@ -190,18 +176,44 @@
           </tr>
         `;
       });
-
-      table += `
-          </tbody>
-        </table>
-      `;
-
-      container.innerHTML = table;
+      table += `</tbody></table>`;
+      userContainer.innerHTML = table;
     }
 
-    // Logout
+    // Show admin login history
+    const adminHistory = JSON.parse(localStorage.getItem("adminHistory")) || [];
+    const historyContainer = document.getElementById("adminHistoryContainer");
+
+    if (adminHistory.length === 0) {
+      historyContainer.innerHTML = '<p class="no-users">No admin login history found.</p>';
+    } else {
+      let historyTable = `
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Login Time</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+      adminHistory.forEach(log => {
+        historyTable += `
+          <tr>
+            <td>${log.name}</td>
+            <td>${log.email}</td>
+            <td>${log.loginDate}</td>
+          </tr>
+        `;
+      });
+      historyTable += `</tbody></table>`;
+      historyContainer.innerHTML = historyTable;
+    }
+
     function logout() {
       localStorage.removeItem("adminLoggedIn");
+      sessionStorage.removeItem("adminSessionLogged");
       window.location.href = "admin-login.html";
     }
   </script>
