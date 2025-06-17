@@ -146,17 +146,16 @@
   </div>
 
   <script>
-    // Redirect if admin is not logged in
+    // Redirect if not logged in
     if (localStorage.getItem("adminLoggedIn") !== "true") {
       window.location.href = "admin-login.html";
     }
 
-    // Welcome Message
+    // Admin welcome message
     const admin = JSON.parse(localStorage.getItem("admin"));
-    const welcome = document.getElementById("welcomeAdmin");
-    welcome.textContent = `👑 Welcome, Admin ${admin?.name || "Unknown"}!`;
+    document.getElementById("welcomeAdmin").textContent = `👑 Welcome, Admin ${admin?.name || "Unknown"}!`;
 
-    // Track admin login session
+    // Log session if first time this session
     if (!sessionStorage.getItem("adminSessionLogged")) {
       const history = JSON.parse(localStorage.getItem("adminHistory")) || [];
       history.push({
@@ -168,17 +167,17 @@
       sessionStorage.setItem("adminSessionLogged", "true");
     }
 
-    // Load registered users
+    // Load and display users
     const users = JSON.parse(localStorage.getItem("users")) || [];
-    const userContainer = document.getElementById("userTableContainer");
-    const adminContainer = document.getElementById("adminTableContainer");
+    const userTable = document.getElementById("userTableContainer");
+    const adminTable = document.getElementById("adminTableContainer");
 
     const normalUsers = users.filter(user => user.role !== "admin");
     const adminUsers = users.filter(user => user.role === "admin");
 
-    // Populate Registered Users
+    // Registered Users
     if (normalUsers.length === 0) {
-      userContainer.innerHTML = '<p class="no-users">No registered users found.</p>';
+      userTable.innerHTML = '<p class="no-users">No registered users found.</p>';
     } else {
       let table = `
         <table>
@@ -207,14 +206,14 @@
         `;
       });
       table += `</tbody></table>`;
-      userContainer.innerHTML = table;
+      userTable.innerHTML = table;
     }
 
-    // Populate Registered Admins
+    // Registered Admins
     if (adminUsers.length === 0) {
-      adminContainer.innerHTML = '<p class="no-users">No registered admins found.</p>';
+      adminTable.innerHTML = '<p class="no-users">No registered admins found.</p>';
     } else {
-      let adminTable = `
+      let adminHTML = `
         <table>
           <thead>
             <tr>
@@ -226,7 +225,7 @@
           <tbody>
       `;
       adminUsers.forEach(admin => {
-        adminTable += `
+        adminHTML += `
           <tr>
             <td>${admin.name || "—"}</td>
             <td>${admin.email || "—"}</td>
@@ -234,18 +233,18 @@
           </tr>
         `;
       });
-      adminTable += `</tbody></table>`;
-      adminContainer.innerHTML = adminTable;
+      adminHTML += `</tbody></table>`;
+      adminTable.innerHTML = adminHTML;
     }
 
-    // Load user login history with team
+    // User Login History
     const userLoginHistory = JSON.parse(localStorage.getItem("userLoginHistory")) || [];
     const userHistoryContainer = document.getElementById("userLoginHistoryContainer");
 
     if (userLoginHistory.length === 0) {
       userHistoryContainer.innerHTML = '<p class="no-users">No user login history found.</p>';
     } else {
-      let loginTable = `
+      let historyHTML = `
         <table>
           <thead>
             <tr>
@@ -258,27 +257,27 @@
           <tbody>
       `;
       userLoginHistory.forEach(entry => {
-        loginTable += `
+        historyHTML += `
           <tr>
             <td>${entry.name || "—"}</td>
             <td>${entry.email || "—"}</td>
-            <td>${entry.team || "—"}</td>
+            <td>${entry.team ? entry.team : "Unknown Team"}</td>
             <td>${entry.loginDate || "—"}</td>
           </tr>
         `;
       });
-      loginTable += `</tbody></table>`;
-      userHistoryContainer.innerHTML = loginTable;
+      historyHTML += `</tbody></table>`;
+      userHistoryContainer.innerHTML = historyHTML;
     }
 
-    // Load admin login history
+    // Admin Login History
     const adminHistory = JSON.parse(localStorage.getItem("adminHistory")) || [];
-    const historyContainer = document.getElementById("adminHistoryContainer");
+    const adminHistoryContainer = document.getElementById("adminHistoryContainer");
 
     if (adminHistory.length === 0) {
-      historyContainer.innerHTML = '<p class="no-users">No admin login history found.</p>';
+      adminHistoryContainer.innerHTML = '<p class="no-users">No admin login history found.</p>';
     } else {
-      let historyTable = `
+      let adminLogHTML = `
         <table>
           <thead>
             <tr>
@@ -290,7 +289,7 @@
           <tbody>
       `;
       adminHistory.forEach(log => {
-        historyTable += `
+        adminLogHTML += `
           <tr>
             <td>${log.name || "—"}</td>
             <td>${log.email || "—"}</td>
@@ -298,11 +297,11 @@
           </tr>
         `;
       });
-      historyTable += `</tbody></table>`;
-      historyContainer.innerHTML = historyTable;
+      adminLogHTML += `</tbody></table>`;
+      adminHistoryContainer.innerHTML = adminLogHTML;
     }
 
-    // Logout Function
+    // Logout
     function logout() {
       localStorage.removeItem("adminLoggedIn");
       sessionStorage.removeItem("adminSessionLogged");
