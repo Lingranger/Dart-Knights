@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Login - Dark Knight</title>
-  <link rel="stylesheet" href="auth.css" />
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -89,10 +88,8 @@
 </head>
 <body>
 
-  <!-- 🔥 Logo in top-left corner -->
   <img src="images/Itim at Pula E-Sports Naglalarawan Gaming Gaming Logo (1).png" alt="Dark Knight Logo" class="site-logo" />
 
-  <!-- 🔥 Centered login form -->
   <div class="auth-container">
     <h2>Login</h2>
     <form id="login-form">
@@ -103,6 +100,35 @@
     <p>Don’t have an account? <a href="signup.html">Sign up here</a></p>
   </div>
 
-  <script src="auth.js"></script>
+  <script>
+    document.getElementById("login-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      const users = JSON.parse(localStorage.getItem("users")) || [];
+      const user = users.find(u => u.email === email && u.password === password);
+
+      if (user) {
+        if (!sessionStorage.getItem("userSessionLogged")) {
+          const loginLogs = JSON.parse(localStorage.getItem("userLoginHistory")) || [];
+          loginLogs.push({
+            name: user.name,
+            email: user.email,
+            loginDate: new Date().toLocaleString()
+          });
+          localStorage.setItem("userLoginHistory", JSON.stringify(loginLogs));
+          sessionStorage.setItem("userSessionLogged", "true");
+        }
+
+        localStorage.setItem("userLoggedIn", "true");
+        localStorage.setItem("currentUser", JSON.stringify(user));
+        alert("Login successful!");
+        window.location.href = "user-dashboard.html";
+      } else {
+        alert("Invalid credentials.");
+      }
+    });
+  </script>
 </body>
 </html>
