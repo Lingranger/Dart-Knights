@@ -291,17 +291,13 @@
     }
 
     updateScheduleTable();
+    document.getElementById("logout-button").addEventListener("click", function (e) {
+  e.preventDefault();
+  window.location.href = "advertisement.html";
+});
+
   </script>
-  <script>
-  // Existing functions for schedule already here...
-
-  // Add this below your other script content
-  document.getElementById("logout-button").addEventListener("click", function (e) {
-    e.preventDefault();
-    window.location.href = "advertisement.html";
-  });
-</script>
-
+ 
 
 </body>
 </html>
