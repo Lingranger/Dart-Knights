@@ -633,5 +633,8 @@ function logout() {
 }
 
 window.onload = () => {
-  renderMatchLogs();
+  renderMatchLogsWithMonth();
+  loadMatches(); // Keep this if you're using the match schedule too
+  // Add any other init functions here if needed
 };
+
