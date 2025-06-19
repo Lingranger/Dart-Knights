@@ -218,7 +218,7 @@
     <main>
       <h2 class="schedule-header">
         <button onclick="prevMonth()">←</button>
-        <span id="monthYear">June 2025</span>
+        <span id="monthYear">Month Year</span>
         <button onclick="nextMonth()">→</button>
       </h2>
 
@@ -243,7 +243,10 @@
   <script>
     const monthYearEl = document.getElementById("monthYear");
     const tbody = document.querySelector("#scheduleTable tbody");
-    let currentDate = new Date();
+
+    // Load saved month or default to current
+    let savedDate = localStorage.getItem("viewedMatchMonth");
+    let currentDate = savedDate ? new Date(savedDate) : new Date();
 
     function getCurrentMonthKey() {
       return currentDate.toLocaleDateString("en-US", { month: "long", year: "numeric" });
@@ -253,6 +256,8 @@
       const matchSchedule = JSON.parse(localStorage.getItem("matchSchedule")) || {};
       const key = getCurrentMonthKey();
       const matches = matchSchedule[key] || [];
+
+      localStorage.setItem("viewedMatchMonth", currentDate.toISOString());
 
       monthYearEl.textContent = key;
       tbody.innerHTML = "";
