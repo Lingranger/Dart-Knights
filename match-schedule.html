@@ -232,7 +232,7 @@
           </tr>
         </thead>
         <tbody>
-          <!-- Filled dynamically -->
+          <!-- Populated by JS -->
         </tbody>
       </table>
 
@@ -241,43 +241,38 @@
   </div>
 
   <script>
-    const monthYearEl = document.getElementById('monthYear');
-    const tbody = document.querySelector('#scheduleTable tbody');
-
+    const monthYearEl = document.getElementById("monthYear");
+    const tbody = document.querySelector("#scheduleTable tbody");
     let currentDate = new Date();
 
-    function getMonthKey(date) {
-      return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    function getCurrentMonthKey() {
+      return currentDate.toLocaleDateString("en-US", { month: "long", year: "numeric" });
     }
 
     function updateScheduleTable() {
-      const matchData = JSON.parse(localStorage.getItem("matchSchedule")) || [];
-      const key = getMonthKey(currentDate);
+      const matchSchedule = JSON.parse(localStorage.getItem("matchSchedule")) || {};
+      const key = getCurrentMonthKey();
+      const matches = matchSchedule[key] || [];
+
       monthYearEl.textContent = key;
-      tbody.innerHTML = '';
+      tbody.innerHTML = "";
 
-      const filtered = matchData.filter(match => {
-        const matchDate = new Date(match.date);
-        return getMonthKey(matchDate) === key;
-      });
-
-      if (filtered.length === 0) {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td colspan="4" style="font-style:italic; color:#666;">No schedule for now.</td>`;
+      if (matches.length > 0) {
+        matches.forEach(match => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${match.date}</td>
+            <td>${match.time}</td>
+            <td>${match.teams}</td>
+            <td>${match.location}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      } else {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td colspan="4" style="text-align:center; font-style:italic; color:#555;">No matches scheduled for ${key}.</td>`;
         tbody.appendChild(tr);
-        return;
       }
-
-      filtered.forEach(item => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${item.date}</td>
-          <td>${item.time}</td>
-          <td>${item.teams}</td>
-          <td>${item.location}</td>
-        `;
-        tbody.appendChild(row);
-      });
     }
 
     function prevMonth() {
