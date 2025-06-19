@@ -131,6 +131,88 @@ function deleteMatch(index) {
     loadMatches();
   }
 }
+// MATCH LOGS (monthly based)
+let matchLogs = JSON.parse(localStorage.getItem("matchLogs")) || {};
+let currentLogDate = new Date();
+const logMonthYearEl = document.getElementById("logMonthYear");
+const logTable = document.querySelector("#matchLogTable tbody");
+
+function getLogMonthKey() {
+  return currentLogDate.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+}
+
+function loadMatchLogs() {
+  const key = getLogMonthKey();
+  logMonthYearEl.textContent = key;
+  logTable.innerHTML = "";
+
+  const logs = matchLogs[key] || [];
+
+  if (logs.length === 0) {
+    logTable.innerHTML = `<tr><td colspan="4" class="no-users">No match logs for ${key}.</td></tr>`;
+    return;
+  }
+
+  logs.forEach(log => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${log.date}</td>
+      <td>${log.player}</td>
+      <td>${log.opponent}</td>
+      <td>${log.winner}</td>
+    `;
+    logTable.appendChild(row);
+  });
+}
+
+function prevLogMonth() {
+  currentLogDate.setMonth(currentLogDate.getMonth() - 1);
+  loadMatchLogs();
+}
+
+function nextLogMonth() {
+  currentLogDate.setMonth(currentLogDate.getMonth() + 1);
+  loadMatchLogs();
+}
+
+function openLogModal() {
+  document.getElementById("logModal").style.display = "flex";
+  document.getElementById("logDate").value = "";
+  document.getElementById("logPlayer").value = "";
+  document.getElementById("logOpponent").value = "";
+  document.getElementById("logWinner").value = "";
+}
+
+function closeLogModal() {
+  document.getElementById("logModal").style.display = "none";
+}
+
+function saveLog() {
+  const date = document.getElementById("logDate").value;
+  const player = document.getElementById("logPlayer").value;
+  const opponent = document.getElementById("logOpponent").value;
+  const winner = document.getElementById("logWinner").value;
+
+  if (!date || !player || !opponent || !winner) {
+    alert("All fields are required.");
+    return;
+  }
+
+  const log = { date, player, opponent, winner };
+  const key = getLogMonthKey();
+
+  if (!matchLogs[key]) {
+    matchLogs[key] = [];
+  }
+
+  matchLogs[key].push(log);
+  localStorage.setItem("matchLogs", JSON.stringify(matchLogs));
+  closeLogModal();
+  loadMatchLogs();
+}
+
+// Initial Load
+loadMatchLogs();
 
 loadMatches();
 
