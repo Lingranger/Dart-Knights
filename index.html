@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Dashboard - Caraga Dart Knights</title>
-  <link rel="stylesheet" href="admin.css" />
+  <link rel="stylesheet" href="admin.css">
 </head>
 <body>
 
@@ -18,7 +18,7 @@
 
   <div class="welcome-message" id="welcomeAdmin"></div>
 
-  <!-- MATCH SCHEDULE SECTION -->
+  <!-- 🔁 Match Schedule Section with Monthly Navigation -->
   <section id="matchScheduleSection">
     <h2>Manage Match Schedule</h2>
     <div style="text-align: center; margin-bottom: 10px;">
@@ -34,18 +34,20 @@
           <th>Time</th>
           <th>Match</th>
           <th>Location</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <!-- Matches injected by JS -->
+        <!-- Matches loaded by JS -->
       </tbody>
     </table>
   </section>
 
-  <!-- ADD MATCH MODAL -->
+  <!-- ➕ Modal -->
   <div id="matchModal" class="modal" style="display:none;">
     <div class="modal-content">
       <h3 id="modalTitle">Add Match</h3>
+      <input type="hidden" id="matchIndex" />
       <label>Date:</label>
       <input type="date" id="matchDate" /><br/>
       <label>Time:</label>
@@ -61,50 +63,7 @@
     </div>
   </div>
 
-  <!-- MATCH LOGS SECTION -->
-  <section id="matchLogsSection">
-    <h2>Manage Match Logs</h2>
-    <div style="text-align: center; margin-bottom: 10px;">
-      <button onclick="prevLogMonth()">←</button>
-      <span id="logMonthYear">Loading...</span>
-      <button onclick="nextLogMonth()">→</button>
-    </div>
-    <button onclick="openLogModal()">➕ Add Log</button>
-    <table id="matchLogsTable">
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Player</th>
-          <th>Opponent</th>
-          <th>Winner</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Logs injected by JS -->
-      </tbody>
-    </table>
-  </section>
-
-  <!-- ADD LOG MODAL -->
-  <div id="logModal" class="modal" style="display:none;">
-    <div class="modal-content">
-      <h3 id="logModalTitle">Add Match Log</h3>
-      <label>Date:</label>
-      <input type="date" id="logDate" /><br/>
-      <label>Player:</label>
-      <input type="text" id="logPlayer" placeholder="e.g. Kai" /><br/>
-      <label>Opponent:</label>
-      <input type="text" id="logOpponent" placeholder="e.g. Oliver" /><br/>
-      <label>Winner:</label>
-      <input type="text" id="logWinner" placeholder="e.g. Kai" /><br/>
-      <div class="modal-actions">
-        <button onclick="saveMatchLog()">💾 Save</button>
-        <button onclick="closeLogModal()">❌ Cancel</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- USER/ADMIN TRACKING -->
+  <!-- 📋 User/Admin Histories -->
   <div class="dashboard-container">
     <h2>Registered Users</h2>
     <div id="userTableContainer"></div>
@@ -119,160 +78,6 @@
     <div id="adminHistoryContainer"></div>
   </div>
 
-  <!-- SCRIPT -->
-  <script>
-    const admin = JSON.parse(localStorage.getItem("admin"));
-    document.getElementById("welcomeAdmin").textContent = `👑 Welcome, Admin ${admin?.name || "Unknown"}!`;
-
-    // 🗓 MATCH SCHEDULE LOGIC
-    const matchMonthEl = document.getElementById("monthYear");
-    const matchTable = document.querySelector("#matchScheduleTable tbody");
-    let matches = JSON.parse(localStorage.getItem("matchSchedule")) || [];
-    let matchCurrentDate = new Date(localStorage.getItem("matchScheduleMonth")) || new Date();
-
-    function getMatchMonthKey() {
-      return matchCurrentDate.toLocaleDateString("en-US", { month: "long", year: "numeric" });
-    }
-
-    function renderMatches() {
-      matchTable.innerHTML = "";
-      matchMonthEl.textContent = getMatchMonthKey();
-      const m = matchCurrentDate.getMonth(), y = matchCurrentDate.getFullYear();
-
-      const filtered = matches.filter(({ date }) => {
-        const d = new Date(date);
-        return d.getMonth() === m && d.getFullYear() === y;
-      });
-
-      if (filtered.length === 0) {
-        matchTable.innerHTML = `<tr><td colspan="4">No matches for this period.</td></tr>`;
-        return;
-      }
-
-      filtered.forEach(({ date, time, match, location }) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `<td>${date}</td><td>${time}</td><td>${match}</td><td>${location}</td>`;
-        matchTable.appendChild(row);
-      });
-
-      localStorage.setItem("matchScheduleMonth", matchCurrentDate.toISOString());
-    }
-
-    function prevMonth() {
-      matchCurrentDate.setMonth(matchCurrentDate.getMonth() - 1);
-      renderMatches();
-    }
-
-    function nextMonth() {
-      matchCurrentDate.setMonth(matchCurrentDate.getMonth() + 1);
-      renderMatches();
-    }
-
-    function openMatchModal() {
-      document.getElementById("matchModal").style.display = "flex";
-      document.getElementById("matchDate").value = "";
-      document.getElementById("matchTime").value = "";
-      document.getElementById("matchTeams").value = "";
-      document.getElementById("matchLocation").value = "";
-    }
-
-    function closeMatchModal() {
-      document.getElementById("matchModal").style.display = "none";
-    }
-
-    function saveMatch() {
-      const date = document.getElementById("matchDate").value;
-      const time = document.getElementById("matchTime").value;
-      const match = document.getElementById("matchTeams").value;
-      const location = document.getElementById("matchLocation").value;
-
-      if (!date || !time || !match || !location) return alert("All fields required.");
-
-      matches.push({ date, time, match, location });
-      localStorage.setItem("matchSchedule", JSON.stringify(matches));
-      closeMatchModal();
-      renderMatches();
-    }
-
-    // 🏆 MATCH LOG SECTION
-    const logMonthEl = document.getElementById("logMonthYear");
-    const logsTable = document.querySelector("#matchLogsTable tbody");
-    let logs = JSON.parse(localStorage.getItem("matchLogs")) || [];
-    let logCurrentDate = new Date(localStorage.getItem("matchLogMonth")) || new Date();
-
-    function getLogMonthKey() {
-      return logCurrentDate.toLocaleDateString("en-US", { month: "long", year: "numeric" });
-    }
-
-    function renderLogs() {
-      logsTable.innerHTML = "";
-      logMonthEl.textContent = getLogMonthKey();
-      const m = logCurrentDate.getMonth(), y = logCurrentDate.getFullYear();
-
-      const filtered = logs.filter(({ date }) => {
-        const d = new Date(date);
-        return d.getMonth() === m && d.getFullYear() === y;
-      });
-
-      if (filtered.length === 0) {
-        logsTable.innerHTML = `<tr><td colspan="4">No logs for this period.</td></tr>`;
-        return;
-      }
-
-      filtered.forEach(({ date, player, opponent, winner }) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `<td>${date}</td><td>${player}</td><td>${opponent}</td><td>${winner}</td>`;
-        logsTable.appendChild(row);
-      });
-
-      localStorage.setItem("matchLogMonth", logCurrentDate.toISOString());
-    }
-
-    function prevLogMonth() {
-      logCurrentDate.setMonth(logCurrentDate.getMonth() - 1);
-      renderLogs();
-    }
-
-    function nextLogMonth() {
-      logCurrentDate.setMonth(logCurrentDate.getMonth() + 1);
-      renderLogs();
-    }
-
-    function openLogModal() {
-      document.getElementById("logModal").style.display = "flex";
-      document.getElementById("logDate").value = "";
-      document.getElementById("logPlayer").value = "";
-      document.getElementById("logOpponent").value = "";
-      document.getElementById("logWinner").value = "";
-    }
-
-    function closeLogModal() {
-      document.getElementById("logModal").style.display = "none";
-    }
-
-    function saveMatchLog() {
-      const date = document.getElementById("logDate").value;
-      const player = document.getElementById("logPlayer").value;
-      const opponent = document.getElementById("logOpponent").value;
-      const winner = document.getElementById("logWinner").value;
-
-      if (!date || !player || !opponent || !winner) return alert("All fields required.");
-
-      logs.push({ date, player, opponent, winner });
-      localStorage.setItem("matchLogs", JSON.stringify(logs));
-      closeLogModal();
-      renderLogs();
-    }
-
-    function logout() {
-      localStorage.removeItem("adminLoggedIn");
-      sessionStorage.removeItem("adminSessionLogged");
-      window.location.href = "advertisement.html";
-    }
-
-    // Init Render
-    renderMatches();
-    renderLogs();
-  </script>
+  <script src="admin.js"></script>
 </body>
 </html>
