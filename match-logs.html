@@ -120,287 +120,10 @@
       cursor: pointer;
     }
 
-    h2 {
-      text-align: center;
-      margin-bottom: 25px;
-    }
-
-    .log-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .log-table th,
-    .log-table td {
-      padding: 12px;
-      text-align: center;
-      border: 1px solid #ccc;
-    }
-
-    .log-table th {
-      background-color: #0a9396;
-      color: white;
-    }
-
-    .log-table tbody tr:nth-child(odd) {
-      background-color: #f0fdfa;
-    }
-
-    .no-logs {
-      text-align: center;
-      font-size: 1.1rem;
-      margin-top: 30px;
-      color: #888;
-    }
-
-    .back-btn {
-      display: block;
-      text-align: center;
-      margin: 25px auto 0;
-      padding: 10px 20px;
-      background-color: #005f73;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      text-decoration: none;
+    .month-display {
+      font-size: 1.5rem;
       font-weight: bold;
-      transition: background 0.3s;
-      width: max-content;
-    }
-
-    .back-btn:hover {
-      background-color: #0a9396;
-    }
-
-    footer {
-      background: #005f73;
-      color: #fff;
-      text-align: center;
-      padding: 15px 0;
-      margin-top: 40px;
-      border-radius: 8px;
-    }
-
-    @media (max-width: 600px) {
-      .header-title h1 {
-        font-size: 1.4rem;
-      }
-
-      .header-title p {
-        font-size: 1rem;
-      }
-
-      header {
-        flex-direction: column;
-        text-align: center;
-        padding-bottom: 20px;
-      }
-
-      .header-title {
-        position: static;
-        transform: none;
-        margin-top: 10px;
-      }
-
-      .log-table th,
-      .log-table td {
-        padding: 8px;
-        font-size: 0.85rem;
-      }
-      .month-display {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #005f73;
-}
-
-    }
-  </style>
-</head>
-<body>
-
-  <video autoplay muted loop playsinline id="bg-video">
-    <source src="videos/71943-540487063_small.mp4" type="video/mp4" />
-    Your browser does not support the video tag.
-  </video>
-
-  <header>
-    <img src="images/Itim at Pula E-Sports Naglalarawan Gaming Gaming Logo (1).png" alt="Logo" />
-    <div class="header-title">
-      <h1>Caraga Dart Knights</h1>
-      <p>Match History Logs</p>
-    </div>
-  </header>
-
-  <div class="content-wrapper">
-    <nav>
-      <a href="Players.html">Home</a>
-      <a href="Players in Caraga.html">Top Players</a>
-      <a href="Rankings.html">Rankings</a>
-      <a href="Photo-Gallery.html">Gallery</a>
-      <a href="Photo-Bombers.html">Photo Bombers</a>
-      <a href="match-schedule.html">Match Schedule</a>
-      <a href="contact.html">Contact</a>
-      <a href="#" id="logout-button" style="color: #ffb703;">Logout</a>
-    </nav>
-
-    <main>
-      <div class="date-navigation">
-  <button onclick="changeMonth(-1)">←</button>
-  <span id="currentMonthYear" class="month-display">Loading...</span>
-  <button onclick="changeMonth(1)">→</button>
-</div>
-
-
-      <table class="log-table" id="logTable">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Player</th>
-            <th>Opponent</th>
-            <th>Winner</th>
-          </tr>
-        </thead>
-        <tbody id="logBody">
-          <!-- Logs will be inserted here -->
-        </tbody>
-      </table>
-
-      <p class="no-logs" id="noLogsMessage" style="display: none;">No match logs for this period.</p>
-
-      <a class="back-btn" href="Players.html">← Back to Home</a>
-    </main>
-  </div>
-
-  <footer>
-    &copy; 2025 Caraga Dart Knights. All rights reserved.
-  </footer>
-
-  <script>
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Caraga Dart Knights - Match Logs</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: transparent;
-      color: #333;
-    }
-
-    #bg-video {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      object-fit: cover;
-      z-index: -1;
-      filter: brightness(0.7);
-    }
-
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #005f73;
-      color: #fff;
-      padding: 15px 20px;
-      border-radius: 10px 10px 0 0;
-      position: relative;
-      z-index: 2;
-      flex-wrap: wrap;
-    }
-
-    header img {
-      height: 80px;
-      width: auto;
-      border-radius: 5px;
-      box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
-    }
-
-    .header-title {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      text-align: center;
-    }
-
-    .header-title h1 {
-      margin: 0;
-      font-size: 1.8em;
-    }
-
-    .header-title p {
-      margin-top: 5px;
-      font-size: 1.2rem;
-      color: #e9d8a6;
-    }
-
-    .content-wrapper {
-      position: relative;
-      z-index: 1;
-      max-width: 1000px;
-      margin: 30px auto;
-      padding: 20px;
-      background-color: rgba(255, 255, 255, 0.9);
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    nav {
-      background: #0a9396;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      padding: 15px 0;
-      border-radius: 8px;
-      flex-wrap: wrap;
-    }
-
-    nav a {
-      color: #e9d8a6;
-      text-decoration: none;
-      font-weight: bold;
-      padding: 8px 15px;
-      border-radius: 5px;
-      transition: background 0.3s;
-    }
-
-    nav a:hover {
-      background: #94d2bd;
-      color: #001219;
-    }
-
-    main {
-      margin-top: 30px;
-      padding: 0 20px;
-    }
-
-    .date-navigation {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 20px;
-      margin-bottom: 20px;
-    }
-
-    .date-navigation button {
-      padding: 8px 15px;
-      background-color: #0a9396;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 25px;
+      color: #005f73;
     }
 
     .log-table {
@@ -518,7 +241,7 @@
     <main>
       <div class="date-navigation">
         <button onclick="changeMonth(-1)">←</button>
-        <h2 id="currentMonthYear"></h2>
+        <span id="currentMonthYear" class="month-display">Loading...</span>
         <button onclick="changeMonth(1)">→</button>
       </div>
 
@@ -547,60 +270,55 @@
   </footer>
 
   <script>
-    <script>
-  let currentDate = new Date();
-  const savedDate = localStorage.getItem('matchLogDate');
-  if (savedDate) {
-    currentDate = new Date(savedDate);
-  }
-
-  function renderLogs() {
-    const logs = JSON.parse(localStorage.getItem("matchLogs")) || [];
-
-    const logBody = document.getElementById('logBody');
-    const noLogsMessage = document.getElementById('noLogsMessage');
-    const month = currentDate.getMonth() + 1;
-    const year = currentDate.getFullYear();
-
-    document.getElementById('currentMonthYear').textContent =
-      currentDate.toLocaleString('default', { month: 'long' }) + ' ' + year;
-
-    logBody.innerHTML = '';
-    const filteredLogs = logs.filter(log => {
-      const logDate = new Date(log.date);
-      return logDate.getMonth() + 1 === month && logDate.getFullYear() === year;
-    });
-
-    if (filteredLogs.length === 0) {
-      noLogsMessage.style.display = 'block';
-    } else {
-      noLogsMessage.style.display = 'none';
-      filteredLogs.forEach(log => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${log.date}</td>
-          <td>${log.player}</td>
-          <td>${log.opponent}</td>
-          <td>${log.winner}</td>
-        `;
-        logBody.appendChild(row);
-      });
+    let currentDate = new Date();
+    const savedDate = localStorage.getItem('matchLogDate');
+    if (savedDate) {
+      currentDate = new Date(savedDate);
     }
 
-    localStorage.setItem('matchLogDate', currentDate.toISOString());
-  }
+    function renderLogs() {
+      const logs = JSON.parse(localStorage.getItem("matchLogs")) || [];
 
-  function changeMonth(direction) {
-    currentDate.setMonth(currentDate.getMonth() + direction);
+      const logBody = document.getElementById('logBody');
+      const noLogsMessage = document.getElementById('noLogsMessage');
+      const month = currentDate.getMonth() + 1;
+      const year = currentDate.getFullYear();
+
+      document.getElementById('currentMonthYear').textContent =
+        currentDate.toLocaleString('default', { month: 'long' }) + ' ' + year;
+
+      logBody.innerHTML = '';
+      const filteredLogs = logs.filter(log => {
+        const logDate = new Date(log.date);
+        return logDate.getMonth() + 1 === month && logDate.getFullYear() === year;
+      });
+
+      if (filteredLogs.length === 0) {
+        noLogsMessage.style.display = 'block';
+      } else {
+        noLogsMessage.style.display = 'none';
+        filteredLogs.forEach(log => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${log.date}</td>
+            <td>${log.player}</td>
+            <td>${log.opponent}</td>
+            <td>${log.winner}</td>
+          `;
+          logBody.appendChild(row);
+        });
+      }
+
+      localStorage.setItem('matchLogDate', currentDate.toISOString());
+    }
+
+    function changeMonth(direction) {
+      currentDate.setMonth(currentDate.getMonth() + direction);
+      renderLogs();
+    }
+
     renderLogs();
-  }
-
-  // Initial load
-  renderLogs();
-</script>
-
-</body>
-</html>
+  </script>
 
 </body>
 </html>
