@@ -7,7 +7,7 @@ if (localStorage.getItem("adminLoggedIn") !== "true") {
 const admin = JSON.parse(localStorage.getItem("admin"));
 document.getElementById("welcomeAdmin").textContent = `👑 Welcome, Admin ${admin?.name || "Unknown"}!`;
 
-// Save admin session history (only once per session)
+// Save admin session history (once per session)
 if (!sessionStorage.getItem("adminSessionLogged")) {
   const history = JSON.parse(localStorage.getItem("adminHistory")) || [];
   history.push({
@@ -19,15 +19,25 @@ if (!sessionStorage.getItem("adminSessionLogged")) {
   sessionStorage.setItem("adminSessionLogged", "true");
 }
 
-// Match Schedule Functions
-let matches = JSON.parse(localStorage.getItem("matchSchedule")) || [];
+// MONTHLY MATCH SCHEDULE SYSTEM
+let matchSchedule = JSON.parse(localStorage.getItem("matchSchedule")) || {};
+let currentDate = new Date(); // Default to current month
+const monthYearEl = document.getElementById("monthYear");
+const matchTable = document.querySelector("#matchScheduleTable tbody");
+
+function getCurrentMonthKey() {
+  return currentDate.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+}
 
 function loadMatches() {
-  const table = document.querySelector("#matchScheduleTable tbody");
-  table.innerHTML = "";
+  const key = getCurrentMonthKey();
+  monthYearEl.textContent = key;
+  matchTable.innerHTML = "";
+
+  const matches = matchSchedule[key] || [];
 
   if (matches.length === 0) {
-    table.innerHTML = `<tr><td colspan="5" class="no-users">No matches scheduled.</td></tr>`;
+    matchTable.innerHTML = `<tr><td colspan="5" class="no-users">No matches scheduled for ${key}.</td></tr>`;
     return;
   }
 
@@ -43,8 +53,18 @@ function loadMatches() {
         <button onclick="deleteMatch(${index})">🗑️</button>
       </td>
     `;
-    table.appendChild(row);
+    matchTable.appendChild(row);
   });
+}
+
+function prevMonth() {
+  currentDate.setMonth(currentDate.getMonth() - 1);
+  loadMatches();
+}
+
+function nextMonth() {
+  currentDate.setMonth(currentDate.getMonth() + 1);
+  loadMatches();
 }
 
 function openMatchModal() {
@@ -73,21 +93,27 @@ function saveMatch() {
     return;
   }
 
-  const matchObj = { date, time, teams, location };
+  const match = { date, time, teams, location };
+  const key = getCurrentMonthKey();
 
-  if (index === "") {
-    matches.push(matchObj);
-  } else {
-    matches[parseInt(index)] = matchObj;
+  if (!matchSchedule[key]) {
+    matchSchedule[key] = [];
   }
 
-  localStorage.setItem("matchSchedule", JSON.stringify(matches));
+  if (index === "") {
+    matchSchedule[key].push(match);
+  } else {
+    matchSchedule[key][parseInt(index)] = match;
+  }
+
+  localStorage.setItem("matchSchedule", JSON.stringify(matchSchedule));
   closeMatchModal();
   loadMatches();
 }
 
 function editMatch(index) {
-  const match = matches[index];
+  const key = getCurrentMonthKey();
+  const match = matchSchedule[key][index];
   document.getElementById("matchIndex").value = index;
   document.getElementById("matchDate").value = match.date;
   document.getElementById("matchTime").value = match.time;
@@ -98,17 +124,18 @@ function editMatch(index) {
 }
 
 function deleteMatch(index) {
+  const key = getCurrentMonthKey();
   if (confirm("Are you sure you want to delete this match?")) {
-    matches.splice(index, 1);
-    localStorage.setItem("matchSchedule", JSON.stringify(matches));
+    matchSchedule[key].splice(index, 1);
+    localStorage.setItem("matchSchedule", JSON.stringify(matchSchedule));
     loadMatches();
   }
 }
 
-// Load matches on start
+// Load matches on page load
 loadMatches();
 
-// Registered Users/Admins
+// REGISTERED USERS / ADMINS
 const users = JSON.parse(localStorage.getItem("users")) || [];
 const userTable = document.getElementById("userTableContainer");
 const adminTable = document.getElementById("adminTableContainer");
@@ -116,133 +143,87 @@ const adminTable = document.getElementById("adminTableContainer");
 const normalUsers = users.filter(user => user.role !== "admin");
 const adminUsers = users.filter(user => user.role === "admin");
 
-// Registered Users Table
 if (normalUsers.length === 0) {
   userTable.innerHTML = '<p class="no-users">No registered users found.</p>';
 } else {
-  let tableHTML = `
-    <table>
-      <thead>
-        <tr>
-          <th>Full Name</th>
-          <th>Age</th>
-          <th>Gender</th>
-          <th>Team</th>
-          <th>Email</th>
-          <th>Signup Date</th>
-        </tr>
-      </thead>
-      <tbody>
-  `;
+  let html = `<table><thead><tr>
+    <th>Full Name</th><th>Age</th><th>Gender</th><th>Team</th><th>Email</th><th>Signup Date</th>
+  </tr></thead><tbody>`;
   normalUsers.forEach(user => {
-    tableHTML += `
-      <tr>
-        <td>${user.name || "—"}</td>
-        <td>${user.age || "—"}</td>
-        <td>${user.gender || "—"}</td>
-        <td>${user.team || "—"}</td>
-        <td>${user.email || "—"}</td>
-        <td>${user.signupDate || "—"}</td>
-      </tr>
-    `;
+    html += `<tr>
+      <td>${user.name || "—"}</td>
+      <td>${user.age || "—"}</td>
+      <td>${user.gender || "—"}</td>
+      <td>${user.team || "—"}</td>
+      <td>${user.email || "—"}</td>
+      <td>${user.signupDate || "—"}</td>
+    </tr>`;
   });
-  tableHTML += `</tbody></table>`;
-  userTable.innerHTML = tableHTML;
+  html += `</tbody></table>`;
+  userTable.innerHTML = html;
 }
 
-// Registered Admins Table
 if (adminUsers.length === 0) {
   adminTable.innerHTML = '<p class="no-users">No registered admins found.</p>';
 } else {
-  let tableHTML = `
-    <table>
-      <thead>
-        <tr>
-          <th>Full Name</th>
-          <th>Email</th>
-          <th>Signup Date</th>
-        </tr>
-      </thead>
-      <tbody>
-  `;
+  let html = `<table><thead><tr>
+    <th>Full Name</th><th>Email</th><th>Signup Date</th>
+  </tr></thead><tbody>`;
   adminUsers.forEach(admin => {
-    tableHTML += `
-      <tr>
-        <td>${admin.name || "—"}</td>
-        <td>${admin.email || "—"}</td>
-        <td>${admin.signupDate || "—"}</td>
-      </tr>
-    `;
+    html += `<tr>
+      <td>${admin.name || "—"}</td>
+      <td>${admin.email || "—"}</td>
+      <td>${admin.signupDate || "—"}</td>
+    </tr>`;
   });
-  tableHTML += `</tbody></table>`;
-  adminTable.innerHTML = tableHTML;
+  html += `</tbody></table>`;
+  adminTable.innerHTML = html;
 }
 
-// User Login History
-const userLoginHistory = JSON.parse(localStorage.getItem("userLoginHistory")) || [];
-const userHistoryContainer = document.getElementById("userLoginHistoryContainer");
+// USER LOGIN HISTORY
+const userLogins = JSON.parse(localStorage.getItem("userLoginHistory")) || [];
+const userLoginHistoryContainer = document.getElementById("userLoginHistoryContainer");
 
-if (userLoginHistory.length === 0) {
-  userHistoryContainer.innerHTML = '<p class="no-users">No user login history found.</p>';
+if (userLogins.length === 0) {
+  userLoginHistoryContainer.innerHTML = '<p class="no-users">No user login history found.</p>';
 } else {
-  let historyHTML = `
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Team</th>
-          <th>Login Time</th>
-        </tr>
-      </thead>
-      <tbody>
-  `;
-  userLoginHistory.forEach(entry => {
-    historyHTML += `
-      <tr>
-        <td>${entry.name || "—"}</td>
-        <td>${entry.email || "—"}</td>
-        <td>${entry.team ? entry.team : "Unknown Team"}</td>
-        <td>${entry.loginDate || "—"}</td>
-      </tr>
-    `;
+  let html = `<table><thead><tr>
+    <th>Name</th><th>Email</th><th>Team</th><th>Login Time</th>
+  </tr></thead><tbody>`;
+  userLogins.forEach(log => {
+    html += `<tr>
+      <td>${log.name || "—"}</td>
+      <td>${log.email || "—"}</td>
+      <td>${log.team || "—"}</td>
+      <td>${log.loginDate || "—"}</td>
+    </tr>`;
   });
-  historyHTML += `</tbody></table>`;
-  userHistoryContainer.innerHTML = historyHTML;
+  html += `</tbody></table>`;
+  userLoginHistoryContainer.innerHTML = html;
 }
 
-// Admin Login History
-const adminHistory = JSON.parse(localStorage.getItem("adminHistory")) || [];
+// ADMIN LOGIN HISTORY
+const adminLogins = JSON.parse(localStorage.getItem("adminHistory")) || [];
 const adminHistoryContainer = document.getElementById("adminHistoryContainer");
 
-if (adminHistory.length === 0) {
+if (adminLogins.length === 0) {
   adminHistoryContainer.innerHTML = '<p class="no-users">No admin login history found.</p>';
 } else {
-  let adminLogHTML = `
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Login Time</th>
-        </tr>
-      </thead>
-      <tbody>
-  `;
-  adminHistory.forEach(log => {
-    adminLogHTML += `
-      <tr>
-        <td>${log.name || "—"}</td>
-        <td>${log.email || "—"}</td>
-        <td>${log.loginDate || "—"}</td>
-      </tr>
-    `;
+  let html = `<table><thead><tr>
+    <th>Name</th><th>Email</th><th>Login Time</th>
+  </tr></thead><tbody>`;
+  adminLogins.forEach(log => {
+    html += `<tr>
+      <td>${log.name || "—"}</td>
+      <td>${log.email || "—"}</td>
+      <td>${log.loginDate || "—"}</td>
+    </tr>`;
   });
-  adminLogHTML += `</tbody></table>`;
-  adminHistoryContainer.innerHTML = adminLogHTML;
+  html += `</tbody></table>`;
+  adminHistoryContainer.innerHTML = html;
 }
 
-// Logout Function
+// LOGOUT
 function logout() {
   localStorage.removeItem("adminLoggedIn");
   sessionStorage.removeItem("adminSessionLogged");
