@@ -134,11 +134,11 @@ function deleteMatch(index) {
 
 loadMatches();
 
-
-// Load and render logs
+// LOGS
 function renderMatchLogs() {
   const logs = JSON.parse(localStorage.getItem("matchLogs")) || [];
   const table = document.getElementById("adminMatchLogsTableBody");
+  if (!table) return;
   table.innerHTML = "";
 
   logs.forEach((log, index) => {
@@ -217,7 +217,6 @@ function closeLogModal() {
   document.getElementById("logWinner").value = "";
   document.getElementById("logIndex").value = "";
 }
-
 
 // USERS
 const users = JSON.parse(localStorage.getItem("users")) || [];
@@ -313,8 +312,7 @@ function logout() {
   sessionStorage.removeItem("adminSessionLogged");
   window.location.href = "advertisement.html";
 }
+
 window.onload = () => {
   renderMatchLogs();
-  // any other existing calls
 };
-
