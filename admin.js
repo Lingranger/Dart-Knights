@@ -7,88 +7,7 @@ if (localStorage.getItem("adminLoggedIn") !== "true") {
 const admin = JSON.parse(localStorage.getItem("admin"));
 document.getElementById("welcomeAdmin").textContent = `👑 Welcome, Admin ${admin?.name || "Unknown"}!`;
 
-// Show Match Schedule section only for admins
-if (localStorage.getItem("adminLoggedIn") === "true") {
-  document.getElementById("matchScheduleSection").style.display = "block";
-  loadMatches();
-}
-
-// Open Modal
-function openMatchModal(index = null) {
-  document.getElementById("matchModal").style.display = "flex";
-  if (index !== null) {
-    const match = matches[index];
-    document.getElementById("modalTitle").textContent = "Edit Match";
-    document.getElementById("matchIndex").value = index;
-    document.getElementById("matchDate").value = match.date;
-    document.getElementById("matchTime").value = match.time;
-    document.getElementById("matchTeams").value = match.match;
-    document.getElementById("matchLocation").value = match.location;
-  } else {
-    document.getElementById("modalTitle").textContent = "Add Match";
-    document.getElementById("matchIndex").value = "";
-    document.getElementById("matchDate").value = "";
-    document.getElementById("matchTime").value = "";
-    document.getElementById("matchTeams").value = "";
-    document.getElementById("matchLocation").value = "";
-  }
-}
-
-// Close Modal
-function closeMatchModal() {
-  document.getElementById("matchModal").style.display = "none";
-}
-
-let matches = JSON.parse(localStorage.getItem("matchSchedule")) || [];
-
-function loadMatches() {
-  const tbody = document.querySelector("#matchScheduleTable tbody");
-  tbody.innerHTML = "";
-  matches.forEach((m, i) => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${m.date}</td>
-      <td>${m.time}</td>
-      <td>${m.match}</td>
-      <td>${m.location}</td>
-      <td>
-        <button onclick="openMatchModal(${i})">✏️</button>
-        <button onclick="deleteMatch(${i})">🗑️</button>
-      </td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
-
-function saveMatch() {
-  const index = document.getElementById("matchIndex").value;
-  const newMatch = {
-    date: document.getElementById("matchDate").value,
-    time: document.getElementById("matchTime").value,
-    match: document.getElementById("matchTeams").value,
-    location: document.getElementById("matchLocation").value
-  };
-
-  if (index === "") {
-    matches.push(newMatch);
-  } else {
-    matches[parseInt(index)] = newMatch;
-  }
-
-  localStorage.setItem("matchSchedule", JSON.stringify(matches));
-  closeMatchModal();
-  loadMatches();
-}
-
-function deleteMatch(index) {
-  if (confirm("Are you sure you want to delete this match?")) {
-    matches.splice(index, 1);
-    localStorage.setItem("matchSchedule", JSON.stringify(matches));
-    loadMatches();
-  }
-}
-
-// Log session if first time this session
+// Save admin session history (only once per session)
 if (!sessionStorage.getItem("adminSessionLogged")) {
   const history = JSON.parse(localStorage.getItem("adminHistory")) || [];
   history.push({
@@ -100,7 +19,96 @@ if (!sessionStorage.getItem("adminSessionLogged")) {
   sessionStorage.setItem("adminSessionLogged", "true");
 }
 
-// Load and display users
+// Match Schedule Functions
+let matches = JSON.parse(localStorage.getItem("matchSchedule")) || [];
+
+function loadMatches() {
+  const table = document.querySelector("#matchScheduleTable tbody");
+  table.innerHTML = "";
+
+  if (matches.length === 0) {
+    table.innerHTML = `<tr><td colspan="5" class="no-users">No matches scheduled.</td></tr>`;
+    return;
+  }
+
+  matches.forEach((match, index) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${match.date}</td>
+      <td>${match.time}</td>
+      <td>${match.teams}</td>
+      <td>${match.location}</td>
+      <td>
+        <button onclick="editMatch(${index})">✏️</button>
+        <button onclick="deleteMatch(${index})">🗑️</button>
+      </td>
+    `;
+    table.appendChild(row);
+  });
+}
+
+function openMatchModal() {
+  document.getElementById("matchModal").style.display = "flex";
+  document.getElementById("modalTitle").textContent = "Add Match";
+  document.getElementById("matchIndex").value = "";
+  document.getElementById("matchDate").value = "";
+  document.getElementById("matchTime").value = "";
+  document.getElementById("matchTeams").value = "";
+  document.getElementById("matchLocation").value = "";
+}
+
+function closeMatchModal() {
+  document.getElementById("matchModal").style.display = "none";
+}
+
+function saveMatch() {
+  const index = document.getElementById("matchIndex").value;
+  const date = document.getElementById("matchDate").value;
+  const time = document.getElementById("matchTime").value;
+  const teams = document.getElementById("matchTeams").value;
+  const location = document.getElementById("matchLocation").value;
+
+  if (!date || !time || !teams || !location) {
+    alert("All fields are required.");
+    return;
+  }
+
+  const matchObj = { date, time, teams, location };
+
+  if (index === "") {
+    matches.push(matchObj);
+  } else {
+    matches[parseInt(index)] = matchObj;
+  }
+
+  localStorage.setItem("matchSchedule", JSON.stringify(matches));
+  closeMatchModal();
+  loadMatches();
+}
+
+function editMatch(index) {
+  const match = matches[index];
+  document.getElementById("matchIndex").value = index;
+  document.getElementById("matchDate").value = match.date;
+  document.getElementById("matchTime").value = match.time;
+  document.getElementById("matchTeams").value = match.teams;
+  document.getElementById("matchLocation").value = match.location;
+  document.getElementById("modalTitle").textContent = "Edit Match";
+  document.getElementById("matchModal").style.display = "flex";
+}
+
+function deleteMatch(index) {
+  if (confirm("Are you sure you want to delete this match?")) {
+    matches.splice(index, 1);
+    localStorage.setItem("matchSchedule", JSON.stringify(matches));
+    loadMatches();
+  }
+}
+
+// Load matches on start
+loadMatches();
+
+// Registered Users/Admins
 const users = JSON.parse(localStorage.getItem("users")) || [];
 const userTable = document.getElementById("userTableContainer");
 const adminTable = document.getElementById("adminTableContainer");
@@ -108,11 +116,11 @@ const adminTable = document.getElementById("adminTableContainer");
 const normalUsers = users.filter(user => user.role !== "admin");
 const adminUsers = users.filter(user => user.role === "admin");
 
-// Registered Users
+// Registered Users Table
 if (normalUsers.length === 0) {
   userTable.innerHTML = '<p class="no-users">No registered users found.</p>';
 } else {
-  let table = `
+  let tableHTML = `
     <table>
       <thead>
         <tr>
@@ -127,7 +135,7 @@ if (normalUsers.length === 0) {
       <tbody>
   `;
   normalUsers.forEach(user => {
-    table += `
+    tableHTML += `
       <tr>
         <td>${user.name || "—"}</td>
         <td>${user.age || "—"}</td>
@@ -138,15 +146,15 @@ if (normalUsers.length === 0) {
       </tr>
     `;
   });
-  table += `</tbody></table>`;
-  userTable.innerHTML = table;
+  tableHTML += `</tbody></table>`;
+  userTable.innerHTML = tableHTML;
 }
 
-// Registered Admins
+// Registered Admins Table
 if (adminUsers.length === 0) {
   adminTable.innerHTML = '<p class="no-users">No registered admins found.</p>';
 } else {
-  let adminHTML = `
+  let tableHTML = `
     <table>
       <thead>
         <tr>
@@ -158,7 +166,7 @@ if (adminUsers.length === 0) {
       <tbody>
   `;
   adminUsers.forEach(admin => {
-    adminHTML += `
+    tableHTML += `
       <tr>
         <td>${admin.name || "—"}</td>
         <td>${admin.email || "—"}</td>
@@ -166,8 +174,8 @@ if (adminUsers.length === 0) {
       </tr>
     `;
   });
-  adminHTML += `</tbody></table>`;
-  adminTable.innerHTML = adminHTML;
+  tableHTML += `</tbody></table>`;
+  adminTable.innerHTML = tableHTML;
 }
 
 // User Login History
@@ -194,7 +202,7 @@ if (userLoginHistory.length === 0) {
       <tr>
         <td>${entry.name || "—"}</td>
         <td>${entry.email || "—"}</td>
-        <td>${entry.team || "Unknown Team"}</td>
+        <td>${entry.team ? entry.team : "Unknown Team"}</td>
         <td>${entry.loginDate || "—"}</td>
       </tr>
     `;
@@ -234,7 +242,7 @@ if (adminHistory.length === 0) {
   adminHistoryContainer.innerHTML = adminLogHTML;
 }
 
-// Logout
+// Logout Function
 function logout() {
   localStorage.removeItem("adminLoggedIn");
   sessionStorage.removeItem("adminSessionLogged");
