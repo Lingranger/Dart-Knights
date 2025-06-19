@@ -7,6 +7,87 @@ if (localStorage.getItem("adminLoggedIn") !== "true") {
 const admin = JSON.parse(localStorage.getItem("admin"));
 document.getElementById("welcomeAdmin").textContent = `👑 Welcome, Admin ${admin?.name || "Unknown"}!`;
 
+// Show Match Schedule section only for admins
+if (localStorage.getItem("adminLoggedIn") === "true") {
+  document.getElementById("matchScheduleSection").style.display = "block";
+  loadMatches();
+}
+
+// Open Modal
+function openMatchModal(index = null) {
+  document.getElementById("matchModal").style.display = "flex";
+  if (index !== null) {
+    const match = matches[index];
+    document.getElementById("modalTitle").textContent = "Edit Match";
+    document.getElementById("matchIndex").value = index;
+    document.getElementById("matchDate").value = match.date;
+    document.getElementById("matchTime").value = match.time;
+    document.getElementById("matchTeams").value = match.match;
+    document.getElementById("matchLocation").value = match.location;
+  } else {
+    document.getElementById("modalTitle").textContent = "Add Match";
+    document.getElementById("matchIndex").value = "";
+    document.getElementById("matchDate").value = "";
+    document.getElementById("matchTime").value = "";
+    document.getElementById("matchTeams").value = "";
+    document.getElementById("matchLocation").value = "";
+  }
+}
+
+// Close Modal
+function closeMatchModal() {
+  document.getElementById("matchModal").style.display = "none";
+}
+
+let matches = JSON.parse(localStorage.getItem("matchSchedule")) || [];
+
+function loadMatches() {
+  const tbody = document.querySelector("#matchScheduleTable tbody");
+  tbody.innerHTML = "";
+  matches.forEach((m, i) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${m.date}</td>
+      <td>${m.time}</td>
+      <td>${m.match}</td>
+      <td>${m.location}</td>
+      <td>
+        <button onclick="openMatchModal(${i})">✏️</button>
+        <button onclick="deleteMatch(${i})">🗑️</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function saveMatch() {
+  const index = document.getElementById("matchIndex").value;
+  const newMatch = {
+    date: document.getElementById("matchDate").value,
+    time: document.getElementById("matchTime").value,
+    match: document.getElementById("matchTeams").value,
+    location: document.getElementById("matchLocation").value
+  };
+
+  if (index === "") {
+    matches.push(newMatch);
+  } else {
+    matches[parseInt(index)] = newMatch;
+  }
+
+  localStorage.setItem("matchSchedule", JSON.stringify(matches));
+  closeMatchModal();
+  loadMatches();
+}
+
+function deleteMatch(index) {
+  if (confirm("Are you sure you want to delete this match?")) {
+    matches.splice(index, 1);
+    localStorage.setItem("matchSchedule", JSON.stringify(matches));
+    loadMatches();
+  }
+}
+
 // Log session if first time this session
 if (!sessionStorage.getItem("adminSessionLogged")) {
   const history = JSON.parse(localStorage.getItem("adminHistory")) || [];
