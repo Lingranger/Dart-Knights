@@ -313,3 +313,8 @@ function logout() {
   sessionStorage.removeItem("adminSessionLogged");
   window.location.href = "advertisement.html";
 }
+window.onload = () => {
+  renderMatchLogs();
+  // any other existing calls
+};
+
