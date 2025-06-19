@@ -18,8 +18,7 @@
 
   <div class="welcome-message" id="welcomeAdmin"></div>
 
-  <!-- ✅ Match Schedule Manager (Admin Only) -->
-  <section id="matchScheduleSection" style="display: none;">
+  <section id="matchScheduleSection">
     <h2>Manage Match Schedule</h2>
     <button onclick="openMatchModal()">➕ Add Match</button>
     <table id="matchScheduleTable">
@@ -33,13 +32,13 @@
         </tr>
       </thead>
       <tbody>
-        <!-- Matches will be loaded here -->
+        <!-- Matches loaded by JS -->
       </tbody>
     </table>
   </section>
 
-  <!-- ✅ Modal for Add/Edit Match -->
-  <div id="matchModal" class="modal" style="display: none;">
+  <!-- Modal -->
+  <div id="matchModal" class="modal" style="display:none;">
     <div class="modal-content">
       <h3 id="modalTitle">Add Match</h3>
       <input type="hidden" id="matchIndex" />
@@ -58,7 +57,6 @@
     </div>
   </div>
 
-  <!-- ✅ Dashboard Data Sections -->
   <div class="dashboard-container">
     <h2>Registered Users</h2>
     <div id="userTableContainer"></div>
