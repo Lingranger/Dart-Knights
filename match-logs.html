@@ -207,6 +207,12 @@
         padding: 8px;
         font-size: 0.85rem;
       }
+      .month-display {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #005f73;
+}
+
     }
   </style>
 </head>
@@ -239,10 +245,11 @@
 
     <main>
       <div class="date-navigation">
-        <button onclick="changeMonth(-1)">←</button>
-        <h2 id="currentMonthYear"></h2>
-        <button onclick="changeMonth(1)">→</button>
-      </div>
+  <button onclick="changeMonth(-1)">←</button>
+  <span id="currentMonthYear" class="month-display">Loading...</span>
+  <button onclick="changeMonth(1)">→</button>
+</div>
+
 
       <table class="log-table" id="logTable">
         <thead>
