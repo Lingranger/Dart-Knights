@@ -19,9 +19,9 @@ if (!sessionStorage.getItem("adminSessionLogged")) {
   sessionStorage.setItem("adminSessionLogged", "true");
 }
 
-// MONTHLY MATCH SCHEDULE SYSTEM
+// MATCH SCHEDULE (monthly based)
 let matchSchedule = JSON.parse(localStorage.getItem("matchSchedule")) || {};
-let currentDate = new Date(); // Default to current month
+let currentDate = new Date();
 const monthYearEl = document.getElementById("monthYear");
 const matchTable = document.querySelector("#matchScheduleTable tbody");
 
@@ -132,10 +132,9 @@ function deleteMatch(index) {
   }
 }
 
-// Load matches on page load
 loadMatches();
 
-// REGISTERED USERS / ADMINS
+// USERS
 const users = JSON.parse(localStorage.getItem("users")) || [];
 const userTable = document.getElementById("userTableContainer");
 const adminTable = document.getElementById("adminTableContainer");
@@ -223,7 +222,7 @@ if (adminLogins.length === 0) {
   adminHistoryContainer.innerHTML = html;
 }
 
-// LOGOUT
+// LOGOUT FUNCTION
 function logout() {
   localStorage.removeItem("adminLoggedIn");
   sessionStorage.removeItem("adminSessionLogged");
