@@ -134,6 +134,91 @@ function deleteMatch(index) {
 
 loadMatches();
 
+
+// Load and render logs
+function renderMatchLogs() {
+  const logs = JSON.parse(localStorage.getItem("matchLogs")) || [];
+  const table = document.getElementById("adminMatchLogsTableBody");
+  table.innerHTML = "";
+
+  logs.forEach((log, index) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${log.date}</td>
+      <td>${log.player}</td>
+      <td>${log.opponent}</td>
+      <td>${log.winner}</td>
+      <td>
+        <button onclick="editLog(${index})">✏️</button>
+        <button onclick="deleteLog(${index})">🗑️</button>
+      </td>
+    `;
+    table.appendChild(row);
+  });
+}
+
+function addOrUpdateLog() {
+  const date = document.getElementById("logDate").value;
+  const player = document.getElementById("logPlayer").value;
+  const opponent = document.getElementById("logOpponent").value;
+  const winner = document.getElementById("logWinner").value;
+  const index = document.getElementById("logIndex").value;
+
+  if (!date || !player || !opponent || !winner) {
+    alert("Please fill all fields.");
+    return;
+  }
+
+  const logs = JSON.parse(localStorage.getItem("matchLogs")) || [];
+
+  const newLog = { date, player, opponent, winner };
+
+  if (index === "") {
+    logs.push(newLog);
+  } else {
+    logs[parseInt(index)] = newLog;
+  }
+
+  localStorage.setItem("matchLogs", JSON.stringify(logs));
+  closeLogModal();
+  renderMatchLogs();
+}
+
+function editLog(index) {
+  const logs = JSON.parse(localStorage.getItem("matchLogs")) || [];
+  const log = logs[index];
+
+  document.getElementById("logDate").value = log.date;
+  document.getElementById("logPlayer").value = log.player;
+  document.getElementById("logOpponent").value = log.opponent;
+  document.getElementById("logWinner").value = log.winner;
+  document.getElementById("logIndex").value = index;
+
+  openLogModal();
+}
+
+function deleteLog(index) {
+  if (!confirm("Delete this log?")) return;
+  const logs = JSON.parse(localStorage.getItem("matchLogs")) || [];
+  logs.splice(index, 1);
+  localStorage.setItem("matchLogs", JSON.stringify(logs));
+  renderMatchLogs();
+}
+
+function openLogModal() {
+  document.getElementById("logModal").style.display = "block";
+}
+
+function closeLogModal() {
+  document.getElementById("logModal").style.display = "none";
+  document.getElementById("logDate").value = "";
+  document.getElementById("logPlayer").value = "";
+  document.getElementById("logOpponent").value = "";
+  document.getElementById("logWinner").value = "";
+  document.getElementById("logIndex").value = "";
+}
+
+
 // USERS
 const users = JSON.parse(localStorage.getItem("users")) || [];
 const userTable = document.getElementById("userTableContainer");
