@@ -96,30 +96,48 @@ tr:hover {
   margin-left: 10px;
 }
 
-@media screen and (max-width: 600px) {
-  .dashboard-container {
-    padding: 15px;
-  }
+/* ✅ Match Schedule Section Styling */
+#matchScheduleSection {
+  padding: 30px;
+}
 
-  th, td {
-    font-size: 14px;
-    padding: 8px;
-  }
-
-  .welcome-message {
-    font-size: 22px;
-  }
-  #matchScheduleSection button {
-  margin-bottom: 10px;
+#matchScheduleSection button {
+  margin-bottom: 15px;
   background-color: #16a34a;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#matchScheduleSection button:hover {
+  background-color: #15803d;
 }
 
 #matchScheduleTable th,
 #matchScheduleTable td {
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
 }
 
+#matchScheduleTable td button {
+  background-color: #0ea5e9;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  margin: 0 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+#matchScheduleTable td button:hover {
+  background-color: #0284c7;
+}
+
+/* ✅ Modal Styling */
 .modal {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -147,7 +165,43 @@ tr:hover {
 .modal-actions {
   display: flex;
   justify-content: space-between;
+  margin-top: 10px;
 }
 
+.modal-actions button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
+.modal-actions button:first-child {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.modal-actions button:last-child {
+  background-color: #ef4444;
+  color: white;
+}
+
+/* Responsive */
+@media screen and (max-width: 600px) {
+  .dashboard-container {
+    padding: 15px;
+  }
+
+  th, td {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .welcome-message {
+    font-size: 22px;
+  }
+
+  .modal-content {
+    width: 90%;
+  }
+}
