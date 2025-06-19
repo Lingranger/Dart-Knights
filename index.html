@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Dashboard - Caraga Dart Knights</title>
-  <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="admin.css" />
 </head>
 <body>
 
@@ -18,8 +18,14 @@
 
   <div class="welcome-message" id="welcomeAdmin"></div>
 
+  <!-- Match Schedule Section -->
   <section id="matchScheduleSection">
     <h2>Manage Match Schedule</h2>
+    <div style="text-align: center; margin-bottom: 10px;">
+      <button onclick="prevMonth()">←</button>
+      <span id="monthYear"></span>
+      <button onclick="nextMonth()">→</button>
+    </div>
     <button onclick="openMatchModal()">➕ Add Match</button>
     <table id="matchScheduleTable">
       <thead>
@@ -32,12 +38,12 @@
         </tr>
       </thead>
       <tbody>
-        <!-- Matches loaded by JS -->
+        <!-- Matches will load here -->
       </tbody>
     </table>
   </section>
 
-  <!-- Modal -->
+  <!-- Match Modal -->
   <div id="matchModal" class="modal" style="display:none;">
     <div class="modal-content">
       <h3 id="modalTitle">Add Match</h3>
@@ -57,6 +63,7 @@
     </div>
   </div>
 
+  <!-- Dashboard Section -->
   <div class="dashboard-container">
     <h2>Registered Users</h2>
     <div id="userTableContainer"></div>
