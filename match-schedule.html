@@ -157,6 +157,11 @@
       text-decoration: underline;
     }
 
+    .admin-controls {
+      margin-bottom: 15px;
+      display: none;
+    }
+
     footer {
       background: #005f73;
       color: #fff;
@@ -217,10 +222,16 @@
 
     <main>
       <h2 class="schedule-header">
-        <button onclick="prevMonth()">&#8592;</button>
+        <button onclick="prevMonth()">←</button>
         <span id="monthYear">June 2025</span>
-        <button onclick="nextMonth()">&#8594;</button>
+        <button onclick="nextMonth()">→</button>
       </h2>
+
+      <div class="admin-controls" id="adminControls">
+        <button onclick="alert('Add Match clicked')">Add Match</button>
+        <button onclick="alert('Edit Match clicked')">Edit Match</button>
+        <button onclick="alert('Delete Match clicked')">Delete Match</button>
+      </div>
 
       <table id="scheduleTable">
         <thead>
@@ -243,6 +254,7 @@
   <script>
     const monthYearEl = document.getElementById('monthYear');
     const tbody = document.querySelector('#scheduleTable tbody');
+    const adminControls = document.getElementById('adminControls');
 
     const scheduleData = {
       'June 2025': [
@@ -291,6 +303,11 @@
     function nextMonth() {
       currentDate.setMonth(currentDate.getMonth() + 1);
       updateScheduleTable();
+    }
+
+    // Show admin-only buttons
+    if (localStorage.getItem("adminLoggedIn") === "true") {
+      adminControls.style.display = "block";
     }
 
     updateScheduleTable();
