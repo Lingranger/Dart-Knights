@@ -232,7 +232,7 @@
           </tr>
         </thead>
         <tbody>
-          <!-- Populated by JS -->
+          <!-- Filled dynamically -->
         </tbody>
       </table>
 
@@ -244,43 +244,40 @@
     const monthYearEl = document.getElementById('monthYear');
     const tbody = document.querySelector('#scheduleTable tbody');
 
-    const scheduleData = {
-      'June 2025': [
-        { date: 'June 5, 2025', time: '3:00 PM', match: 'Team A vs Team B', location: 'Venue 1' },
-        { date: 'June 12, 2025', time: '4:00 PM', match: 'Team C vs Team D', location: 'Venue 2' },
-        { date: 'June 20, 2025', time: '5:00 PM', match: 'Team E vs Team F', location: 'Venue 3' }
-      ],
-      'July 2025': [
-        { date: 'July 3, 2025', time: '2:00 PM', match: 'Team A vs Team C', location: 'Venue 4' },
-        { date: 'July 15, 2025', time: '6:00 PM', match: 'Team B vs Team D', location: 'Venue 5' }
-      ]
-    };
+    let currentDate = new Date();
 
-    let currentDate = new Date(2025, 5); // June 2025
+    function getMonthKey(date) {
+      return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    }
 
     function updateScheduleTable() {
-      const opts = { year: 'numeric', month: 'long' };
-      const key = currentDate.toLocaleDateString('en-US', opts);
+      const matchData = JSON.parse(localStorage.getItem("matchSchedule")) || [];
+      const key = getMonthKey(currentDate);
       monthYearEl.textContent = key;
       tbody.innerHTML = '';
 
-      const list = scheduleData[key];
-      if (list && list.length) {
-        list.forEach(item => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${item.date}</td>
-            <td>${item.time}</td>
-            <td>${item.match}</td>
-            <td>${item.location}</td>
-          `;
-          tbody.appendChild(row);
-        });
-      } else {
+      const filtered = matchData.filter(match => {
+        const matchDate = new Date(match.date);
+        return getMonthKey(matchDate) === key;
+      });
+
+      if (filtered.length === 0) {
         const tr = document.createElement('tr');
         tr.innerHTML = `<td colspan="4" style="font-style:italic; color:#666;">No schedule for now.</td>`;
         tbody.appendChild(tr);
+        return;
       }
+
+      filtered.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${item.date}</td>
+          <td>${item.time}</td>
+          <td>${item.teams}</td>
+          <td>${item.location}</td>
+        `;
+        tbody.appendChild(row);
+      });
     }
 
     function prevMonth() {
