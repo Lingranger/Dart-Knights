@@ -120,6 +120,11 @@
     <h2>Admin Login History</h2>
     <div id="adminHistoryContainer"></div>
   </div>
+<script>
+  if (localStorage.getItem("adminLoggedIn") !== "true") {
+    window.location.href = "admin-login.html";
+  }
+</script>
 
   <script src="admin.js"></script>
   <script>
