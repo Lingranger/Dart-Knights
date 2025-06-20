@@ -18,6 +18,27 @@
 
   <div class="welcome-message" id="welcomeAdmin"></div>
 
+  <!-- Event Management Section -->
+<section>
+  <h2>Manage Upcoming Events</h2>
+  <button onclick="openEventModal()">➕ Add Event</button>
+  <div id="eventList"></div>
+</section>
+
+<!-- Modal for Adding/Editing Event -->
+<div id="eventModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:#00000099; justify-content:center; align-items:center;">
+  <div style="background:white; padding:20px; border-radius:10px;">
+    <h3 id="eventModalTitle">Add Event</h3>
+    <input type="hidden" id="eventIndex">
+    <input type="text" id="eventTitle" placeholder="Event Title"><br><br>
+    <input type="text" id="eventDate" placeholder="Event Date"><br><br>
+    <input type="text" id="eventLocation" placeholder="Event Location"><br><br>
+    <button onclick="saveEvent()">💾 Save</button>
+    <button onclick="closeEventModal()">❌ Cancel</button>
+  </div>
+</div>
+
+
   <!-- Modal or Section in Admin Dashboard -->
 <div id="eventModal" style="display: none;">
   <h3 id="eventModalTitle">Add Event</h3>
