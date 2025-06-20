@@ -26,19 +26,29 @@ function renderEvents() {
   const container = document.getElementById("eventList");
   if (!container) return;
   container.innerHTML = "";
+
+  if (events.length === 0) {
+    container.innerHTML = `<tr><td colspan="4">No upcoming events.</td></tr>`;
+    return;
+  }
+
   events.forEach((event, index) => {
-    container.innerHTML += `
-      <div>
-        <strong>${event.title}</strong> — ${event.date} @ ${event.location}
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${event.title}</td>
+      <td>${event.date}</td>
+      <td>${event.location}</td>
+      <td>
         <button onclick="editEvent(${index})">✏️</button>
         <button onclick="deleteEvent(${index})">❌</button>
-      </div>
+      </td>
     `;
+    container.appendChild(row);
   });
 }
 
 function openEventModal() {
-  document.getElementById("eventModal").style.display = "block";
+  document.getElementById("eventModal").style.display = "flex";
   document.getElementById("eventModalTitle").textContent = "Add Event";
   document.getElementById("eventIndex").value = "";
   document.getElementById("eventTitle").value = "";
@@ -73,6 +83,24 @@ function saveEvent() {
   closeEventModal();
   renderEvents();
 }
+
+function editEvent(index) {
+  const event = events[index];
+  document.getElementById("eventIndex").value = index;
+  document.getElementById("eventTitle").value = event.title;
+  document.getElementById("eventDate").value = event.date;
+  document.getElementById("eventLocation").value = event.location;
+  document.getElementById("eventModalTitle").textContent = "Edit Event";
+  document.getElementById("eventModal").style.display = "flex";
+}
+
+function deleteEvent(index) {
+  if (!confirm("Are you sure you want to delete this event?")) return;
+  events.splice(index, 1);
+  localStorage.setItem("upcomingEvents", JSON.stringify(events));
+  renderEvents();
+}
+
 
 function editEvent(index) {
   const event = events[index];
