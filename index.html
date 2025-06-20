@@ -1,225 +1,116 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin Dashboard - Caraga Dart Knights</title>
-  <link rel="stylesheet" href="admin.css">
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #001f3f;
-      margin: 0;
-      padding: 0;
-      color: #ffffff;
-    }
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #001f3f; /* Dark Blue */
+    margin: 0;
+    padding: 0;
+    color: #ffffff; /* White text */
+  }
 
-    header {
-      background: #003366;
-      color: white;
-      padding: 15px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+  header {
+    background: #003366;
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-    .logo-title {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
+  .logo-title {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
 
-    .logo {
-      height: 60px;
-    }
+  .logo {
+    height: 60px;
+  }
 
-    .title {
-      font-size: 1.5em;
-    }
+  .title {
+    font-size: 1.5em;
+  }
 
-    .logout-btn {
-      background: #ff4136;
-      border: none;
-      color: white;
-      padding: 10px 15px;
-      cursor: pointer;
-      font-weight: bold;
-    }
+  .logout-btn {
+    background: #ff4136;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-weight: bold;
+  }
 
-    .dashboard-container {
-      padding: 20px;
-    }
+  .dashboard-container {
+    padding: 20px;
+  }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-      background-color: #002b5c;
-      color: white;
-    }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background-color: #002b5c; /* Darker blue for table */
+    color: white;
+  }
 
-    th, td {
-      border: 1px solid #ccc;
-      padding: 10px;
-      text-align: center;
-    }
+  th, td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+  }
 
-    th {
-      background: #005f73;
-      color: white;
-    }
+  th {
+    background: #005f73;
+    color: white;
+  }
 
-    tr:nth-child(even) {
-      background-color: #003366;
-    }
+  tr:nth-child(even) {
+    background-color: #003366;
+  }
 
-    .modal {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 999;
-    }
+  .modal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+  }
 
-    .modal-content {
-      background: #004080;
-      color: white;
-      padding: 20px;
-      width: 300px;
-      border-radius: 10px;
-    }
+  .modal-content {
+    background: #004080;
+    color: white;
+    padding: 20px;
+    width: 300px;
+    border-radius: 10px;
+  }
 
-    .modal-actions {
-      margin-top: 10px;
-      text-align: right;
-    }
+  .modal-actions {
+    margin-top: 10px;
+    text-align: right;
+  }
 
-    button {
-      padding: 8px 12px;
-      border: none;
-      background-color: #0074D9;
-      color: white;
-      cursor: pointer;
-      border-radius: 4px;
-      margin: 5px;
-    }
+  button {
+    padding: 8px 12px;
+    border: none;
+    background-color: #0074D9;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+    margin: 5px;
+  }
 
-    button:hover {
-      background-color: #005fa3;
-    }
+  button:hover {
+    background-color: #005fa3;
+  }
 
-    input[type="text"],
-    input[type="date"],
-    input[type="time"] {
-      width: 100%;
-      padding: 6px;
-      margin: 4px 0 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <div class="logo-title">
-      <img src="images/Itim at Pula E-Sports Naglalarawan Gaming Gaming Logo (1).png" alt="Logo" class="logo" />
-      <div class="title">Admin Dashboard</div>
-    </div>
-    <button class="logout-btn" onclick="logout()">Logout</button>
-  </header>
-
-  <div class="dashboard-container">
-    <h2>Registered Users</h2>
-    <div id="userTableContainer"></div>
-
-    <h2>Registered Admins</h2>
-    <div id="adminTableContainer"></div>
-
-    <h2>User Login History</h2>
-    <div id="userLoginHistoryContainer"></div>
-
-    <h2>Admin Login History</h2>
-    <div id="adminHistoryContainer"></div>
-  </div>
-
-  <script>
-    if (localStorage.getItem("adminLoggedIn") !== "true") {
-      window.location.href = "admin-login.html";
-    }
-
-    function renderRegisteredUsers() {
-      const users = JSON.parse(localStorage.getItem("registeredUsers")) || [];
-      const container = document.getElementById("userTableContainer");
-      if (users.length === 0) {
-        container.innerHTML = "<p>Coming Soon...</p>";
-        return;
-      }
-      let html = `<table><thead><tr><th>Name</th><th>Email</th><th>Username</th></tr></thead><tbody>`;
-      users.forEach(user => {
-        html += `<tr><td>${user.name}</td><td>${user.email}</td><td>${user.username}</td></tr>`;
-      });
-      html += `</tbody></table>`;
-      container.innerHTML = html;
-    }
-
-    function renderRegisteredAdmins() {
-      const admins = JSON.parse(localStorage.getItem("registeredAdmins")) || [];
-      const container = document.getElementById("adminTableContainer");
-      if (admins.length === 0) {
-        container.innerHTML = "<p>Coming Soon...</p>";
-        return;
-      }
-      let html = `<table><thead><tr><th>Name</th><th>Email</th><th>Username</th></tr></thead><tbody>`;
-      admins.forEach(admin => {
-        html += `<tr><td>${admin.name}</td><td>${admin.email}</td><td>${admin.username}</td></tr>`;
-      });
-      html += `</tbody></table>`;
-      container.innerHTML = html;
-    }
-
-    function renderUserLoginHistory() {
-      const logs = JSON.parse(localStorage.getItem("userLoginHistory")) || [];
-      const container = document.getElementById("userLoginHistoryContainer");
-      if (logs.length === 0) {
-        container.innerHTML = "<p>Coming Soon...</p>";
-        return;
-      }
-      let html = `<table><thead><tr><th>Username</th><th>Login Time</th></tr></thead><tbody>`;
-      logs.forEach(log => {
-        html += `<tr><td>${log.username}</td><td>${log.time}</td></tr>`;
-      });
-      html += `</tbody></table>`;
-      container.innerHTML = html;
-    }
-
-    function renderAdminLoginHistory() {
-      const logs = JSON.parse(localStorage.getItem("adminLoginHistory")) || [];
-      const container = document.getElementById("adminHistoryContainer");
-      if (logs.length === 0) {
-        container.innerHTML = "<p>Coming Soon...</p>";
-        return;
-      }
-      let html = `<table><thead><tr><th>Username</th><th>Login Time</th></tr></thead><tbody>`;
-      logs.forEach(log => {
-        html += `<tr><td>${log.username}</td><td>${log.time}</td></tr>`;
-      });
-      html += `</tbody></table>`;
-      container.innerHTML = html;
-    }
-
-    function logout() {
-      localStorage.removeItem("adminLoggedIn");
-      sessionStorage.removeItem("adminSessionLogged");
-      window.location.href = "admin-login.html";
-    }
-
-    renderRegisteredUsers();
-    renderRegisteredAdmins();
-    renderUserLoginHistory();
-    renderAdminLoginHistory();
-  </script>
-</body>
-</html>
+  input[type="text"],
+  input[type="date"],
+  input[type="time"] {
+    width: 100%;
+    padding: 6px;
+    margin: 4px 0 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+</style>
