@@ -325,6 +325,7 @@ window.onload = () => {
   renderRegisteredAdmins();
   renderUserLoginHistory();
   renderAdminLoginHistory();
+  renderEvents();
 };
 // Example structure to add a new upcoming event
 const upcomingEvents = JSON.parse(localStorage.getItem("upcomingEvents")) || [];
@@ -344,4 +345,74 @@ recentResults.push({
   runnerUp: "Leo Navarro"
 });
 localStorage.setItem("recentResults", JSON.stringify(recentResults));
+let events = JSON.parse(localStorage.getItem("upcomingEvents")) || [];
+
+function renderEvents() {
+  const container = document.getElementById("eventList");
+  container.innerHTML = "";
+  events.forEach((event, index) => {
+    container.innerHTML += `
+      <div>
+        <strong>${event.title}</strong> — ${event.date} @ ${event.location}
+        <button onclick="editEvent(${index})">✏️</button>
+        <button onclick="deleteEvent(${index})">❌</button>
+      </div>
+    `;
+  });
+}
+
+function openEventModal() {
+  document.getElementById("eventModal").style.display = "block";
+  document.getElementById("eventModalTitle").textContent = "Add Event";
+  document.getElementById("eventIndex").value = "";
+  document.getElementById("eventTitle").value = "";
+  document.getElementById("eventDate").value = "";
+  document.getElementById("eventLocation").value = "";
+}
+
+function closeEventModal() {
+  document.getElementById("eventModal").style.display = "none";
+}
+
+function saveEvent() {
+  const index = document.getElementById("eventIndex").value;
+  const title = document.getElementById("eventTitle").value;
+  const date = document.getElementById("eventDate").value;
+  const location = document.getElementById("eventLocation").value;
+
+  if (!title || !date || !location) {
+    alert("Please fill out all fields.");
+    return;
+  }
+
+  const newEvent = { title, date, location };
+
+  if (index === "") {
+    events.push(newEvent);
+  } else {
+    events[parseInt(index)] = newEvent;
+  }
+
+  localStorage.setItem("upcomingEvents", JSON.stringify(events));
+  closeEventModal();
+  renderEvents();
+}
+
+function editEvent(index) {
+  const event = events[index];
+  document.getElementById("eventIndex").value = index;
+  document.getElementById("eventTitle").value = event.title;
+  document.getElementById("eventDate").value = event.date;
+  document.getElementById("eventLocation").value = event.location;
+  document.getElementById("eventModalTitle").textContent = "Edit Event";
+  document.getElementById("eventModal").style.display = "block";
+}
+
+function deleteEvent(index) {
+  if (!confirm("Are you sure you want to delete this event?")) return;
+  events.splice(index, 1);
+  localStorage.setItem("upcomingEvents", JSON.stringify(events));
+  renderEvents();
+}
+
 
