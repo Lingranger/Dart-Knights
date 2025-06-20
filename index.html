@@ -19,6 +19,21 @@ You said:
 
   <div class="welcome-message" id="welcomeAdmin"></div>
 
+  <!-- Modal or Section in Admin Dashboard -->
+<div id="eventModal" style="display: none;">
+  <h3 id="eventModalTitle">Add Event</h3>
+  <input type="hidden" id="eventIndex">
+  <input type="text" id="eventTitle" placeholder="Event Title">
+  <input type="date" id="eventDate">
+  <input type="text" id="eventLocation" placeholder="Location">
+  <button onclick="saveEvent()">Save Event</button>
+  <button onclick="closeEventModal()">Cancel</button>
+</div>
+
+<button onclick="openEventModal()">➕ Add New Event</button>
+<div id="eventList"></div>
+
+
   <!-- 🔁 Match Schedule Section with Monthly Navigation -->
   <section id="matchScheduleSection">
     <h2>Manage Match Schedule</h2>
