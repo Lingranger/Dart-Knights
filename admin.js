@@ -326,3 +326,22 @@ window.onload = () => {
   renderUserLoginHistory();
   renderAdminLoginHistory();
 };
+// Example structure to add a new upcoming event
+const upcomingEvents = JSON.parse(localStorage.getItem("upcomingEvents")) || [];
+upcomingEvents.push({
+  title: "New Dart Masters 2025",
+  date: "October 10, 2025",
+  location: "Butuan City Dome"
+});
+localStorage.setItem("upcomingEvents", JSON.stringify(upcomingEvents));
+
+// Same goes for results
+const recentResults = JSON.parse(localStorage.getItem("recentResults")) || [];
+recentResults.push({
+  title: "Mindanao Clash – June 15",
+  winner: "Arvin Dela Peña",
+  score: "6–4",
+  runnerUp: "Leo Navarro"
+});
+localStorage.setItem("recentResults", JSON.stringify(recentResults));
+
