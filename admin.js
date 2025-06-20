@@ -7,7 +7,7 @@ if (localStorage.getItem("adminLoggedIn") !== "true") {
 const admin = JSON.parse(localStorage.getItem("admin"));
 document.getElementById("welcomeAdmin").textContent = `👑 Welcome, Admin ${admin?.name || "Unknown"}!`;
 
-// Save admin session history (once per session)
+// Save admin session login history
 if (!sessionStorage.getItem("adminSessionLogged")) {
   const history = JSON.parse(localStorage.getItem("adminHistory")) || [];
   history.push({
@@ -19,7 +19,7 @@ if (!sessionStorage.getItem("adminSessionLogged")) {
   sessionStorage.setItem("adminSessionLogged", "true");
 }
 
-// MATCH SCHEDULE (monthly based)
+// MATCH SCHEDULE
 let matchSchedule = JSON.parse(localStorage.getItem("matchSchedule")) || {};
 let currentDate = new Date();
 const monthYearEl = document.getElementById("monthYear");
@@ -50,7 +50,7 @@ function loadMatches() {
       <td>${match.location}</td>
       <td>
         <button onclick="editMatch(${index})">✏️</button>
-        <button onclick="deleteMatch(${index})">🔚️</button>
+        <button onclick="deleteMatch(${index})">🗑️</button>
       </td>
     `;
     matchTable.appendChild(row);
@@ -75,6 +75,8 @@ function openMatchModal() {
   document.getElementById("matchTime").value = "";
   document.getElementById("matchTeams").value = "";
   document.getElementById("matchLocation").value = "";
+  document.getElementById("matchTeamAImage").value = "";
+  document.getElementById("matchTeamBImage").value = "";
 }
 
 function closeMatchModal() {
@@ -87,13 +89,15 @@ function saveMatch() {
   const time = document.getElementById("matchTime").value;
   const teams = document.getElementById("matchTeams").value;
   const location = document.getElementById("matchLocation").value;
+  const teamAImage = document.getElementById("matchTeamAImage").value;
+  const teamBImage = document.getElementById("matchTeamBImage").value;
 
-  if (!date || !time || !teams || !location) {
+  if (!date || !time || !teams || !location || !teamAImage || !teamBImage) {
     alert("All fields are required.");
     return;
   }
 
-  const match = { date, time, teams, location };
+  const match = { date, time, teams, location, teamAImage, teamBImage };
   const key = getCurrentMonthKey();
 
   if (!matchSchedule[key]) {
@@ -119,6 +123,8 @@ function editMatch(index) {
   document.getElementById("matchTime").value = match.time;
   document.getElementById("matchTeams").value = match.teams;
   document.getElementById("matchLocation").value = match.location;
+  document.getElementById("matchTeamAImage").value = match.teamAImage || "";
+  document.getElementById("matchTeamBImage").value = match.teamBImage || "";
   document.getElementById("modalTitle").textContent = "Edit Match";
   document.getElementById("matchModal").style.display = "flex";
 }
@@ -132,6 +138,7 @@ function deleteMatch(index) {
   }
 }
 
+// MATCH LOGS
 function renderMatchLogs() {
   const logs = JSON.parse(localStorage.getItem("matchLogs")) || [];
   const table = document.getElementById("adminMatchLogsTableBody");
@@ -147,28 +154,24 @@ function renderMatchLogs() {
       <td>${log.winner}</td>
       <td>
         <button onclick="editLog(${index})">✏️</button>
-        <button onclick="deleteLog(${index})">🔚️</button>
+        <button onclick="deleteLog(${index})">🗑️</button>
       </td>
     `;
     table.appendChild(row);
   });
 }
 
-function renderMatchLogsWithMonth() {
-  renderMatchLogs(); // Placeholder for future month-based filtering
-}
-
 function openLogModal() {
   document.getElementById("logModal").style.display = "block";
-}
-
-function closeLogModal() {
-  document.getElementById("logModal").style.display = "none";
+  document.getElementById("logIndex").value = "";
   document.getElementById("logDate").value = "";
   document.getElementById("logPlayer").value = "";
   document.getElementById("logOpponent").value = "";
   document.getElementById("logWinner").value = "";
-  document.getElementById("logIndex").value = "";
+}
+
+function closeLogModal() {
+  document.getElementById("logModal").style.display = "none";
 }
 
 function addOrUpdateLog() {
@@ -218,6 +221,7 @@ function deleteLog(index) {
   renderMatchLogs();
 }
 
+// USERS & ADMINS
 function renderRegisteredUsers() {
   const users = JSON.parse(localStorage.getItem("users")) || [];
   const userTable = document.getElementById("userTableContainer");
@@ -319,7 +323,7 @@ function logout() {
 }
 
 window.onload = () => {
-  renderMatchLogsWithMonth();
+  renderMatchLogs();
   loadMatches();
   renderRegisteredUsers();
   renderRegisteredAdmins();
