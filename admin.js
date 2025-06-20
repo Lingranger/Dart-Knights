@@ -5,7 +5,7 @@ if (localStorage.getItem("adminLoggedIn") !== "true") {
 
 // Admin welcome message
 const admin = JSON.parse(localStorage.getItem("admin"));
-document.getElementById("welcomeAdmin").textContent = 👑 Welcome, Admin ${admin?.name || "Unknown"}!;
+document.getElementById("welcomeAdmin").textContent = `👑 Welcome, Admin ${admin?.name || "Unknown"}!`;
 
 // Save admin session history (once per session)
 if (!sessionStorage.getItem("adminSessionLogged")) {
@@ -37,13 +37,13 @@ function loadMatches() {
   const matches = matchSchedule[key] || [];
 
   if (matches.length === 0) {
-    matchTable.innerHTML = <tr><td colspan="5" class="no-users">No matches scheduled for ${key}.</td></tr>;
+    matchTable.innerHTML = `<tr><td colspan="5" class="no-users">No matches scheduled for ${key}.</td></tr>`;
     return;
   }
 
   matches.forEach((match, index) => {
     const row = document.createElement("tr");
-    row.innerHTML = 
+    row.innerHTML = `
       <td>${match.date}</td>
       <td>${match.time}</td>
       <td>${match.teams}</td>
@@ -52,7 +52,7 @@ function loadMatches() {
         <button onclick="editMatch(${index})">✏️</button>
         <button onclick="deleteMatch(${index})">🔚️</button>
       </td>
-    ;
+    `;
     matchTable.appendChild(row);
   });
 }
@@ -140,7 +140,7 @@ function renderMatchLogs() {
 
   logs.forEach((log, index) => {
     const row = document.createElement("tr");
-    row.innerHTML = 
+    row.innerHTML = `
       <td>${log.date}</td>
       <td>${log.player}</td>
       <td>${log.opponent}</td>
@@ -149,7 +149,7 @@ function renderMatchLogs() {
         <button onclick="editLog(${index})">✏️</button>
         <button onclick="deleteLog(${index})">🔚️</button>
       </td>
-    ;
+    `;
     table.appendChild(row);
   });
 }
@@ -226,20 +226,20 @@ function renderRegisteredUsers() {
   if (normalUsers.length === 0) {
     userTable.innerHTML = '<p class="no-users">No registered users found.</p>';
   } else {
-    let html = <table><thead><tr>
+    let html = `<table><thead><tr>
       <th>Full Name</th><th>Age</th><th>Gender</th><th>Team</th><th>Email</th><th>Signup Date</th>
-    </tr></thead><tbody>;
+    </tr></thead><tbody>`;
     normalUsers.forEach(user => {
-      html += <tr>
+      html += `<tr>
         <td>${user.name || "—"}</td>
         <td>${user.age || "—"}</td>
         <td>${user.gender || "—"}</td>
         <td>${user.team || "—"}</td>
         <td>${user.email || "—"}</td>
         <td>${user.signupDate || "—"}</td>
-      </tr>;
+      </tr>`;
     });
-    html += </tbody></table>;
+    html += `</tbody></table>`;
     userTable.innerHTML = html;
   }
 }
@@ -252,17 +252,17 @@ function renderRegisteredAdmins() {
   if (adminUsers.length === 0) {
     adminTable.innerHTML = '<p class="no-users">No registered admins found.</p>';
   } else {
-    let html = <table><thead><tr>
+    let html = `<table><thead><tr>
       <th>Full Name</th><th>Email</th><th>Signup Date</th>
-    </tr></thead><tbody>;
+    </tr></thead><tbody>`;
     adminUsers.forEach(admin => {
-      html += <tr>
+      html += `<tr>
         <td>${admin.name || "—"}</td>
         <td>${admin.email || "—"}</td>
         <td>${admin.signupDate || "—"}</td>
-      </tr>;
+      </tr>`;
     });
-    html += </tbody></table>;
+    html += `</tbody></table>`;
     adminTable.innerHTML = html;
   }
 }
@@ -274,18 +274,18 @@ function renderUserLoginHistory() {
   if (logins.length === 0) {
     container.innerHTML = '<p class="no-users">No user login history found.</p>';
   } else {
-    let html = <table><thead><tr>
+    let html = `<table><thead><tr>
       <th>Name</th><th>Email</th><th>Team</th><th>Login Time</th>
-    </tr></thead><tbody>;
+    </tr></thead><tbody>`;
     logins.forEach(log => {
-      html += <tr>
+      html += `<tr>
         <td>${log.name || "—"}</td>
         <td>${log.email || "—"}</td>
         <td>${log.team || "—"}</td>
         <td>${log.loginDate || "—"}</td>
-      </tr>;
+      </tr>`;
     });
-    html += </tbody></table>;
+    html += `</tbody></table>`;
     container.innerHTML = html;
   }
 }
@@ -297,17 +297,17 @@ function renderAdminLoginHistory() {
   if (logins.length === 0) {
     container.innerHTML = '<p class="no-users">No admin login history found.</p>';
   } else {
-    let html = <table><thead><tr>
+    let html = `<table><thead><tr>
       <th>Name</th><th>Email</th><th>Login Time</th>
-    </tr></thead><tbody>;
+    </tr></thead><tbody>`;
     logins.forEach(log => {
-      html += <tr>
+      html += `<tr>
         <td>${log.name || "—"}</td>
         <td>${log.email || "—"}</td>
         <td>${log.loginDate || "—"}</td>
-      </tr>;
+      </tr>`;
     });
-    html += </tbody></table>;
+    html += `</tbody></table>`;
     container.innerHTML = html;
   }
 }
@@ -325,4 +325,4 @@ window.onload = () => {
   renderRegisteredAdmins();
   renderUserLoginHistory();
   renderAdminLoginHistory();
-}; 
+};
