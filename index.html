@@ -19,22 +19,25 @@
   <div class="welcome-message" id="welcomeAdmin"></div>
 
  <!-- 🗓️ Manage Upcoming Events Section -->
+<!-- Event Management Section -->
 <section>
   <h2>Manage Upcoming Events</h2>
   <button onclick="openEventModal()">➕ Add Event</button>
-
-  <table id="eventTable">
+  <table style="width: 100%; margin-top: 10px; border-collapse: collapse;">
     <thead>
-      <tr>
-        <th>Title</th>
-        <th>Date</th>
-        <th>Location</th>
-        <th>Actions</th>
+      <tr style="background-color: #003366; color: white;">
+        <th style="padding: 8px;">Title</th>
+        <th style="padding: 8px;">Date</th>
+        <th style="padding: 8px;">Location</th>
+        <th style="padding: 8px;">Actions</th>
       </tr>
     </thead>
-    <tbody id="eventList"></tbody>
+    <tbody id="eventList">
+      <!-- JS will insert rows here -->
+    </tbody>
   </table>
 </section>
+
 
 <!-- 📋 Modal for Adding/Editing Event -->
 <div id="eventModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:#00000099; justify-content:center; align-items:center;">
