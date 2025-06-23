@@ -188,9 +188,6 @@
     <main>
       <h2>Upcoming Dart Events & Games</h2>
       <div class="events" id="upcomingEventsContainer"></div>
-
-      <h2 style="margin-top: 50px;">Recent Match Results</h2>
-      <div class="events" id="recentResultsContainer"></div>
     </main>
   </div>
 
@@ -199,7 +196,6 @@
   </footer>
 
   <script>
-    // Logout logic
     document.getElementById("logout-button").addEventListener("click", function (e) {
       e.preventDefault();
       const logoutTime = new Date().toISOString();
@@ -214,7 +210,6 @@
       window.location.href = "advertisement.html";
     });
 
-    // Load & Render Upcoming Events
     function renderUpcomingEvents() {
       const events = JSON.parse(localStorage.getItem("upcomingEvents")) || [];
       const container = document.getElementById("upcomingEventsContainer");
@@ -237,34 +232,8 @@
       });
     }
 
-    // Load & Render Recent Match Results
-    function renderRecentResults() {
-      const results = JSON.parse(localStorage.getItem("recentResults")) || [];
-      const container = document.getElementById("recentResultsContainer");
-      container.innerHTML = "";
-
-      if (results.length === 0) {
-        container.innerHTML = "<p>No recent match results available.</p>";
-        return;
-      }
-
-      results.forEach(result => {
-        const card = document.createElement("div");
-        card.className = "event-card";
-        card.innerHTML = `
-          <h3>${result.title}</h3>
-          <p><strong>Winner:</strong> ${result.winner}</p>
-          <p><strong>Score:</strong> ${result.score}</p>
-          <p><strong>Runner-Up:</strong> ${result.runnerUp}</p>
-        `;
-        container.appendChild(card);
-      });
-    }
-
-    // Initial load
     window.onload = function () {
       renderUpcomingEvents();
-      renderRecentResults();
     };
   </script>
 </body>
