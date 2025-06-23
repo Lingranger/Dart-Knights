@@ -199,61 +199,73 @@
   </footer>
 
   <script>
-    // Show admin link if logged in
-    if (localStorage.getItem("adminLoggedIn") === "true") {
-      document.getElementById("adminLink").style.display = "inline-block";
-    }
+    // Logout logic
+    document.getElementById("logout-button").addEventListener("click", function (e) {
+      e.preventDefault();
+      const logoutTime = new Date().toISOString();
+      localStorage.setItem("lastLogout", logoutTime);
+      localStorage.setItem("wasLoggedOut", "true");
 
-   document.getElementById("logout-button").addEventListener("click", function (e) {
-  e.preventDefault();
+      localStorage.removeItem("userLoggedIn");
+      sessionStorage.removeItem("userSessionLogged");
+      localStorage.removeItem("adminLoggedIn");
+      sessionStorage.removeItem("adminSession");
 
-  // Save logout info to localStorage
-  const logoutTime = new Date().toISOString();
-  localStorage.setItem("lastLogout", logoutTime);
-  localStorage.setItem("wasLoggedOut", "true");
-
-  // Clear session data
-  localStorage.removeItem("userLoggedIn");
-  sessionStorage.removeItem("userSessionLogged");
-  localStorage.removeItem("adminLoggedIn");
-  sessionStorage.removeItem("adminSession");
-
-  // Redirect to logout page
-  window.location.href = "advertisement.html";
-});
-
-
-    // Dynamic Event & Match Rendering
-    const upcomingEvents = JSON.parse(localStorage.getItem("upcomingEvents")) || [];
-    const matchResults = JSON.parse(localStorage.getItem("recentResults")) || [];
-
-    const upcomingContainer = document.getElementById("upcomingEventsContainer");
-    const resultsContainer = document.getElementById("recentResultsContainer");
-
-    function renderEventCard(title, date, location) {
-      return `<div class="event-card">
-        <h3>${title}</h3>
-        <p><strong>Date:</strong> ${date}</p>
-        <p><strong>Location:</strong> ${location}</p>
-      </div>`;
-    }
-
-    function renderResultCard(title, winner, score, runnerUp) {
-      return `<div class="event-card">
-        <h3>${title}</h3>
-        <p><strong>Winner:</strong> ${winner}</p>
-        <p><strong>Score:</strong> ${score}</p>
-        <p><strong>Runner-Up:</strong> ${runnerUp}</p>
-      </div>`;
-    }
-
-    upcomingEvents.forEach(event => {
-      upcomingContainer.innerHTML += renderEventCard(event.title, event.date, event.location);
+      window.location.href = "advertisement.html";
     });
 
-    matchResults.forEach(result => {
-      resultsContainer.innerHTML += renderResultCard(result.title, result.winner, result.score, result.runnerUp);
-    });
+    // Load & Render Upcoming Events
+    function renderUpcomingEvents() {
+      const events = JSON.parse(localStorage.getItem("upcomingEvents")) || [];
+      const container = document.getElementById("upcomingEventsContainer");
+      container.innerHTML = "";
+
+      if (events.length === 0) {
+        container.innerHTML = "<p>No upcoming events available.</p>";
+        return;
+      }
+
+      events.forEach(event => {
+        const card = document.createElement("div");
+        card.className = "event-card";
+        card.innerHTML = `
+          <h3>${event.title}</h3>
+          <p><strong>Date:</strong> ${event.date}</p>
+          <p><strong>Location:</strong> ${event.location}</p>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Load & Render Recent Match Results
+    function renderRecentResults() {
+      const results = JSON.parse(localStorage.getItem("recentResults")) || [];
+      const container = document.getElementById("recentResultsContainer");
+      container.innerHTML = "";
+
+      if (results.length === 0) {
+        container.innerHTML = "<p>No recent match results available.</p>";
+        return;
+      }
+
+      results.forEach(result => {
+        const card = document.createElement("div");
+        card.className = "event-card";
+        card.innerHTML = `
+          <h3>${result.title}</h3>
+          <p><strong>Winner:</strong> ${result.winner}</p>
+          <p><strong>Score:</strong> ${result.score}</p>
+          <p><strong>Runner-Up:</strong> ${result.runnerUp}</p>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Initial load
+    window.onload = function () {
+      renderUpcomingEvents();
+      renderRecentResults();
+    };
   </script>
 </body>
 </html>
