@@ -182,7 +182,6 @@
       <a href="contact.html">Contact</a>
       <a href="match-schedule.html">Match Schedule</a>
       <a href="match-logs.html">Match Logs</a>
-      <a href="admin-dashboard.html" id="adminLink" style="display: none; color: #f94144;">Admin Dashboard</a>
       <a href="#" id="logout-button" style="color: #ffb703;">Logout</a>
     </nav>
 
@@ -205,15 +204,24 @@
       document.getElementById("adminLink").style.display = "inline-block";
     }
 
-    // Logout logic
-    document.getElementById("logout-button").addEventListener("click", function (e) {
-      e.preventDefault();
-      localStorage.removeItem("userLoggedIn");
-      sessionStorage.removeItem("userSessionLogged");
-      localStorage.removeItem("adminLoggedIn");
-      sessionStorage.removeItem("adminSession");
-      window.location.href = "advertisement.html";
-    });
+   document.getElementById("logout-button").addEventListener("click", function (e) {
+  e.preventDefault();
+
+  // Save logout info to localStorage
+  const logoutTime = new Date().toISOString();
+  localStorage.setItem("lastLogout", logoutTime);
+  localStorage.setItem("wasLoggedOut", "true");
+
+  // Clear session data
+  localStorage.removeItem("userLoggedIn");
+  sessionStorage.removeItem("userSessionLogged");
+  localStorage.removeItem("adminLoggedIn");
+  sessionStorage.removeItem("adminSession");
+
+  // Redirect to logout page
+  window.location.href = "advertisement.html";
+});
+
 
     // Dynamic Event & Match Rendering
     const upcomingEvents = JSON.parse(localStorage.getItem("upcomingEvents")) || [];
