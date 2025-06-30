@@ -68,6 +68,7 @@ let matchSchedule = JSON.parse(localStorage.getItem("matchSchedule")) || default
 let matchLogs = JSON.parse(localStorage.getItem("matchLogs")) || defaultMatchLogs;
 let users = JSON.parse(localStorage.getItem("users")) || defaultUsers;
 
+// ✅ Save if it was missing before
 localStorage.setItem("upcomingEvents", JSON.stringify(events));
 localStorage.setItem("matchSchedule", JSON.stringify(matchSchedule));
 localStorage.setItem("matchLogs", JSON.stringify(matchLogs));
@@ -154,10 +155,7 @@ function deleteEvent(index) {
 }
 
 // ✅ MATCH SCHEDULE (persistent month)
-let currentDate = localStorage.getItem("adminMatchScheduleMonth")
-  ? new Date(localStorage.getItem("adminMatchScheduleMonth"))
-  : new Date();
-
+let currentDate = new Date(localStorage.getItem("adminMatchScheduleMonth") || new Date());
 const monthYearEl = document.getElementById("monthYear");
 const matchTable = document.querySelector("#matchScheduleTable tbody");
 
@@ -270,10 +268,8 @@ function deleteMatch(index) {
   }
 }
 
-// ✅ MATCH LOGS (persistent month & heading)
-let currentLogDate = localStorage.getItem("adminMatchLogMonth")
-  ? new Date(localStorage.getItem("adminMatchLogMonth"))
-  : new Date();
+// ✅ MATCH LOGS (persistent month)
+let currentLogDate = new Date(localStorage.getItem("adminMatchLogMonth") || new Date());
 
 function getCurrentLogMonthKey() {
   return currentLogDate.toLocaleDateString("en-US", { month: "long", year: "numeric" });
@@ -283,11 +279,6 @@ function renderMatchLogs() {
   const table = document.getElementById("adminMatchLogsTableBody");
   if (!table) return;
   table.innerHTML = "";
-
-  const logMonthYearEl = document.getElementById("logMonthYear");
-  if (logMonthYearEl) {
-    logMonthYearEl.textContent = getCurrentLogMonthKey();
-  }
 
   const logs = matchLogs.filter(log => {
     const logMonth = new Date(log.date).toLocaleDateString("en-US", { month: "long", year: "numeric" });
@@ -321,8 +312,161 @@ function changeLogMonth(direction) {
   renderMatchLogs();
 }
 
-// ✅ Log CRUD...
-// Keep your log CRUD code here as-is!
+function openLogModal() {
+  document.getElementById("logModal").style.display = "block";
+}
+
+function closeLogModal() {
+  document.getElementById("logModal").style.display = "none";
+  document.getElementById("logDate").value = "";
+  document.getElementById("logPlayer").value = "";
+  document.getElementById("logOpponent").value = "";
+  document.getElementById("logWinner").value = "";
+  document.getElementById("logIndex").value = "";
+}
+
+function addOrUpdateLog() {
+  const date = document.getElementById("logDate").value;
+  const player = document.getElementById("logPlayer").value;
+  const opponent = document.getElementById("logOpponent").value;
+  const winner = document.getElementById("logWinner").value;
+  const index = document.getElementById("logIndex").value;
+
+  if (!date || !player || !opponent || !winner) {
+    alert("Please fill all fields.");
+    return;
+  }
+
+  const newLog = { date, player, opponent, winner };
+
+  if (index === "") {
+    matchLogs.push(newLog);
+  } else {
+    matchLogs[parseInt(index)] = newLog;
+  }
+
+  localStorage.setItem("matchLogs", JSON.stringify(matchLogs));
+  closeLogModal();
+  renderMatchLogs();
+}
+
+function editLog(index) {
+  const log = matchLogs[index];
+  document.getElementById("logDate").value = log.date;
+  document.getElementById("logPlayer").value = log.player;
+  document.getElementById("logOpponent").value = log.opponent;
+  document.getElementById("logWinner").value = log.winner;
+  document.getElementById("logIndex").value = index;
+
+  openLogModal();
+}
+
+function deleteLog(index) {
+  if (!confirm("Delete this log?")) return;
+  matchLogs.splice(index, 1);
+  localStorage.setItem("matchLogs", JSON.stringify(matchLogs));
+  renderMatchLogs();
+}
+
+// ✅ USERS & ADMINS
+function renderRegisteredUsers() {
+  const userTable = document.getElementById("userTableContainer");
+  const normalUsers = users.filter(user => user.role !== "admin");
+
+  if (normalUsers.length === 0) {
+    userTable.innerHTML = '<p class="no-users">No registered users found.</p>';
+  } else {
+    let html = `<table><thead><tr>
+      <th>Full Name</th><th>Age</th><th>Gender</th><th>Team</th><th>Email</th><th>Signup Date</th>
+    </tr></thead><tbody>`;
+    normalUsers.forEach(user => {
+      html += `<tr>
+        <td>${user.name || "—"}</td>
+        <td>${user.age || "—"}</td>
+        <td>${user.gender || "—"}</td>
+        <td>${user.team || "—"}</td>
+        <td>${user.email || "—"}</td>
+        <td>${user.signupDate || "—"}</td>
+      </tr>`;
+    });
+    html += `</tbody></table>`;
+    userTable.innerHTML = html;
+  }
+}
+
+function renderRegisteredAdmins() {
+  const adminTable = document.getElementById("adminTableContainer");
+  const adminUsers = users.filter(user => user.role === "admin");
+
+  if (adminUsers.length === 0) {
+    adminTable.innerHTML = '<p class="no-users">No registered admins found.</p>';
+  } else {
+    let html = `<table><thead><tr>
+      <th>Full Name</th><th>Email</th><th>Signup Date</th>
+    </tr></thead><tbody>`;
+    adminUsers.forEach(admin => {
+      html += `<tr>
+        <td>${admin.name || "—"}</td>
+        <td>${admin.email || "—"}</td>
+        <td>${admin.signupDate || "—"}</td>
+      </tr>`;
+    });
+    html += `</tbody></table>`;
+    adminTable.innerHTML = html;
+  }
+}
+
+function renderUserLoginHistory() {
+  const logins = JSON.parse(localStorage.getItem("userLoginHistory")) || [];
+  const container = document.getElementById("userLoginHistoryContainer");
+
+  if (logins.length === 0) {
+    container.innerHTML = '<p class="no-users">No user login history found.</p>';
+  } else {
+    let html = `<table><thead><tr>
+      <th>Name</th><th>Email</th><th>Team</th><th>Login Time</th>
+    </tr></thead><tbody>`;
+    logins.forEach(log => {
+      html += `<tr>
+        <td>${log.name || "—"}</td>
+        <td>${log.email || "—"}</td>
+        <td>${log.team || "—"}</td>
+        <td>${log.loginDate || "—"}</td>
+      </tr>`;
+    });
+    html += `</tbody></table>`;
+    container.innerHTML = html;
+  }
+}
+
+function renderAdminLoginHistory() {
+  const logins = JSON.parse(localStorage.getItem("adminHistory")) || [];
+  const container = document.getElementById("adminHistoryContainer");
+
+  if (logins.length === 0) {
+    container.innerHTML = '<p class="no-users">No admin login history found.</p>';
+  } else {
+    let html = `<table><thead><tr>
+      <th>Name</th><th>Email</th><th>Login Time</th>
+    </tr></thead><tbody>`;
+    logins.forEach(log => {
+      html += `<tr>
+        <td>${log.name || "—"}</td>
+        <td>${log.email || "—"}</td>
+        <td>${log.loginDate || "—"}</td>
+      </tr>`;
+    });
+    html += `</tbody></table>`;
+    container.innerHTML = html;
+  }
+}
+
+// ✅ LOGOUT
+function logout() {
+  localStorage.removeItem("adminLoggedIn");
+  sessionStorage.removeItem("adminSessionLogged");
+  window.location.href = "advertisement.html";
+}
 
 // ✅ Final init
 window.onload = () => {
