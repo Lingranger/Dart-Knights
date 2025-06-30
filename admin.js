@@ -7,7 +7,7 @@ if (localStorage.getItem("adminLoggedIn") !== "true") {
 const admin = JSON.parse(localStorage.getItem("admin"));
 document.getElementById("welcomeAdmin").textContent = `👑 Welcome, Admin ${admin?.name || "Unknown"}!`;
 
-// ✅ 3) Save admin session login history once per session
+// ✅ 3) Save admin login history once per session
 if (!sessionStorage.getItem("adminSessionLogged")) {
   const history = JSON.parse(localStorage.getItem("adminHistory")) || [];
   history.push({
@@ -19,71 +19,66 @@ if (!sessionStorage.getItem("adminSessionLogged")) {
   sessionStorage.setItem("adminSessionLogged", "true");
 }
 
-// ✅ 4) SAFE fallback defaults — only once!
-const defaultEvents = [
-  { title: "Opening Tournament", date: "2025-07-15", location: "Butuan City Dome" }
-];
+// ✅ 4) Set fallback data **ONLY if no data yet**
+if (!localStorage.getItem("upcomingEvents")) {
+  const defaultEvents = [
+    { title: "Opening Tournament", date: "2025-07-15", location: "Butuan City Dome" }
+  ];
+  localStorage.setItem("upcomingEvents", JSON.stringify(defaultEvents));
+}
 
-const defaultMatchSchedule = {
-  [new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" })]: [
+if (!localStorage.getItem("matchSchedule")) {
+  const defaultSchedule = {
+    [new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" })]: [
+      {
+        date: new Date().toISOString().split("T")[0],
+        time: "18:00",
+        teams: "Team Alpha vs Team Beta",
+        location: "Butuan City Dome"
+      }
+    ]
+  };
+  localStorage.setItem("matchSchedule", JSON.stringify(defaultSchedule));
+}
+
+if (!localStorage.getItem("matchLogs")) {
+  const defaultLogs = [
     {
       date: new Date().toISOString().split("T")[0],
-      time: "18:00",
-      teams: "Team Alpha vs Team Beta",
-      location: "Butuan City Dome"
+      player: "John Doe",
+      opponent: "Jane Smith",
+      winner: "John Doe"
     }
-  ]
-};
+  ];
+  localStorage.setItem("matchLogs", JSON.stringify(defaultLogs));
+}
 
-const defaultMatchLogs = [
-  {
-    date: new Date().toISOString().split("T")[0],
-    player: "John Doe",
-    opponent: "Jane Smith",
-    winner: "John Doe"
-  }
-];
+if (!localStorage.getItem("users")) {
+  const defaultUsers = [
+    {
+      name: "Admin",
+      email: "admin@example.com",
+      role: "admin",
+      signupDate: new Date().toLocaleDateString()
+    }
+  ];
+  localStorage.setItem("users", JSON.stringify(defaultUsers));
+}
 
-const defaultUsers = [
-  {
-    name: "Admin",
-    email: "admin@example.com",
-    role: "admin",
-    signupDate: new Date().toLocaleDateString()
-  },
-  {
-    name: "Sample Player",
-    age: 25,
-    gender: "Male",
-    team: "Alpha",
-    email: "player@example.com",
-    role: "user",
-    signupDate: new Date().toLocaleDateString()
-  }
-];
+// ✅ Now safely load
+let events = JSON.parse(localStorage.getItem("upcomingEvents"));
+let matchSchedule = JSON.parse(localStorage.getItem("matchSchedule"));
+let matchLogs = JSON.parse(localStorage.getItem("matchLogs"));
+let users = JSON.parse(localStorage.getItem("users"));
 
-// ✅ Load or fallback
-let events = localStorage.getItem("upcomingEvents")
-  ? JSON.parse(localStorage.getItem("upcomingEvents"))
-  : defaultEvents;
+// ✅ Safe month state
+let currentDate = localStorage.getItem("adminMatchScheduleMonth")
+  ? new Date(localStorage.getItem("adminMatchScheduleMonth"))
+  : new Date();
 
-let matchSchedule = localStorage.getItem("matchSchedule")
-  ? JSON.parse(localStorage.getItem("matchSchedule"))
-  : defaultMatchSchedule;
-
-let matchLogs = localStorage.getItem("matchLogs")
-  ? JSON.parse(localStorage.getItem("matchLogs"))
-  : defaultMatchLogs;
-
-let users = localStorage.getItem("users")
-  ? JSON.parse(localStorage.getItem("users"))
-  : defaultUsers;
-
-// ✅ Save if it was missing before
-localStorage.setItem("upcomingEvents", JSON.stringify(events));
-localStorage.setItem("matchSchedule", JSON.stringify(matchSchedule));
-localStorage.setItem("matchLogs", JSON.stringify(matchLogs));
-localStorage.setItem("users", JSON.stringify(users));
+let currentLogDate = localStorage.getItem("adminMatchLogMonth")
+  ? new Date(localStorage.getItem("adminMatchLogMonth"))
+  : new Date();
 
 // ✅ EVENTS
 function renderEvents() {
@@ -165,11 +160,7 @@ function deleteEvent(index) {
   renderEvents();
 }
 
-// ✅ MATCH SCHEDULE — use ISO
-let currentDate = localStorage.getItem("adminMatchScheduleMonth")
-  ? new Date(localStorage.getItem("adminMatchScheduleMonth"))
-  : new Date();
-
+// ✅ MATCH SCHEDULE
 const monthYearEl = document.getElementById("monthYear");
 const matchTable = document.querySelector("#matchScheduleTable tbody");
 
@@ -185,7 +176,7 @@ function loadMatches() {
   const matches = matchSchedule[key] || [];
 
   if (matches.length === 0) {
-    matchTable.innerHTML = `<tr><td colspan="5" class="no-users">No matches scheduled for ${key}.</td></tr>`;
+    matchTable.innerHTML = `<tr><td colspan="5">No matches for ${key}.</td></tr>`;
     return;
   }
 
@@ -217,11 +208,7 @@ function nextMonth() {
   loadMatches();
 }
 
-// ✅ MATCH LOGS — use ISO
-let currentLogDate = localStorage.getItem("adminMatchLogMonth")
-  ? new Date(localStorage.getItem("adminMatchLogMonth"))
-  : new Date();
-
+// ✅ LOGS
 function getCurrentLogMonthKey() {
   return currentLogDate.toLocaleDateString("en-US", { month: "long", year: "numeric" });
 }
@@ -237,7 +224,7 @@ function renderMatchLogs() {
   });
 
   if (logs.length === 0) {
-    table.innerHTML = `<tr><td colspan="5" class="no-users">No logs for ${getCurrentLogMonthKey()}.</td></tr>`;
+    table.innerHTML = `<tr><td colspan="5">No logs for ${getCurrentLogMonthKey()}.</td></tr>`;
     return;
   }
 
@@ -257,21 +244,21 @@ function renderMatchLogs() {
   });
 }
 
-function changeLogMonth(direction) {
-  currentLogDate.setMonth(currentLogDate.getMonth() + direction);
+function prevLogMonth() {
+  currentLogDate.setMonth(currentLogDate.getMonth() - 1);
   localStorage.setItem("adminMatchLogMonth", currentLogDate.toISOString());
   renderMatchLogs();
 }
 
-// ✅ REMAINING CRUD same
-// ✅ Add your CRUD for logs/users/admins/login/logout here unchanged
+function nextLogMonth() {
+  currentLogDate.setMonth(currentLogDate.getMonth() + 1);
+  localStorage.setItem("adminMatchLogMonth", currentLogDate.toISOString());
+  renderMatchLogs();
+}
 
+// ✅ INIT
 window.onload = () => {
   renderEvents();
   loadMatches();
   renderMatchLogs();
-  renderRegisteredUsers();
-  renderRegisteredAdmins();
-  renderUserLoginHistory();
-  renderAdminLoginHistory();
 };
