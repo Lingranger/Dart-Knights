@@ -1,13 +1,13 @@
-// ✅ Redirect if not logged in
+// ✅ 1) Check admin login
 if (localStorage.getItem("adminLoggedIn") !== "true") {
   window.location.href = "admin-login.html";
 }
 
-// ✅ Admin welcome message
+// ✅ 2) Show admin welcome
 const admin = JSON.parse(localStorage.getItem("admin"));
 document.getElementById("welcomeAdmin").textContent = `👑 Welcome, Admin ${admin?.name || "Unknown"}!`;
 
-// ✅ Save admin session history (once per session)
+// ✅ 3) Save admin session login history once per session
 if (!sessionStorage.getItem("adminSessionLogged")) {
   const history = JSON.parse(localStorage.getItem("adminHistory")) || [];
   history.push({
@@ -19,9 +19,61 @@ if (!sessionStorage.getItem("adminSessionLogged")) {
   sessionStorage.setItem("adminSessionLogged", "true");
 }
 
-// ✅ EVENT MANAGEMENT
-let events = JSON.parse(localStorage.getItem("upcomingEvents")) || [];
+// ✅ 4) SAFE fallback defaults
+const defaultEvents = [
+  { title: "Opening Tournament", date: "2025-07-15", location: "Butuan City Dome" }
+];
 
+const defaultMatchSchedule = {
+  [new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" })]: [
+    {
+      date: new Date().toISOString().split("T")[0],
+      time: "18:00",
+      teams: "Team Alpha vs Team Beta",
+      location: "Butuan City Dome"
+    }
+  ]
+};
+
+const defaultMatchLogs = [
+  {
+    date: new Date().toISOString().split("T")[0],
+    player: "John Doe",
+    opponent: "Jane Smith",
+    winner: "John Doe"
+  }
+];
+
+const defaultUsers = [
+  {
+    name: "Admin",
+    email: "admin@example.com",
+    role: "admin",
+    signupDate: new Date().toLocaleDateString()
+  },
+  {
+    name: "Sample Player",
+    age: 25,
+    gender: "Male",
+    team: "Alpha",
+    email: "player@example.com",
+    role: "user",
+    signupDate: new Date().toLocaleDateString()
+  }
+];
+
+// ✅ Load or fallback
+let events = JSON.parse(localStorage.getItem("upcomingEvents")) || defaultEvents;
+let matchSchedule = JSON.parse(localStorage.getItem("matchSchedule")) || defaultMatchSchedule;
+let matchLogs = JSON.parse(localStorage.getItem("matchLogs")) || defaultMatchLogs;
+let users = JSON.parse(localStorage.getItem("users")) || defaultUsers;
+
+localStorage.setItem("upcomingEvents", JSON.stringify(events));
+localStorage.setItem("matchSchedule", JSON.stringify(matchSchedule));
+localStorage.setItem("matchLogs", JSON.stringify(matchLogs));
+localStorage.setItem("users", JSON.stringify(users));
+
+// ✅ EVENTS
 function renderEvents() {
   const container = document.getElementById("eventList");
   if (!container) return;
@@ -101,8 +153,7 @@ function deleteEvent(index) {
   renderEvents();
 }
 
-// ✅ MATCH SCHEDULE (monthly)
-let matchSchedule = JSON.parse(localStorage.getItem("matchSchedule")) || {};
+// ✅ MATCH SCHEDULE
 let currentDate = new Date();
 const monthYearEl = document.getElementById("monthYear");
 const matchTable = document.querySelector("#matchScheduleTable tbody");
@@ -132,7 +183,7 @@ function loadMatches() {
       <td>${match.location}</td>
       <td>
         <button onclick="editMatch(${index})">✏️</button>
-        <button onclick="deleteMatch(${index})">🔚️</button>
+        <button onclick="deleteMatch(${index})">❌</button>
       </td>
     `;
     matchTable.appendChild(row);
@@ -214,40 +265,31 @@ function deleteMatch(index) {
   }
 }
 
-// ✅ MATCH LOGS with Monthly Navigation
-let logCurrentDate = new Date();
-
-function updateLogMonthYear() {
-  const options = { month: 'long', year: 'numeric' };
-  document.getElementById('logMonthYear').textContent = logCurrentDate.toLocaleDateString(undefined, options);
+// ✅ MATCH LOGS with month filter
+let currentLogDate = new Date();
+function getCurrentLogMonthKey() {
+  return currentLogDate.toLocaleDateString("en-US", { month: "long", year: "numeric" });
 }
 
-function changeLogMonth(offset) {
-  logCurrentDate.setMonth(logCurrentDate.getMonth() + offset);
-  updateLogMonthYear();
-  renderMatchLogsWithMonth();
-}
+function renderMatchLogs() {
+  const key = getCurrentLogMonthKey();
+  document.getElementById("logMonthYear").textContent = key;
 
-function renderMatchLogsWithMonth() {
-  const allLogs = JSON.parse(localStorage.getItem("matchLogs")) || [];
   const table = document.getElementById("adminMatchLogsTableBody");
   if (!table) return;
   table.innerHTML = "";
 
-  const selectedMonth = logCurrentDate.getMonth();
-  const selectedYear = logCurrentDate.getFullYear();
-
-  const filteredLogs = allLogs.filter(log => {
-    const logDate = new Date(log.date);
-    return logDate.getMonth() === selectedMonth && logDate.getFullYear() === selectedYear;
+  const logsToShow = matchLogs.filter(log => {
+    const logMonthKey = new Date(log.date).toLocaleDateString("en-US", { month: "long", year: "numeric" });
+    return logMonthKey === key;
   });
 
-  if (filteredLogs.length === 0) {
-    table.innerHTML = `<tr><td colspan="5">No logs for this month.</td></tr>`;
+  if (logsToShow.length === 0) {
+    table.innerHTML = `<tr><td colspan="5" class="no-users">No logs for ${key}.</td></tr>`;
     return;
   }
 
-  filteredLogs.forEach((log, index) => {
+  logsToShow.forEach((log, index) => {
     const row = document.createElement("tr");
     row.innerHTML = `
       <td>${log.date}</td>
@@ -256,11 +298,16 @@ function renderMatchLogsWithMonth() {
       <td>${log.winner}</td>
       <td>
         <button onclick="editLog(${index})">✏️</button>
-        <button onclick="deleteLog(${index})">🔚️</button>
+        <button onclick="deleteLog(${index})">❌</button>
       </td>
     `;
     table.appendChild(row);
   });
+}
+
+function changeLogMonth(direction) {
+  currentLogDate.setMonth(currentLogDate.getMonth() + direction);
+  renderMatchLogs();
 }
 
 function openLogModal() {
@@ -288,24 +335,21 @@ function addOrUpdateLog() {
     return;
   }
 
-  const logs = JSON.parse(localStorage.getItem("matchLogs")) || [];
   const newLog = { date, player, opponent, winner };
 
   if (index === "") {
-    logs.push(newLog);
+    matchLogs.push(newLog);
   } else {
-    logs[parseInt(index)] = newLog;
+    matchLogs[parseInt(index)] = newLog;
   }
 
-  localStorage.setItem("matchLogs", JSON.stringify(logs));
+  localStorage.setItem("matchLogs", JSON.stringify(matchLogs));
   closeLogModal();
-  renderMatchLogsWithMonth();
+  renderMatchLogs();
 }
 
 function editLog(index) {
-  const logs = JSON.parse(localStorage.getItem("matchLogs")) || [];
-  const log = logs[index];
-
+  const log = matchLogs[index];
   document.getElementById("logDate").value = log.date;
   document.getElementById("logPlayer").value = log.player;
   document.getElementById("logOpponent").value = log.opponent;
@@ -317,15 +361,13 @@ function editLog(index) {
 
 function deleteLog(index) {
   if (!confirm("Delete this log?")) return;
-  const logs = JSON.parse(localStorage.getItem("matchLogs")) || [];
-  logs.splice(index, 1);
-  localStorage.setItem("matchLogs", JSON.stringify(logs));
-  renderMatchLogsWithMonth();
+  matchLogs.splice(index, 1);
+  localStorage.setItem("matchLogs", JSON.stringify(matchLogs));
+  renderMatchLogs();
 }
 
-// ✅ USER/ADMIN TABLES & HISTORY
+// ✅ USERS & ADMINS
 function renderRegisteredUsers() {
-  const users = JSON.parse(localStorage.getItem("users")) || [];
   const userTable = document.getElementById("userTableContainer");
   const normalUsers = users.filter(user => user.role !== "admin");
 
@@ -351,7 +393,6 @@ function renderRegisteredUsers() {
 }
 
 function renderRegisteredAdmins() {
-  const users = JSON.parse(localStorage.getItem("users")) || [];
   const adminTable = document.getElementById("adminTableContainer");
   const adminUsers = users.filter(user => user.role === "admin");
 
@@ -373,6 +414,7 @@ function renderRegisteredAdmins() {
   }
 }
 
+// ✅ USER LOGIN HISTORY
 function renderUserLoginHistory() {
   const logins = JSON.parse(localStorage.getItem("userLoginHistory")) || [];
   const container = document.getElementById("userLoginHistoryContainer");
@@ -396,6 +438,7 @@ function renderUserLoginHistory() {
   }
 }
 
+// ✅ ADMIN LOGIN HISTORY
 function renderAdminLoginHistory() {
   const logins = JSON.parse(localStorage.getItem("adminHistory")) || [];
   const container = document.getElementById("adminHistoryContainer");
@@ -418,18 +461,17 @@ function renderAdminLoginHistory() {
   }
 }
 
-// ✅ Logout
+// ✅ LOGOUT
 function logout() {
   localStorage.removeItem("adminLoggedIn");
   sessionStorage.removeItem("adminSessionLogged");
   window.location.href = "advertisement.html";
 }
 
-// ✅ Init
+// ✅ INIT
 window.onload = () => {
   renderEvents();
-  updateLogMonthYear();
-  renderMatchLogsWithMonth();
+  renderMatchLogs();
   loadMatches();
   renderRegisteredUsers();
   renderRegisteredAdmins();
