@@ -154,7 +154,7 @@ function deleteEvent(index) {
   renderEvents();
 }
 
-// ✅ MATCH SCHEDULE (persistent month)
+// ✅ MATCH SCHEDULE
 let currentDate = new Date(localStorage.getItem("adminMatchScheduleMonth") || new Date());
 const monthYearEl = document.getElementById("monthYear");
 const matchTable = document.querySelector("#matchScheduleTable tbody");
@@ -268,7 +268,7 @@ function deleteMatch(index) {
   }
 }
 
-// ✅ MATCH LOGS (persistent month)
+// ✅ MATCH LOGS
 let currentLogDate = new Date(localStorage.getItem("adminMatchLogMonth") || new Date());
 
 function getCurrentLogMonthKey() {
@@ -471,8 +471,8 @@ function logout() {
 // ✅ Final init
 window.onload = () => {
   renderEvents();
-  renderMatchLogs();
   loadMatches();
+  renderMatchLogs();
   renderRegisteredUsers();
   renderRegisteredAdmins();
   renderUserLoginHistory();
