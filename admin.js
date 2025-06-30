@@ -276,6 +276,7 @@ function getCurrentLogMonthKey() {
 }
 
 function renderMatchLogs() {
+  document.getElementById("logMonthYear").textContent = getCurrentLogMonthKey();
   const table = document.getElementById("adminMatchLogsTableBody");
   if (!table) return;
   table.innerHTML = "";
