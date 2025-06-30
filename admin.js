@@ -101,10 +101,8 @@ function deleteEvent(index) {
   renderEvents();
 }
 
-// ✅ MATCH SCHEDULE (monthly)
+// ✅ MATCH SCHEDULE with persistent month
 let matchSchedule = JSON.parse(localStorage.getItem("matchSchedule")) || {};
-
-// ✅ Restore saved month/year for match schedule
 let currentDate = localStorage.getItem("matchScheduleCurrentDate")
   ? new Date(localStorage.getItem("matchScheduleCurrentDate"))
   : new Date();
@@ -155,7 +153,6 @@ function nextMonth() {
   localStorage.setItem("matchScheduleCurrentDate", currentDate.toISOString());
   loadMatches();
 }
-
 
 function openMatchModal() {
   document.getElementById("matchModal").style.display = "flex";
@@ -222,15 +219,14 @@ function deleteMatch(index) {
   }
 }
 
-// ✅ MATCH LOGS with Monthly Navigation
-// ✅ Restore saved month/year for match logs
+// ✅ MATCH LOGS with persistent month
 let logCurrentDate = localStorage.getItem("logCurrentDate")
   ? new Date(localStorage.getItem("logCurrentDate"))
   : new Date();
 
 function updateLogMonthYear() {
-  const options = { month: 'long', year: 'numeric' };
-  document.getElementById('logMonthYear').textContent = logCurrentDate.toLocaleDateString(undefined, options);
+  document.getElementById("logMonthYear").textContent =
+    logCurrentDate.toLocaleDateString("en-US", { month: "long", year: "numeric" });
 }
 
 function changeLogMonth(offset) {
@@ -240,28 +236,13 @@ function changeLogMonth(offset) {
   renderMatchLogsWithMonth();
 }
 
-}
-
-function renderMatchLogsWithMonth() {
-  const allLogs = JSON.parse(localStorage.getItem("matchLogs")) || [];
+function renderMatchLogs() {
+  const logs = JSON.parse(localStorage.getItem("matchLogs")) || [];
   const table = document.getElementById("adminMatchLogsTableBody");
   if (!table) return;
   table.innerHTML = "";
 
-  const selectedMonth = logCurrentDate.getMonth();
-  const selectedYear = logCurrentDate.getFullYear();
-
-  const filteredLogs = allLogs.filter(log => {
-    const logDate = new Date(log.date);
-    return logDate.getMonth() === selectedMonth && logDate.getFullYear() === selectedYear;
-  });
-
-  if (filteredLogs.length === 0) {
-    table.innerHTML = `<tr><td colspan="5">No logs for this month.</td></tr>`;
-    return;
-  }
-
-  filteredLogs.forEach((log, index) => {
+  logs.forEach((log, index) => {
     const row = document.createElement("tr");
     row.innerHTML = `
       <td>${log.date}</td>
@@ -275,6 +256,11 @@ function renderMatchLogsWithMonth() {
     `;
     table.appendChild(row);
   });
+}
+
+function renderMatchLogsWithMonth() {
+  updateLogMonthYear();
+  renderMatchLogs();
 }
 
 function openLogModal() {
@@ -313,7 +299,7 @@ function addOrUpdateLog() {
 
   localStorage.setItem("matchLogs", JSON.stringify(logs));
   closeLogModal();
-  renderMatchLogsWithMonth();
+  renderMatchLogs();
 }
 
 function editLog(index) {
@@ -334,10 +320,10 @@ function deleteLog(index) {
   const logs = JSON.parse(localStorage.getItem("matchLogs")) || [];
   logs.splice(index, 1);
   localStorage.setItem("matchLogs", JSON.stringify(logs));
-  renderMatchLogsWithMonth();
+  renderMatchLogs();
 }
 
-// ✅ USER/ADMIN TABLES & HISTORY
+// ✅ Users & Admins
 function renderRegisteredUsers() {
   const users = JSON.parse(localStorage.getItem("users")) || [];
   const userTable = document.getElementById("userTableContainer");
@@ -432,17 +418,15 @@ function renderAdminLoginHistory() {
   }
 }
 
-// ✅ Logout
 function logout() {
   localStorage.removeItem("adminLoggedIn");
   sessionStorage.removeItem("adminSessionLogged");
   window.location.href = "advertisement.html";
 }
 
-// ✅ Init
+// ✅ Initialize
 window.onload = () => {
   renderEvents();
-  updateLogMonthYear();
   renderMatchLogsWithMonth();
   loadMatches();
   renderRegisteredUsers();
