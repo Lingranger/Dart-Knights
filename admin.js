@@ -19,7 +19,7 @@ if (!sessionStorage.getItem("adminSessionLogged")) {
   sessionStorage.setItem("adminSessionLogged", "true");
 }
 
-// ✅ 4) SAFE fallback defaults
+// ✅ 4) SAFE fallback defaults — only once!
 const defaultEvents = [
   { title: "Opening Tournament", date: "2025-07-15", location: "Butuan City Dome" }
 ];
@@ -63,11 +63,23 @@ const defaultUsers = [
 ];
 
 // ✅ Load or fallback
-let events = JSON.parse(localStorage.getItem("upcomingEvents")) || defaultEvents;
-let matchSchedule = JSON.parse(localStorage.getItem("matchSchedule")) || defaultMatchSchedule;
-let matchLogs = JSON.parse(localStorage.getItem("matchLogs")) || defaultMatchLogs;
-let users = JSON.parse(localStorage.getItem("users")) || defaultUsers;
+let events = localStorage.getItem("upcomingEvents")
+  ? JSON.parse(localStorage.getItem("upcomingEvents"))
+  : defaultEvents;
 
+let matchSchedule = localStorage.getItem("matchSchedule")
+  ? JSON.parse(localStorage.getItem("matchSchedule"))
+  : defaultMatchSchedule;
+
+let matchLogs = localStorage.getItem("matchLogs")
+  ? JSON.parse(localStorage.getItem("matchLogs"))
+  : defaultMatchLogs;
+
+let users = localStorage.getItem("users")
+  ? JSON.parse(localStorage.getItem("users"))
+  : defaultUsers;
+
+// ✅ Save if it was missing before
 localStorage.setItem("upcomingEvents", JSON.stringify(events));
 localStorage.setItem("matchSchedule", JSON.stringify(matchSchedule));
 localStorage.setItem("matchLogs", JSON.stringify(matchLogs));
@@ -153,8 +165,9 @@ function deleteEvent(index) {
   renderEvents();
 }
 
-// ✅ MATCH SCHEDULE
-let currentDate = new Date();
+// ✅ MATCH SCHEDULE (persistent month)
+let currentDate = new Date(localStorage.getItem("adminMatchScheduleMonth") || new Date());
+
 const monthYearEl = document.getElementById("monthYear");
 const matchTable = document.querySelector("#matchScheduleTable tbody");
 
@@ -192,11 +205,13 @@ function loadMatches() {
 
 function prevMonth() {
   currentDate.setMonth(currentDate.getMonth() - 1);
+  localStorage.setItem("adminMatchScheduleMonth", currentDate);
   loadMatches();
 }
 
 function nextMonth() {
   currentDate.setMonth(currentDate.getMonth() + 1);
+  localStorage.setItem("adminMatchScheduleMonth", currentDate);
   loadMatches();
 }
 
@@ -265,31 +280,29 @@ function deleteMatch(index) {
   }
 }
 
-// ✅ MATCH LOGS with month filter
-let currentLogDate = new Date();
+// ✅ MATCH LOGS (persistent month)
+let currentLogDate = new Date(localStorage.getItem("adminMatchLogMonth") || new Date());
+
 function getCurrentLogMonthKey() {
   return currentLogDate.toLocaleDateString("en-US", { month: "long", year: "numeric" });
 }
 
 function renderMatchLogs() {
-  const key = getCurrentLogMonthKey();
-  document.getElementById("logMonthYear").textContent = key;
-
   const table = document.getElementById("adminMatchLogsTableBody");
   if (!table) return;
   table.innerHTML = "";
 
-  const logsToShow = matchLogs.filter(log => {
-    const logMonthKey = new Date(log.date).toLocaleDateString("en-US", { month: "long", year: "numeric" });
-    return logMonthKey === key;
+  const logs = matchLogs.filter(log => {
+    const logMonth = new Date(log.date).toLocaleDateString("en-US", { month: "long", year: "numeric" });
+    return logMonth === getCurrentLogMonthKey();
   });
 
-  if (logsToShow.length === 0) {
-    table.innerHTML = `<tr><td colspan="5" class="no-users">No logs for ${key}.</td></tr>`;
+  if (logs.length === 0) {
+    table.innerHTML = `<tr><td colspan="5" class="no-users">No logs for ${getCurrentLogMonthKey()}.</td></tr>`;
     return;
   }
 
-  logsToShow.forEach((log, index) => {
+  logs.forEach((log, index) => {
     const row = document.createElement("tr");
     row.innerHTML = `
       <td>${log.date}</td>
@@ -307,9 +320,11 @@ function renderMatchLogs() {
 
 function changeLogMonth(direction) {
   currentLogDate.setMonth(currentLogDate.getMonth() + direction);
+  localStorage.setItem("adminMatchLogMonth", currentLogDate);
   renderMatchLogs();
 }
 
+// ✅ Log CRUD
 function openLogModal() {
   document.getElementById("logModal").style.display = "block";
 }
@@ -468,7 +483,7 @@ function logout() {
   window.location.href = "advertisement.html";
 }
 
-// ✅ INIT
+// ✅ Final init
 window.onload = () => {
   renderEvents();
   renderMatchLogs();
