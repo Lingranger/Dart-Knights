@@ -103,7 +103,12 @@ function deleteEvent(index) {
 
 // ✅ MATCH SCHEDULE (monthly)
 let matchSchedule = JSON.parse(localStorage.getItem("matchSchedule")) || {};
-let currentDate = new Date();
+
+// ✅ Restore saved month/year for match schedule
+let currentDate = localStorage.getItem("matchScheduleCurrentDate")
+  ? new Date(localStorage.getItem("matchScheduleCurrentDate"))
+  : new Date();
+
 const monthYearEl = document.getElementById("monthYear");
 const matchTable = document.querySelector("#matchScheduleTable tbody");
 
@@ -141,13 +146,16 @@ function loadMatches() {
 
 function prevMonth() {
   currentDate.setMonth(currentDate.getMonth() - 1);
+  localStorage.setItem("matchScheduleCurrentDate", currentDate.toISOString());
   loadMatches();
 }
 
 function nextMonth() {
   currentDate.setMonth(currentDate.getMonth() + 1);
+  localStorage.setItem("matchScheduleCurrentDate", currentDate.toISOString());
   loadMatches();
 }
+
 
 function openMatchModal() {
   document.getElementById("matchModal").style.display = "flex";
@@ -215,7 +223,10 @@ function deleteMatch(index) {
 }
 
 // ✅ MATCH LOGS with Monthly Navigation
-let logCurrentDate = new Date();
+// ✅ Restore saved month/year for match logs
+let logCurrentDate = localStorage.getItem("logCurrentDate")
+  ? new Date(localStorage.getItem("logCurrentDate"))
+  : new Date();
 
 function updateLogMonthYear() {
   const options = { month: 'long', year: 'numeric' };
@@ -224,8 +235,11 @@ function updateLogMonthYear() {
 
 function changeLogMonth(offset) {
   logCurrentDate.setMonth(logCurrentDate.getMonth() + offset);
+  localStorage.setItem("logCurrentDate", logCurrentDate.toISOString());
   updateLogMonthYear();
   renderMatchLogsWithMonth();
+}
+
 }
 
 function renderMatchLogsWithMonth() {
