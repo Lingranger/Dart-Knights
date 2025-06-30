@@ -19,7 +19,7 @@ if (!sessionStorage.getItem("adminSessionLogged")) {
   sessionStorage.setItem("adminSessionLogged", "true");
 }
 
-// ✅ 4) SAFE fallback defaults — only once!
+// ✅ 4) SAFE fallback defaults
 const defaultEvents = [
   { title: "Opening Tournament", date: "2025-07-15", location: "Butuan City Dome" }
 ];
@@ -63,23 +63,11 @@ const defaultUsers = [
 ];
 
 // ✅ Load or fallback
-let events = localStorage.getItem("upcomingEvents")
-  ? JSON.parse(localStorage.getItem("upcomingEvents"))
-  : defaultEvents;
+let events = JSON.parse(localStorage.getItem("upcomingEvents")) || defaultEvents;
+let matchSchedule = JSON.parse(localStorage.getItem("matchSchedule")) || defaultMatchSchedule;
+let matchLogs = JSON.parse(localStorage.getItem("matchLogs")) || defaultMatchLogs;
+let users = JSON.parse(localStorage.getItem("users")) || defaultUsers;
 
-let matchSchedule = localStorage.getItem("matchSchedule")
-  ? JSON.parse(localStorage.getItem("matchSchedule"))
-  : defaultMatchSchedule;
-
-let matchLogs = localStorage.getItem("matchLogs")
-  ? JSON.parse(localStorage.getItem("matchLogs"))
-  : defaultMatchLogs;
-
-let users = localStorage.getItem("users")
-  ? JSON.parse(localStorage.getItem("users"))
-  : defaultUsers;
-
-// ✅ Save if it was missing before
 localStorage.setItem("upcomingEvents", JSON.stringify(events));
 localStorage.setItem("matchSchedule", JSON.stringify(matchSchedule));
 localStorage.setItem("matchLogs", JSON.stringify(matchLogs));
@@ -277,13 +265,31 @@ function deleteMatch(index) {
   }
 }
 
-// ✅ MATCH LOGS
+// ✅ MATCH LOGS with month filter
+let currentLogDate = new Date();
+function getCurrentLogMonthKey() {
+  return currentLogDate.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+}
+
 function renderMatchLogs() {
+  const key = getCurrentLogMonthKey();
+  document.getElementById("logMonthYear").textContent = key;
+
   const table = document.getElementById("adminMatchLogsTableBody");
   if (!table) return;
   table.innerHTML = "";
 
-  matchLogs.forEach((log, index) => {
+  const logsToShow = matchLogs.filter(log => {
+    const logMonthKey = new Date(log.date).toLocaleDateString("en-US", { month: "long", year: "numeric" });
+    return logMonthKey === key;
+  });
+
+  if (logsToShow.length === 0) {
+    table.innerHTML = `<tr><td colspan="5" class="no-users">No logs for ${key}.</td></tr>`;
+    return;
+  }
+
+  logsToShow.forEach((log, index) => {
     const row = document.createElement("tr");
     row.innerHTML = `
       <td>${log.date}</td>
@@ -297,6 +303,11 @@ function renderMatchLogs() {
     `;
     table.appendChild(row);
   });
+}
+
+function changeLogMonth(direction) {
+  currentLogDate.setMonth(currentLogDate.getMonth() + direction);
+  renderMatchLogs();
 }
 
 function openLogModal() {
@@ -366,7 +377,6 @@ function renderRegisteredUsers() {
     let html = `<table><thead><tr>
       <th>Full Name</th><th>Age</th><th>Gender</th><th>Team</th><th>Email</th><th>Signup Date</th>
     </tr></thead><tbody>`;
-    normalUsers.forEach(user => {
     normalUsers.forEach(user => {
       html += `<tr>
         <td>${user.name || "—"}</td>
@@ -458,7 +468,7 @@ function logout() {
   window.location.href = "advertisement.html";
 }
 
-// ✅ Final init
+// ✅ INIT
 window.onload = () => {
   renderEvents();
   renderMatchLogs();
