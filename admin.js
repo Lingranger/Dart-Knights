@@ -1,13 +1,13 @@
-// Redirect if not logged in
+// ✅ Redirect if not logged in
 if (localStorage.getItem("adminLoggedIn") !== "true") {
   window.location.href = "admin-login.html";
 }
 
-// Admin welcome message
+// ✅ Admin welcome message
 const admin = JSON.parse(localStorage.getItem("admin"));
 document.getElementById("welcomeAdmin").textContent = `👑 Welcome, Admin ${admin?.name || "Unknown"}!`;
 
-// Save admin session history (once per session)
+// ✅ Save admin session history (once per session)
 if (!sessionStorage.getItem("adminSessionLogged")) {
   const history = JSON.parse(localStorage.getItem("adminHistory")) || [];
   history.push({
@@ -19,7 +19,7 @@ if (!sessionStorage.getItem("adminSessionLogged")) {
   sessionStorage.setItem("adminSessionLogged", "true");
 }
 
-// EVENT MANAGEMENT (Homepage Events)
+// ✅ EVENT MANAGEMENT
 let events = JSON.parse(localStorage.getItem("upcomingEvents")) || [];
 
 function renderEvents() {
@@ -101,25 +101,7 @@ function deleteEvent(index) {
   renderEvents();
 }
 
-
-function editEvent(index) {
-  const event = events[index];
-  document.getElementById("eventIndex").value = index;
-  document.getElementById("eventTitle").value = event.title;
-  document.getElementById("eventDate").value = event.date;
-  document.getElementById("eventLocation").value = event.location;
-  document.getElementById("eventModalTitle").textContent = "Edit Event";
-  document.getElementById("eventModal").style.display = "block";
-}
-
-function deleteEvent(index) {
-  if (!confirm("Are you sure you want to delete this event?")) return;
-  events.splice(index, 1);
-  localStorage.setItem("upcomingEvents", JSON.stringify(events));
-  renderEvents();
-}
-
-// MATCH SCHEDULE (monthly based)
+// ✅ MATCH SCHEDULE (monthly)
 let matchSchedule = JSON.parse(localStorage.getItem("matchSchedule")) || {};
 let currentDate = new Date();
 const monthYearEl = document.getElementById("monthYear");
@@ -232,14 +214,40 @@ function deleteMatch(index) {
   }
 }
 
+// ✅ MATCH LOGS with Monthly Navigation
+let logCurrentDate = new Date();
 
-function renderMatchLogs() {
-  const logs = JSON.parse(localStorage.getItem("matchLogs")) || [];
+function updateLogMonthYear() {
+  const options = { month: 'long', year: 'numeric' };
+  document.getElementById('logMonthYear').textContent = logCurrentDate.toLocaleDateString(undefined, options);
+}
+
+function changeLogMonth(offset) {
+  logCurrentDate.setMonth(logCurrentDate.getMonth() + offset);
+  updateLogMonthYear();
+  renderMatchLogsWithMonth();
+}
+
+function renderMatchLogsWithMonth() {
+  const allLogs = JSON.parse(localStorage.getItem("matchLogs")) || [];
   const table = document.getElementById("adminMatchLogsTableBody");
   if (!table) return;
   table.innerHTML = "";
 
-  logs.forEach((log, index) => {
+  const selectedMonth = logCurrentDate.getMonth();
+  const selectedYear = logCurrentDate.getFullYear();
+
+  const filteredLogs = allLogs.filter(log => {
+    const logDate = new Date(log.date);
+    return logDate.getMonth() === selectedMonth && logDate.getFullYear() === selectedYear;
+  });
+
+  if (filteredLogs.length === 0) {
+    table.innerHTML = `<tr><td colspan="5">No logs for this month.</td></tr>`;
+    return;
+  }
+
+  filteredLogs.forEach((log, index) => {
     const row = document.createElement("tr");
     row.innerHTML = `
       <td>${log.date}</td>
@@ -253,10 +261,6 @@ function renderMatchLogs() {
     `;
     table.appendChild(row);
   });
-}
-
-function renderMatchLogsWithMonth() {
-  renderMatchLogs(); // Placeholder for future month-based filtering
 }
 
 function openLogModal() {
@@ -295,7 +299,7 @@ function addOrUpdateLog() {
 
   localStorage.setItem("matchLogs", JSON.stringify(logs));
   closeLogModal();
-  renderMatchLogs();
+  renderMatchLogsWithMonth();
 }
 
 function editLog(index) {
@@ -316,9 +320,10 @@ function deleteLog(index) {
   const logs = JSON.parse(localStorage.getItem("matchLogs")) || [];
   logs.splice(index, 1);
   localStorage.setItem("matchLogs", JSON.stringify(logs));
-  renderMatchLogs();
+  renderMatchLogsWithMonth();
 }
 
+// ✅ USER/ADMIN TABLES & HISTORY
 function renderRegisteredUsers() {
   const users = JSON.parse(localStorage.getItem("users")) || [];
   const userTable = document.getElementById("userTableContainer");
@@ -413,13 +418,17 @@ function renderAdminLoginHistory() {
   }
 }
 
+// ✅ Logout
 function logout() {
   localStorage.removeItem("adminLoggedIn");
   sessionStorage.removeItem("adminSessionLogged");
   window.location.href = "advertisement.html";
 }
+
+// ✅ Init
 window.onload = () => {
   renderEvents();
+  updateLogMonthYear();
   renderMatchLogsWithMonth();
   loadMatches();
   renderRegisteredUsers();
